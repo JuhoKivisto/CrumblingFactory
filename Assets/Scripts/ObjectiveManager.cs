@@ -2,48 +2,94 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
+[System.Serializable]
 public class Objective {
 
-    GameObject interactable;
+    public GameObject interactable;
 
-    public int ControlPanelId { get; set; }
+    public int controlPanelId;
+
+    public Objective(int cPId, GameObject intact) {
+
+        interactable = intact;
+        controlPanelId = cPId;
+
+    }
 }
 
 public class ObjectiveManager : MonoBehaviour {
 
-    public List<Objective> objectiveList;
+    public static ObjectiveManager instance = null;
+    [Header("Debug")]
+    public bool debugMode;
 
-	/// <summary>
+    public int numberOfPanelSwitch;
+
+    public List<Objective> objectiveList = new List<Objective>();
+    public List<Objective> allObjectivesList = new List<Objective>();
+
+    public int currentObjectiveId;
+
+
+    void Awake() {
+
+        if (instance == null) {
+            instance = this;
+        }
+
+        else if (instance != this) {
+            Destroy(gameObject);
+        }
+    }
+
+    void Start() {
+        CreateObjectives();
+    }
+
+    /// <summary>
     /// Creates random objective list from all possible objectives
     /// Also the number of objectives is random
     /// </summary>
     /// <param name="AllObjectivesList"></param>
-   public void CreateObjectives(List<Objective> AllObjectivesList) {
+    /// 
+    private void CreateObjectives() {
         System.Random rnd = new System.Random();
 
-        int maxIterations = 1;
-        int numberOfPanelSwitch = rnd.Next(5, 8);
-        print("number of Panel switch: " + numberOfPanelSwitch);
+        //int maxIterations = 1;
+        numberOfPanelSwitch = rnd.Next(3, 8); // Generates random number between 3-7 for how meny panel switch happens
+        if (debugMode) {
 
+            print("number of panel switch: " + numberOfPanelSwitch);
+        }
+
+        /* Creates randomized number of actions for each control panel */
         for (int index = 0; index < numberOfPanelSwitch; index++) {
 
-            int panelId = rnd.Next(4);
-            print("Panel id: " + panelId);
+            int panelId = rnd.Next(1, 4);
+            if (debugMode) {
 
+                print("Panel id: " + panelId);
+            }
+
+            /* How many actions need to be done before changing panel*/
             int iterations = rnd.Next(1,5);
-            print("iterations: " + iterations);
+            if (debugMode) {
 
-            maxIterations =+ iterations;
+            print("iterations: " + iterations);
+            }
 
             int id = 0;
             while (id < iterations) {
-                int numberOfInteractions = 0;
+                //int numberOfInteractions = 0;
 
+                /* List that holds temporary all interactions on specifig panel */
                 List<Objective> controlPanel = new List<Objective>();
-                foreach (var objective in AllObjectivesList) {
-                    if (objective.ControlPanelId == panelId) {
+
+                /* Adds all interactables with the same panel id to the controlPanel- list */
+                foreach (var objective in allObjectivesList) {
+                    if (objective.controlPanelId == panelId) {
                         controlPanel.Add(objective);
+                        id++;
                     }
                 }
 
@@ -51,17 +97,15 @@ public class ObjectiveManager : MonoBehaviour {
 
                 foreach (var objective in controlPanel) {
                     objectiveList.Add(objective);
-                }
-                
+
+                }  
             }
-
         }
-        
-
-
+        currentObjectiveId = 0;
+        objectiveList[0].interactable.gameObject.transform.Translate(Vector3.up);
     }
 
-    List<Objective> Shuffle(List<Objective> list) {
+    private List<Objective> Shuffle(List<Objective> list) {
         System.Random rnd = new System.Random();
         for (int i = 0; i < list.Count; i++) {
 
@@ -74,7 +118,30 @@ public class ObjectiveManager : MonoBehaviour {
         return list;
     }
 
-    void PopulateList(Objective objective) {
+   public void PopulateList(Objective objective) {
 
+        allObjectivesList.Add(objective);
+    }
+
+    public void NextObjective() {
+        
+        if (currentObjectiveId < objectiveList.Count -1) {
+
+        //objectiveList[currentObjectiveId].interactable.SetActive(false);
+     
+        //objectiveList[currentObjectiveId++].interactable.SetActive(true);
+        objectiveList[currentObjectiveId++].interactable.gameObject.transform.Translate(Vector3.up);
+        }     
+    }
+
+   public IEnumerator CompleteObjective() {
+
+        objectiveList[currentObjectiveId].interactable.gameObject.transform.Translate(-Vector3.up);
+        yield return new WaitForSeconds(1f);
+        NextObjective();
+    }
+
+    public void Test() {
+        StartCoroutine(CompleteObjective());
     }
 }
