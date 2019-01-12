@@ -35,5 +35,13 @@ public class InteractableItem : MonoBehaviour {
 
     public void EndInteraction(HandController hand) {
 
+        if (hand == attachedHand) {
+            attachedHand = null;
+            currentlyInteracting = false;
+        }
+    }
+
+    public bool IsInteracting() {
+        return currentlyInteracting;
     }
 }
