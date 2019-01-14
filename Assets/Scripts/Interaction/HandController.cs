@@ -108,10 +108,14 @@ public class HandController : MonoBehaviour {
             return;
         }
 
+        if (controller.GetPress(gripButton) && pickUp != null) {
+
+            pickUp.transform.LookAt(this.transform.position);
+        }
 
         if (controller.GetPressDown(gripButton) && pickUp != null) {
 
-            pickUp.transform.position = this.transform.position;
+            //pickUp.transform.position = this.transform.position;
             //pickUp.transform.parent = this.transform;
             //pickUp.GetComponent<Rigidbody>().isKinematic = true;
         }
