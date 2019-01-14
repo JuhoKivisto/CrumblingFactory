@@ -29,9 +29,9 @@ public class InteractableItem : MonoBehaviour {
     // Update is called once per frame
     void Update() {
 
-        bool isButtonAndLever = this.tag == "button" || this.tag == "lever";
+        bool isButton = this.tag == "button";
 
-        if (attachedHand && currentlyInteracting && !isButtonAndLever) {                    //pick up object 
+        if (attachedHand && currentlyInteracting && !isButton) {                    //pick up object 
             posDelta = attachedHand.transform.position - interactionPoint.position;
             this.rigidbody.velocity = posDelta * velocityFactor * Time.fixedDeltaTime;
 
@@ -45,6 +45,9 @@ public class InteractableItem : MonoBehaviour {
             this.rigidbody.angularVelocity = (Time.fixedDeltaTime * angle * axis) * rotationFactor;
         }
 
+        if(attachedHand && currentlyInteracting && isButton) {
+
+        }
 
     }
 
