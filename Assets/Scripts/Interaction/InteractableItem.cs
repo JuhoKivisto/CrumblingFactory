@@ -31,7 +31,7 @@ public class InteractableItem : MonoBehaviour {
 
         bool isButton = this.tag == "button";
 
-        if (attachedHand && currentlyInteracting && !isButton) {                    //pick up object 
+        if (attachedHand && currentlyInteracting) {                    //pick up object 
             posDelta = attachedHand.transform.position - interactionPoint.position;
             this.rigidbody.velocity = posDelta * velocityFactor * Time.fixedDeltaTime;
 
