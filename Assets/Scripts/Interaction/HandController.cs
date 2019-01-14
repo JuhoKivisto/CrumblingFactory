@@ -30,7 +30,7 @@ public class HandController : MonoBehaviour {
             return;
         }
 
-        if (controller.GetPressDown(gripButton)) {
+        if (controller.GetPressDown(gripButton) && test != null) {
 
             test.transform.parent = this.gameObject.transform;
 
@@ -60,7 +60,7 @@ public class HandController : MonoBehaviour {
             }
         }
 
-        if (controller.GetPressUp(gripButton) && interactingItem != null) {
+        if (controller.GetPressUp(gripButton) && interactingItem != null && test != null) {
             interactingItem.EndInteraction(this);
 
             test.transform.parent = null;
