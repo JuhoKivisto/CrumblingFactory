@@ -31,7 +31,7 @@ public class HandController : MonoBehaviour {
         }
 
         if(controller.GetPress(gripButton) && test != null) {
-            test.transform.LookAt(new Vector3(this.transform.position.x, 0, 0));
+            test.transform.LookAt(new Vector3(test.transform.position.x, this.transform.position.y, this.transform.position.z));
         }
 
         if (controller.GetPressDown(gripButton) && test != null) {
