@@ -31,7 +31,7 @@ public class HandController : MonoBehaviour {
             return;
         }
 
-        if(controller.GetPress(gripButton) && lever.tag == "Lever") {
+        if(controller.GetPress(gripButton) && lever != null) {
             lever.transform.LookAt(new Vector3(lever.transform.position.x, this.transform.position.y, this.transform.position.z));
         }
 
@@ -64,7 +64,7 @@ public class HandController : MonoBehaviour {
             }
         }
 
-        if (controller.GetPressUp(gripButton) && interactingItem != null && lever != null) {
+        if (controller.GetPressUp(gripButton) && interactingItem != null) {
             interactingItem.EndInteraction(this);
 
         }
