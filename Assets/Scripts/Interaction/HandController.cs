@@ -15,7 +15,7 @@ public class HandController : MonoBehaviour {
     private InteractableItem closestItem;
     private InteractableItem interactingItem;
 
-    private GameObject test;
+    private GameObject lever;
 
     // Use this for initialization
     void Start() {
@@ -30,11 +30,11 @@ public class HandController : MonoBehaviour {
             return;
         }
 
-        if(controller.GetPress(gripButton) && test != null) {
-            test.transform.LookAt(new Vector3(test.transform.position.x, this.transform.position.y, this.transform.position.z));
+        if(controller.GetPress(gripButton) && lever != null) {
+            lever.transform.LookAt(new Vector3(lever.transform.position.x, this.transform.position.y, this.transform.position.z));
         }
 
-        if (controller.GetPressDown(gripButton) && test != null) {
+        if (controller.GetPressDown(gripButton)) {
 
 
             float minDistance = float.MaxValue;
@@ -63,7 +63,7 @@ public class HandController : MonoBehaviour {
             }
         }
 
-        if (controller.GetPressUp(gripButton) && interactingItem != null && test != null) {
+        if (controller.GetPressUp(gripButton) && interactingItem != null && lever != null) {
             interactingItem.EndInteraction(this);
 
         }
@@ -75,7 +75,8 @@ public class HandController : MonoBehaviour {
             objectsHoveringOver.Add(collidedItem);
         }
 
-        test = collider.gameObject;
+        if(collider.gameObject.tag == "Lever")
+            lever = collider.gameObject;
     }
 
     private void OnTriggerExit(Collider collider) {                                             //when controller exits object                    
@@ -84,7 +85,8 @@ public class HandController : MonoBehaviour {
             objectsHoveringOver.Remove(collidedItem);
         }
 
-        test = null;
+        if(collider.gameObject.tag == "Lever")
+            lever = null;
     }
 
 
