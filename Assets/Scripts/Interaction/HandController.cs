@@ -63,7 +63,7 @@ public class HandController : MonoBehaviour {
             }
         }
 
-        if (controller.GetPressUp(gripButton) && interactingItem != null && lever != null) {
+        if (controller.GetPressUp(gripButton) && interactingItem != null) {
             interactingItem.EndInteraction(this);
 
         }
