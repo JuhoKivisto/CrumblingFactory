@@ -15,6 +15,8 @@ public class HandController : MonoBehaviour {
     private InteractableItem closestItem;
     private InteractableItem interactingItem;
 
+    private GameObject test;
+
     // Use this for initialization
     void Start() {
         trackedObj = GetComponent<SteamVR_TrackedObject>();
@@ -29,6 +31,9 @@ public class HandController : MonoBehaviour {
         }
 
         if (controller.GetPressDown(gripButton)) {
+
+            test.transform.parent = this.gameObject.transform;
+
             float minDistance = float.MaxValue;
 
             Debug.Log("min distance " + minDistance);
@@ -57,6 +62,8 @@ public class HandController : MonoBehaviour {
 
         if (controller.GetPressUp(gripButton) && interactingItem != null) {
             interactingItem.EndInteraction(this);
+
+            test.transform.parent = null;
         }
     }
 
@@ -65,6 +72,8 @@ public class HandController : MonoBehaviour {
         if (collidedItem) {
             objectsHoveringOver.Add(collidedItem);
         }
+
+        test = collider.gameObject;
     }
 
     private void OnTriggerExit(Collider collider) {                                             //when controller exits object                    
@@ -72,6 +81,8 @@ public class HandController : MonoBehaviour {
         if (collidedItem) {
             objectsHoveringOver.Remove(collidedItem);
         }
+
+        test = null;
     }
 
 
