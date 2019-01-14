@@ -9,10 +9,13 @@ public class Objective {
 
     public int controlPanelId;
 
+    public bool done;
+
     public Objective(int cPId, GameObject intact) {
 
         interactable = intact;
         controlPanelId = cPId;
+        done = false;
 
     }
 }
@@ -103,6 +106,8 @@ public class ObjectiveManager : MonoBehaviour {
         }
         currentObjectiveId = 0;
         objectiveList[0].interactable.gameObject.transform.Translate(Vector3.up);
+
+        TimeManager.instance.StartTimer();
     }
 
     private List<Objective> Shuffle(List<Objective> list) {
@@ -127,10 +132,13 @@ public class ObjectiveManager : MonoBehaviour {
         
         if (currentObjectiveId < objectiveList.Count -1) {
 
-        //objectiveList[currentObjectiveId].interactable.SetActive(false);
-     
-        //objectiveList[currentObjectiveId++].interactable.SetActive(true);
-        objectiveList[currentObjectiveId++].interactable.gameObject.transform.Translate(Vector3.up);
+            //objectiveList[currentObjectiveId].interactable.SetActive(false);
+
+            //objectiveList[currentObjectiveId++].interactable.SetActive(true);
+            objectiveList[currentObjectiveId].done = true;
+            objectiveList[currentObjectiveId++].interactable.gameObject.transform.Translate(Vector3.up);
+            GameManager.instance.EventByInteraction();
+        
         }     
     }
 
