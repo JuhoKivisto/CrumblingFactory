@@ -33,7 +33,7 @@ public class HandController : MonoBehaviour {
             return;
         }
 
-        if(controller.GetPress(gripButton) && lever.tag == "Lever") {
+        if (controller.GetPress(gripButton) && lever != null) {
             lever.transform.LookAt(new Vector3(lever.transform.position.x, this.transform.position.y, this.transform.position.z));
         }
 
@@ -43,7 +43,7 @@ public class HandController : MonoBehaviour {
             pickUp.GetComponent<Rigidbody>().isKinematic = true;
         }
 
-        if(controller.GetPressUp(gripButton) && pickUp != null) {
+        if (controller.GetPressUp(gripButton) && pickUp != null) {
             pickUp.transform.parent = null;
             pickUp.GetComponent<Rigidbody>().isKinematic = false;
         }
@@ -88,15 +88,21 @@ public class HandController : MonoBehaviour {
         //    objectsHoveringOver.Add(collidedItem);
         //}
 
-        if(collider.gameObject.tag == "Pickable") {
+        if (collider.gameObject.tag == "Pickable") {
             pickUp = collider.gameObject;
+
+            Debug.Log("Pickable");
         }
-        if(collider.gameObject.tag == "Lever")
+        if (collider.gameObject.tag == "Lever")
             lever = collider.gameObject;
 
-        if(collider.gameObject.tag == "Button") {
+        if (collider.gameObject.tag == "Button") {
+
+            GameObject cube = collider.gameObject.transform.GetChild(0).gameObject;
             Vector3 buttonLocalPosition = collider.gameObject.transform.GetChild(0).gameObject.GetComponent<Transform>().localPosition;
             buttonLocalPosition = new Vector3(buttonLocalPosition.x, -0.2f, buttonLocalPosition.z);
+
+            cube.GetComponent<Transform>().localPosition = buttonLocalPosition;
         }
     }
 
@@ -106,19 +112,20 @@ public class HandController : MonoBehaviour {
         //    objectsHoveringOver.Remove(collidedItem);
         //}
 
-        if(collider.gameObject.tag == "Pickable") {
+        if (collider.gameObject.tag == "Pickable") {
             pickUp = null;
         }
-        if(collider.gameObject.tag == "Lever")
+        if (collider.gameObject.tag == "Lever")
             lever = null;
 
         if (collider.gameObject.tag == "Button") {
 
+            GameObject cube = collider.gameObject.transform.GetChild(0).gameObject;
             Vector3 buttonLocalPosition = collider.gameObject.transform.GetChild(0).gameObject.GetComponent<Transform>().localPosition;
             buttonLocalPosition = Vector3.zero;
-
+            cube.GetComponent<Transform>().localPosition = buttonLocalPosition;
         }
-            
+
     }
-    
+
 }
