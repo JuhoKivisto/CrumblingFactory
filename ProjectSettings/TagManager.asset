@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Lever
   - Button
+  - Pickable
   layers:
   - Default
   - TransparentFX

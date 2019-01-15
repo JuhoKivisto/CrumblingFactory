@@ -17,6 +17,8 @@ public class HandController : MonoBehaviour {
     private InteractableItem interactingItem;
 
     private GameObject lever;
+    private GameObject pickUp;
+
 
     // Use this for initialization
     void Start() {
@@ -35,59 +37,88 @@ public class HandController : MonoBehaviour {
             lever.transform.LookAt(new Vector3(lever.transform.position.x, this.transform.position.y, this.transform.position.z));
         }
 
-        if (controller.GetPressDown(gripButton)) {
+        if (controller.GetPressDown(gripButton) && pickUp != null) {
 
-
-            float minDistance = float.MaxValue;
-
-            Debug.Log("min distance " + minDistance);
-
-            float distance;
-            foreach (InteractableItem item in objectsHoveringOver) {                        //get all interactable items
-                distance = (item.transform.position - transform.position).sqrMagnitude;     //get distance between controller and object
-
-                Debug.Log("distance " + distance);
-                if (distance < minDistance) {
-                    minDistance = distance;
-                    closestItem = item;
-                }
-            }
-
-            interactingItem = closestItem;
-
-            if (interactingItem) {
-                if (interactingItem.IsInteracting()) {
-                    interactingItem.EndInteraction(this);
-                }
-
-                interactingItem.BeginInteraction(this);
-            }
+            pickUp.transform.parent = this.transform;
+            pickUp.GetComponent<Rigidbody>().isKinematic = true;
         }
 
-        if (controller.GetPressUp(gripButton) && interactingItem != null && lever != null) {
-            interactingItem.EndInteraction(this);
-
+        if(controller.GetPressUp(gripButton) && pickUp != null) {
+            pickUp.transform.parent = null;
+            pickUp.GetComponent<Rigidbody>().isKinematic = false;
         }
+        //if (controller.GetPressDown(gripButton)) {
+
+
+        //    float minDistance = float.MaxValue;
+
+        //    Debug.Log("min distance " + minDistance);
+
+        //    float distance;
+        //    foreach (InteractableItem item in objectsHoveringOver) {                        //get all interactable items
+        //        distance = (item.transform.position - transform.position).sqrMagnitude;     //get distance between controller and object
+
+        //        Debug.Log("distance " + distance);
+        //        if (distance < minDistance) {
+        //            minDistance = distance;
+        //            closestItem = item;
+        //        }
+        //    }
+
+        //    interactingItem = closestItem;
+
+        //    if (interactingItem) {
+        //        if (interactingItem.IsInteracting()) {
+        //            interactingItem.EndInteraction(this);
+        //        }
+
+        //        interactingItem.BeginInteraction(this);
+        //    }
+        //}
+
+        //if (controller.GetPressUp(gripButton) && interactingItem != null && lever != null) {
+        //    interactingItem.EndInteraction(this);
+
+        //}
     }
 
     private void OnTriggerEnter(Collider collider) {                                            //when controller collides with object
-        InteractableItem collidedItem = collider.GetComponent<InteractableItem>();
-        if (collidedItem) {
-            objectsHoveringOver.Add(collidedItem);
-        }
+        //InteractableItem collidedItem = collider.GetComponent<InteractableItem>();
+        //if (collidedItem) {
+        //    objectsHoveringOver.Add(collidedItem);
+        //}
 
+        if(collider.gameObject.tag == "Pickable") {
+            pickUp = collider.gameObject;
+        }
         if(collider.gameObject.tag == "Lever")
             lever = collider.gameObject;
+
+        if(collider.gameObject.tag == "Button") {
+            Vector3 buttonLocalPosition = collider.gameObject.transform.GetChild(0).gameObject.GetComponent<Transform>().localPosition;
+            buttonLocalPosition = new Vector3(buttonLocalPosition.x, -0.2f, buttonLocalPosition.z);
+        }
     }
 
     private void OnTriggerExit(Collider collider) {                                             //when controller exits object                    
-        InteractableItem collidedItem = collider.GetComponent<InteractableItem>();
-        if (collidedItem) {
-            objectsHoveringOver.Remove(collidedItem);
-        }
+        //InteractableItem collidedItem = collider.GetComponent<InteractableItem>();
+        //if (collidedItem) {
+        //    objectsHoveringOver.Remove(collidedItem);
+        //}
 
+        if(collider.gameObject.tag == "Pickable") {
+            pickUp = null;
+        }
         if(collider.gameObject.tag == "Lever")
             lever = null;
+
+        if (collider.gameObject.tag == "Button") {
+
+            Vector3 buttonLocalPosition = collider.gameObject.transform.GetChild(0).gameObject.GetComponent<Transform>().localPosition;
+            buttonLocalPosition = Vector3.zero;
+
+        }
+            
     }
     
 }
