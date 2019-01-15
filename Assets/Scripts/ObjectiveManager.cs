@@ -110,6 +110,11 @@ public class ObjectiveManager : MonoBehaviour {
         TimeManager.instance.StartTimer();
     }
 
+    /// <summary>
+    /// Shuffles the given list
+    /// </summary>
+    /// <param name="list"></param>
+    /// <returns>list</returns>
     private List<Objective> Shuffle(List<Objective> list) {
         System.Random rnd = new System.Random();
         for (int i = 0; i < list.Count; i++) {

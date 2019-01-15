@@ -21,6 +21,10 @@ public class GameManager : MonoBehaviour {
 
     public int timeEventId;
 
+    public int heatMeter;
+
+    public Stats stats;
+
     //ObjectiveManager objManager = ObjectiveManager.instance.GetComponent<ObjectiveManager>();
 
     void Awake() {
@@ -36,6 +40,7 @@ public class GameManager : MonoBehaviour {
 
     private void Start() {
         timeEvents = new int[] {0,0,0,0 };
+      
     }
 
     /// <summary>
@@ -77,11 +82,18 @@ public class GameManager : MonoBehaviour {
     /// After certain amount of time witch is random, some events will hapen
     /// </summary>
     public void EventByTime() {
+
+        if (TimeManager.instance.time % 1 == 0) {
+            heatMeter++;
+        }
         
         if (TimeManager.instance.time == timeEvents[timeEventId] && timeEventId < timeEvents.Length) {
             print(TimeManager.instance.gameLenght - TimeManager.instance.time);
             //print(timeEventId);
             timeEventId++;
+        }
+        if (TimeManager.instance.time == TimeManager.instance.gameLenght) {
+            // factory explodes
         }
     }
 
@@ -102,6 +114,32 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// When factory heat meter reaches
+    /// temperature high enough events happens
+    /// </summary>
+    public void EventByHeat() {
+        if (heatMeter == stats.criticalTemporatures[0]) {
+            // minor explosions
+            // factory shaking 
+        }
+        else if (heatMeter == stats.criticalTemporatures[1]) {
+            // screen turns red
+            // explosions
+            // some of the conrol panel interactables could explode
+
+        }
+        else if (heatMeter == stats.criticalTemporatures[3]) {
+            // one of the controll panel explode
+        }
+        else if (heatMeter == stats.criticalTemporatures[4]) {
+            // factory explodes
+        }
+    }
+
+    /// <summary>
+    /// Creates times for time based events
+    /// </summary>
     public void CreateTimeEvents() {
         System.Random rnd = new System.Random();
 
