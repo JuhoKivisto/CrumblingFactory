@@ -9,19 +9,13 @@ public class GameManager : MonoBehaviour {
 
     public int errorCount = 0;
 
-    public int[] errorThresholds; 
-
     public int doomCounter = 0;
 
     public int[] timeEvents;
 
-    public int rA;
-
-    public int rB;
-
     public int timeEventId;
 
-    public int heatMeter;
+    public float heatMeter;
 
     public Stats stats;
 
@@ -83,8 +77,9 @@ public class GameManager : MonoBehaviour {
     /// </summary>
     public void EventByTime() {
 
-        if (TimeManager.instance.time % 1 == 0) {
-            heatMeter++;
+        /* Increases heat after certain time */
+        if (TimeManager.instance.time % stats.timeDivider == 0) {
+            heatMeter += stats.heatIncreaser;
         }
         
         if (TimeManager.instance.time == timeEvents[timeEventId] && timeEventId < timeEvents.Length) {
@@ -103,13 +98,13 @@ public class GameManager : MonoBehaviour {
     /// after the errorThreshold[2] errorCount resets
     /// </summary>
     public void EventByError() {
-        if (errorCount == errorThresholds[0]) {
+        if (errorCount == stats.errorThresholds[0]) {
             
         }
-        else if (errorCount == errorThresholds[1]) {
+        else if (errorCount == stats.errorThresholds[1]) {
 
         }
-        else if (errorCount == errorThresholds[2]) {
+        else if (errorCount == stats.errorThresholds[2]) {
             errorCount = 0;
         }
     }
@@ -145,7 +140,8 @@ public class GameManager : MonoBehaviour {
 
         int indexDecreaser = 0;
         for (int i = 0; i < timeEvents.Length; i++) {
-            timeEvents[i] = rnd.Next(rA + timeEvents[i-indexDecreaser], rB + timeEvents[i-indexDecreaser]);
+            timeEvents[i] = rnd.Next(stats.timeEventRandomLow + timeEvents[i-indexDecreaser],
+                stats.timeEventRandomHigh + timeEvents[i-indexDecreaser]);
             indexDecreaser = 1;
         }
     }

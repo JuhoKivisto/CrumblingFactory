@@ -1558,11 +1558,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   errorCount: 0
-  errorThresholds: 020000000400000006000000
   doomCounter: 0
   timeEvents: 
-  rA: 15
-  rB: 30
   timeEventId: 0
   heatMeter: 0
   stats: {fileID: 767962021}
@@ -2083,9 +2080,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   criticalTemporatures: 320000004b0000005a00000064000000
+  timeDivider: 1
+  heatIncreaser: 1
   gameLenght: 120
-  timeEventRandomLow: 0
-  timeEventRandomHigh: 0
+  timeEventRandomLow: 15
+  timeEventRandomHigh: 30
   errorThresholds: 020000000400000006000000
 --- !u!4 &767962022
 Transform:

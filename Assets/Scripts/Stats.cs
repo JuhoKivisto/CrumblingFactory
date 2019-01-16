@@ -7,6 +7,9 @@ public class Stats : MonoBehaviour {
     [Header("----------HEAT-----------")]
     [Range(50,100)]
     public int[] criticalTemporatures;
+    public int timeDivider;
+    public float heatIncreaser;
+
 
     [Space]
 
@@ -18,7 +21,7 @@ public class Stats : MonoBehaviour {
 
     [Space]
 
-    [Header("----------ERRORS----------")]
+    [Header("----------ERROR----------")]
     [Range(2, 10)]
     public int[] errorThresholds;
 }
