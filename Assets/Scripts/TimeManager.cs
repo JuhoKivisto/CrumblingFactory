@@ -61,6 +61,7 @@ public class TimeManager : MonoBehaviour {
 
             timeText.text = "Time left: " + (minutes.ToString("00") + ":" + seconds.ToString("00"));
             GameManager.instance.EventByTime();
+            GameManager.instance.EventByHeat();
         }
 
 

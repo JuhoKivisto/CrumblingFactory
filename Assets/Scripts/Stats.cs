@@ -2,11 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
+public class EnvironmentalEvent {
+
+    public GameObject eventObject;
+    public int heatOfTheEvent;
+
+}
+
 public class Stats : MonoBehaviour {
 
     [Header("----------HEAT-----------")]
-    [Range(50,100)]
-    public int[] criticalTemporatures;
+    //[Range(50,100)]
+    public EnvironmentalEvent[] criticalTemporatures;
     public int timeDivider;
     public float heatIncreaser;
 

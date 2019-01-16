@@ -80,6 +80,7 @@ public class GameManager : MonoBehaviour {
         /* Increases heat after certain time */
         if (TimeManager.instance.time % stats.timeDivider == 0) {
             heatMeter += stats.heatIncreaser;
+            
         }
         
         if (TimeManager.instance.time == timeEvents[timeEventId] && timeEventId < timeEvents.Length) {
@@ -114,20 +115,22 @@ public class GameManager : MonoBehaviour {
     /// temperature high enough events happens
     /// </summary>
     public void EventByHeat() {
-        if (heatMeter == stats.criticalTemporatures[0]) {
+        if (heatMeter == stats.criticalTemporatures[0].heatOfTheEvent) {
+            GameObject tempGameO = GameObject.Instantiate(stats.criticalTemporatures[0].eventObject,Camera.main.transform.position, Quaternion.identity, null);
+            tempGameO.GetComponentInChildren<Rigidbody>().AddForce(Vector3.up * 1000f);
             // minor explosions
             // factory shaking 
         }
-        else if (heatMeter == stats.criticalTemporatures[1]) {
+        else if (heatMeter == 75) {
             // screen turns red
             // explosions
             // some of the conrol panel interactables could explode
 
         }
-        else if (heatMeter == stats.criticalTemporatures[3]) {
+        else if (heatMeter == 80) {
             // one of the controll panel explode
         }
-        else if (heatMeter == stats.criticalTemporatures[4]) {
+        else if (heatMeter == 100) {
             // factory explodes
         }
     }
@@ -146,4 +149,19 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+
+    IEnumerator WaitList() 
+    {
+        yield return StartCoroutine(WaitCoroutine(2f, "SetKinematic"));
+        //Do something
+        yield return StartCoroutine(WaitCoroutine(4f, "Scaledown"));
+        //Do something
+        yield return StartCoroutine(WaitCoroutine(8f, "Destroy"));
+        //Do something
+    }
+
+    IEnumerator WaitCoroutine(float waitTime, string functionName) {
+        yield return new WaitForSeconds(waitTime);
+        Invoke(functionName, 0f);
+    }
 }
