@@ -19,6 +19,8 @@ public class GameManager : MonoBehaviour {
 
     public Stats stats;
 
+    public GameObject player;
+
     //ObjectiveManager objManager = ObjectiveManager.instance.GetComponent<ObjectiveManager>();
 
     void Awake() {
@@ -116,8 +118,10 @@ public class GameManager : MonoBehaviour {
     /// </summary>
     public void EventByHeat() {
         if (heatMeter == stats.criticalTemporatures[0].heatOfTheEvent) {
-            GameObject tempGameO = GameObject.Instantiate(stats.criticalTemporatures[0].eventObject,Camera.main.transform.position, Quaternion.identity, null);
-            tempGameO.GetComponentInChildren<Rigidbody>().AddForce(Vector3.up * 1000f);
+            Vector3 spwnpoint = new Vector3(player.transform.position.x, 60, player.transform.position.z);
+
+            GameObject tempGameO = GameObject.Instantiate(stats.criticalTemporatures[0].eventObject,spwnpoint, Quaternion.identity, null);
+            //tempGameO.GetComponentInChildren<Rigidbody>().AddForce(Vector3.up * 1000f);
             // minor explosions
             // factory shaking 
         }
