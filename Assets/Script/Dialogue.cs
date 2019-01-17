@@ -10,6 +10,7 @@ public class Dialogue  {
     public string name;
     [TextArea(5,10)] /* minimuma nd maximum text area we will use*/
     public string[] sentences;
+
 	
 	
 }

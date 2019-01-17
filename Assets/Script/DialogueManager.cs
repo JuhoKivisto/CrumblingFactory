@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Sprites;
+using UnityEngine.SceneManagement;
 
 public class DialogueManager : MonoBehaviour {
 
@@ -12,11 +14,14 @@ public class DialogueManager : MonoBehaviour {
 
     public Text nametext;
     public Text dialogueText;
+    public GameObject image;
+    
 
 	// Use this for initialization
 	void Start () {
 
         sentences = new Queue<string>(); /* for initialization  */
+    
 		
 	}
 
@@ -24,9 +29,9 @@ public class DialogueManager : MonoBehaviour {
 
     public void StartDialogue (Dialogue dialogue)
     {
-        Debug.Log ("starting:" + dialogue.name);
+       /* Debug.Log ("starting:" + dialogue.name);*/
         nametext.text = dialogue.name;
-
+    
 
         sentences.Clear();
 
@@ -37,8 +42,10 @@ public class DialogueManager : MonoBehaviour {
         }
 
         DisplaNextSentence();
+  
 
     }
+
 
     public void DisplaNextSentence()
     {
@@ -65,6 +72,6 @@ public class DialogueManager : MonoBehaviour {
     }
     public  void EndDialogue()
     {
-        Debug.Log("End of the dialogue"); 
+        SceneManager.LoadScene(1);
     }
 }
