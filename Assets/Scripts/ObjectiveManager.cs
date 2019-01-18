@@ -23,16 +23,23 @@ public class Objective {
 public class ObjectiveManager : MonoBehaviour {
 
     public static ObjectiveManager instance = null;
+
     [Header("Debug")]
     public bool debugMode;
 
+    /* DO NOT USE */
     public int numberOfPanelSwitch;
+    public int currentObjectiveId;
+    public int howManyObjectives;
+    public int objectivesDone;
 
     public List<Objective> objectiveList = new List<Objective>();
     public List<Objective> allObjectivesList = new List<Objective>();
 
-    public int currentObjectiveId;
+    System.Random random = new System.Random();
 
+    public GameManager gameManager;
+    public Stats stats;
 
     void Awake() {
 
@@ -46,16 +53,17 @@ public class ObjectiveManager : MonoBehaviour {
     }
 
     void Start() {
-        CreateObjectives();
+        CreateObjectives___OLD();
     }
 
     /// <summary>
+    /// DO NOT USE!!!!!!!!!!!!!!
     /// Creates random objective list from all possible objectives
     /// Also the number of objectives is random
     /// </summary>
     /// <param name="AllObjectivesList"></param>
     /// 
-    private void CreateObjectives() {
+    private void CreateObjectives___OLD() {
         System.Random rnd = new System.Random();
 
         //int maxIterations = 1;
@@ -110,6 +118,31 @@ public class ObjectiveManager : MonoBehaviour {
         TimeManager.instance.StartTimer();
     }
 
+    private void CreateObjectives() {
+
+        if (gameManager.heatMeter / 10 == 0) {
+            howManyObjectives = 1;
+        }
+        else {
+
+            howManyObjectives = (int) gameManager.heatMeter / 10 + 1;
+
+            if (howManyObjectives > 5) {
+                howManyObjectives = 5;
+            }
+        }
+
+        while (howManyObjectives != 0) {
+            int randomIndex = random.Next(0, allObjectivesList.Count);
+
+            while (!objectiveList.Contains(allObjectivesList[randomIndex])) {
+                randomIndex = random.Next(0, allObjectivesList.Count);
+            }
+            objectiveList.Add(allObjectivesList[randomIndex]);
+        }
+
+    }
+
     /// <summary>
     /// Shuffles the given list
     /// </summary>
@@ -128,14 +161,14 @@ public class ObjectiveManager : MonoBehaviour {
         return list;
     }
 
-   public void PopulateList(Objective objective) {
+    public void PopulateList(Objective objective) {
 
         allObjectivesList.Add(objective);
     }
 
     public void NextObjective() {
-        
-        if (currentObjectiveId < objectiveList.Count -1) {
+
+        if (currentObjectiveId < objectiveList.Count - 1) {
 
             //objectiveList[currentObjectiveId].interactable.SetActive(false);
 
@@ -143,11 +176,11 @@ public class ObjectiveManager : MonoBehaviour {
             objectiveList[currentObjectiveId].done = true;
             objectiveList[currentObjectiveId++].interactable.gameObject.transform.Translate(Vector3.up);
             GameManager.instance.EventByInteraction();
-        
-        }     
+
+        }
     }
 
-   public IEnumerator CompleteObjective() {
+    public IEnumerator CompleteObjective() {
 
         objectiveList[currentObjectiveId].interactable.gameObject.transform.Translate(-Vector3.up);
         yield return new WaitForSeconds(1f);

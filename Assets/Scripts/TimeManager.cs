@@ -7,13 +7,12 @@ public class TimeManager : MonoBehaviour {
 
     public static TimeManager instance = null;
 
-    public Text timeText;
-
     private bool timerRunning;
 
     public float time;
-
     public float gameLenght = 125;
+
+    public Text timeText;
 
     void Awake() {
 

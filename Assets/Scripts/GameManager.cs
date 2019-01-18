@@ -8,12 +8,9 @@ public class GameManager : MonoBehaviour {
     public static GameManager instance = null;
 
     public int errorCount = 0;
-
     public int doomCounter = 0;
-
-    public int[] timeEvents;
-
     public int timeEventId;
+    public int[] timeEvents;
 
     public float heatMeter;
 
@@ -152,7 +149,6 @@ public class GameManager : MonoBehaviour {
             indexDecreaser = 1;
         }
     }
-
 
     IEnumerator WaitList() 
     {

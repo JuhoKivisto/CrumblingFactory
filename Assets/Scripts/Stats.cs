@@ -32,4 +32,9 @@ public class Stats : MonoBehaviour {
     [Header("----------ERROR----------")]
     [Range(2, 10)]
     public int[] errorThresholds;
+
+    [Space]
+
+    [Header("----------OBJECTTIVE----------")]
+    public int maxObjectives;
 }
