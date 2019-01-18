@@ -9,17 +9,17 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1898959065275806}
+  m_RootGameObject: {fileID: 1167316346055336}
   m_IsPrefabAsset: 1
---- !u!1 &1898959065275806
+--- !u!1 &1167316346055336
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4101859659206344}
-  - component: {fileID: 114690314260073168}
+  - component: {fileID: 4490455892356578}
+  - component: {fileID: 114534625411885344}
   m_Layer: 0
   m_Name: Stats
   m_TagString: Untagged
@@ -27,12 +27,12 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4101859659206344
+--- !u!4 &4490455892356578
 Transform:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1898959065275806}
+  m_GameObject: {fileID: 1167316346055336}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -4.7882004, y: -9.554929, z: -5.660489}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -40,12 +40,12 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114690314260073168
+--- !u!114 &114534625411885344
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1898959065275806}
+  m_GameObject: {fileID: 1167316346055336}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 12838c6c7c7f8ae4092378a8079ba447, type: 3}

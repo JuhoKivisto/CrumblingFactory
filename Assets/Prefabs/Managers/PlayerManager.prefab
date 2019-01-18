@@ -9,52 +9,47 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1352840806529944}
+  m_RootGameObject: {fileID: 1296445856156950}
   m_IsPrefabAsset: 1
---- !u!1 &1352840806529944
+--- !u!1 &1296445856156950
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4811035873365270}
-  - component: {fileID: 114394992722955030}
+  - component: {fileID: 4639732335968238}
+  - component: {fileID: 114826787848748468}
   m_Layer: 0
-  m_Name: GameManager
+  m_Name: PlayerManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4811035873365270
+--- !u!4 &4639732335968238
 Transform:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1352840806529944}
+  m_GameObject: {fileID: 1296445856156950}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.7077007, y: 0.6943941, z: 0.7652397}
+  m_LocalPosition: {x: 4.936032, y: 0.7264795, z: -50.482082}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114394992722955030
+--- !u!114 &114826787848748468
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1352840806529944}
+  m_GameObject: {fileID: 1296445856156950}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 16ded003111d84944afdf8bb44c1d868, type: 3}
+  m_Script: {fileID: 11500000, guid: 0b19b4555b7f9844c8f5da2dc3ab5a5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  errorCount: 0
-  doomCounter: 0
-  timeEvents: 
-  timeEventId: 0
-  heatMeter: 0
-  stats: {fileID: 0}
-  player: {fileID: 0}
+  health: 0
+  playerStatus: {fileID: 0}

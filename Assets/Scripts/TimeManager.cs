@@ -26,6 +26,10 @@ public class TimeManager : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Timer
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator RemainingTime() {
 
         int seconds = 0;
@@ -68,6 +72,10 @@ public class TimeManager : MonoBehaviour {
 
     }
 
+    /// <summary>
+    /// Starts the timer
+    /// and creates time events
+    /// </summary>
     public void StartTimer() {
         GameManager.instance.CreateTimeEvents();
         StartCoroutine(RemainingTime());
