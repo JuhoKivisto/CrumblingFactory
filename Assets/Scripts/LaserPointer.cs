@@ -6,6 +6,11 @@ public class LaserPointer : MonoBehaviour {
 
     private SteamVR_TrackedObject trackedObj;
 
+    // material objects
+    public Material mat1;
+    public Material mat2;
+    private Renderer rend;
+
     // laser objects
     public GameObject laserP;
     private GameObject laser;
@@ -45,12 +50,14 @@ public class LaserPointer : MonoBehaviour {
         shouldTeleport = false; // sets the bool back to false
         reticle.SetActive(false); // sets reticle to false
         Vector3 difference = cameraRigTransform.position - headTransform.position;
-        difference.y = 0; // keeps you in the correct are in y-axis
+        difference.y = 0; // keeps you in the correct area on y-axis
         cameraRigTransform.position = hitPoint + difference; // teleports Camera Rig to the reticle
     }
 
     // Use this for initialization
     void Start () {
+        Renderer rend = laser.GetComponent<Renderer>();
+
         laser = Instantiate(laserP); // instantiates our laser prefab
         laserTransform = laser.transform;
 
@@ -64,13 +71,20 @@ public class LaserPointer : MonoBehaviour {
         if (Controller.GetPress(SteamVR_Controller.ButtonMask.Trigger)) // checks for a trigger press
         {
             RaycastHit hit; 
-            if (Physics.Raycast(trackedObj.transform.position, transform.forward, out hit, 100, teleportMask)) // Checks what raycast is colliding with and if it has the correct layer active to teleport
+            if (Physics.Raycast(trackedObj.transform.position, transform.forward, out hit, 25)) // Checks what raycast is colliding with and if it has the correct layer active to teleport
             {
                 hitPoint = hit.point;
                 ShowLaser(hit); 
                 reticle.SetActive(true); // sets reticle active
                 teleportReticleTransform.position = hitPoint + teleportReticleOffset; // changes reticles position to raycasts hit point
-                shouldTeleport = true; // enables the use of Teleport();
+                if (hit.collider.gameObject.layer == 8)
+                {
+                    rend.material = mat1;
+                    shouldTeleport = true; // enables the use of Teleport();
+                } else
+                {
+                    rend.material = mat2;
+                }
             }
         }
         else // disables laser and reticle if the trigger isn't pressed
