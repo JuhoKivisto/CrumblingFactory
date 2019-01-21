@@ -37,8 +37,8 @@ public class HandController : MonoBehaviour {
             //handlingObject.transform.LookAt(new Vector3(handlingObject.transform.localPosition.x, this.transform.localPosition.y, this.transform.localPosition.z));
             Debug.Log(transform.InverseTransformPoint(this.GetComponent<Transform>().position) + handlingObject.GetComponent<Transform>().localPosition);
 
-            handlingObject.GetComponent<Transform>().localPosition = transform.InverseTransformPoint(this.GetComponent<Transform>().position 
-                    + handlingObject.GetComponent<Transform>().localPosition);
+            handlingObject.GetComponent<Transform>().localPosition = transform.InverseTransformPoint(this.GetComponent<Transform>().position) 
+                    + handlingObject.GetComponent<Transform>().localPosition;
 
            
             interactingItem.LeverUp = true;
