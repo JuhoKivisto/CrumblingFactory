@@ -38,7 +38,7 @@ public class HandController : MonoBehaviour {
 
             //handlingObject.GetComponent<Transform>().localPosition = ;
 
-            Debug.Log(transform.InverseTransformPoint(this.GetComponent<Transform>().position));
+            Debug.Log(transform.InverseTransformPoint(this.GetComponent<Transform>().position) + handlingObject.GetComponent<Transform>().localPosition);
 
             interactingItem.LeverUp = true;
         }
