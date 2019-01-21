@@ -57,10 +57,14 @@ public class HandController : MonoBehaviour {
         if (collider.gameObject.tag == "Pickable") {
             pickUp = collider.gameObject;
 
-            Debug.Log("Pickable");
+            collider.gameObject.GetComponent<InteractableItem>().PickingUp = true;
         }
-        if (collider.gameObject.tag == "Lever")
+        if (collider.gameObject.tag == "Lever") {
+
             lever = collider.gameObject;
+
+            collider.gameObject.GetComponent<InteractableItem>().LeverUp = true;
+        }
 
         if (collider.gameObject.tag == "Button") {
 
@@ -84,9 +88,14 @@ public class HandController : MonoBehaviour {
 
         if (collider.gameObject.tag == "Pickable") {
             pickUp = null;
+            collider.gameObject.GetComponent<InteractableItem>().PickingUp = false;
         }
-        if (collider.gameObject.tag == "Lever")
+        if (collider.gameObject.tag == "Lever") {
             lever = null;
+
+            collider.gameObject.GetComponent<InteractableItem>().LeverUp = false;
+
+        }
 
         if (collider.gameObject.tag == "Button") {
 
