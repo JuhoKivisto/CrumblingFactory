@@ -11,13 +11,11 @@ public class HandController : MonoBehaviour {
     private SteamVR_Controller.Device controller { get { return SteamVR_Controller.Input((int)trackedObj.index); } }        //get hand sets
     private SteamVR_TrackedObject trackedObj;
 
-    //HashSet<InteractableItem> objectsHoveringOver = new HashSet<InteractableItem>();
+    private InteractableItem interactingItem;
 
-    //private InteractableItem closestItem;
-    //private InteractableItem interactingItem;
+    private GameObject handlingObject;
 
-    private GameObject lever;
-    private GameObject pickUp;
+
 
 
     // Use this for initialization
@@ -33,19 +31,30 @@ public class HandController : MonoBehaviour {
             return;
         }
 
-        if (controller.GetPress(gripButton) && lever != null) {
-            lever.transform.LookAt(new Vector3(lever.transform.position.x, this.transform.position.y, this.transform.position.z));
+        if (controller.GetPress(gripButton) && handlingObject != null && 
+                            interactingItem.typeOfObject == InteractableItem.ObjectType.Lever) {
+
+            handlingObject.transform.LookAt(new Vector3(handlingObject.transform.position.x, this.transform.position.y, this.transform.position.z));
+
+            interactingItem.LeverUp = true;
         }
 
-        if (controller.GetPressDown(gripButton) && pickUp != null) {
+        if (controller.GetPressDown(gripButton) && handlingObject != null 
+                        && interactingItem.typeOfObject == InteractableItem.ObjectType.PickableObject) {
 
-            pickUp.transform.parent = this.transform;
-            pickUp.GetComponent<Rigidbody>().isKinematic = true;
+            handlingObject.transform.parent = this.transform;
+            handlingObject.GetComponent<Rigidbody>().isKinematic = true;
+
+            interactingItem.PickingUp = true;
         }
 
-        if (controller.GetPressUp(gripButton) && pickUp != null) {
-            pickUp.transform.parent = null;
-            pickUp.GetComponent<Rigidbody>().isKinematic = false;
+        if (controller.GetPressUp(gripButton) && handlingObject != null
+                    && interactingItem.typeOfObject == InteractableItem.ObjectType.PickableObject) {
+            handlingObject.transform.parent = null;
+            handlingObject.GetComponent<Rigidbody>().isKinematic = false;
+
+            interactingItem.LeverUp = false;
+            interactingItem.PickingUp = false;
         }
         
     }
@@ -54,17 +63,10 @@ public class HandController : MonoBehaviour {
 
         InteractableItem collidedItem = collider.GetComponent<InteractableItem>();
 
-        if (collidedItem.typeOfObject == InteractableItem.ObjectType.PickableObject) {
-            pickUp = collider.gameObject;
+        handlingObject = collider.gameObject;
+        interactingItem = collidedItem;
 
-            collidedItem.PickingUp = true;
-        }
-        if (collidedItem.typeOfObject == InteractableItem.ObjectType.Lever) {
 
-            lever = collider.gameObject;
-
-            collidedItem.LeverUp = true;
-        }
 
         if (collidedItem.typeOfObject == InteractableItem.ObjectType.Button) {
 
@@ -85,16 +87,8 @@ public class HandController : MonoBehaviour {
 
         InteractableItem colliedItem = collider.GetComponent<InteractableItem>();
 
-        if (colliedItem.typeOfObject == InteractableItem.ObjectType.PickableObject) {
-            pickUp = null;
-
-            colliedItem.PickingUp = false;
-        }
-        if (colliedItem.typeOfObject == InteractableItem.ObjectType.Lever) {
-            lever = null;
-
-            colliedItem.LeverUp = false;
-        }
+        interactingItem = null;
+        handlingObject = null;
 
         if (colliedItem.typeOfObject == InteractableItem.ObjectType.Button) {
 
