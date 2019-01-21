@@ -20,6 +20,7 @@ public class HandController : MonoBehaviour {
 
     // Use this for initialization
     void Start() {
+        
         trackedObj = GetComponent<SteamVR_TrackedObject>();
 
     }
