@@ -5,13 +5,15 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Sprites;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class DialogueManager : MonoBehaviour {
 
     /* keeps track off all the sentence used in the DIalogue*/
     private Queue<string> sentences;  /* Queue uses a FIFO system */
 
-
+   
+    
     public Text nametext;
     public Text dialogueText;
     public GameObject image;
@@ -29,7 +31,9 @@ public class DialogueManager : MonoBehaviour {
 
     public void StartDialogue (Dialogue dialogue)
     {
-       /* Debug.Log ("starting:" + dialogue.name);*/
+        /* Debug.Log ("starting:" + dialogue.name);*/
+
+    
         nametext.text = dialogue.name;
     
 
