@@ -2,72 +2,78 @@
 using System.Collections;
 
 public class InteractableItem : MonoBehaviour {
-    public Rigidbody rigidbody;
 
-    private bool currentlyInteracting;
+    private void Start() {
+        Debug.Log(this.name);
+    }
 
-    private float velocityFactor = 20000f;
-    private Vector3 posDelta;
 
-    private float rotationFactor = 400f;
-    private Quaternion rotationDelta;
-    private float angle;
-    private Vector3 axis;
+    //public Rigidbody rigidbody;
 
-    private HandController attachedHand;
+    //private bool currentlyInteracting;
 
-    private Transform interactionPoint;
+    //private float velocityFactor = 20000f;
+    //private Vector3 posDelta;
+
+    //private float rotationFactor = 400f;
+    //private Quaternion rotationDelta;
+    //private float angle;
+    //private Vector3 axis;
+
+    //private HandController attachedHand;
+
+    //private Transform interactionPoint;
 
     // Use this for initialization
-    void Start() {
-        rigidbody = GetComponent<Rigidbody>();
-        interactionPoint = new GameObject().transform;
-        velocityFactor /= rigidbody.mass;
-        rotationFactor /= rigidbody.mass;
-    }
+    //void Start() {
+    //    rigidbody = GetComponent<Rigidbody>();
+    //    interactionPoint = new GameObject().transform;
+    //    velocityFactor /= rigidbody.mass;
+    //    rotationFactor /= rigidbody.mass;
+    //}
 
-    // Update is called once per frame
-    void Update() {
+    //// Update is called once per frame
+    //void Update() {
 
-        bool isButton = this.tag == "button";
+    //    bool isButton = this.tag == "button";
 
-        if (attachedHand && currentlyInteracting) {                    //pick up object 
-            posDelta = attachedHand.transform.position - interactionPoint.position;
-            this.rigidbody.velocity = posDelta * velocityFactor * Time.fixedDeltaTime;
+    //    if (attachedHand && currentlyInteracting) {                    //pick up object 
+    //        posDelta = attachedHand.transform.position - interactionPoint.position;
+    //        this.rigidbody.velocity = posDelta * velocityFactor * Time.fixedDeltaTime;
 
-            rotationDelta = attachedHand.transform.rotation * Quaternion.Inverse(interactionPoint.rotation);
-            rotationDelta.ToAngleAxis(out angle, out axis);
+    //        rotationDelta = attachedHand.transform.rotation * Quaternion.Inverse(interactionPoint.rotation);
+    //        rotationDelta.ToAngleAxis(out angle, out axis);
 
-            if (angle > 180) {
-                angle -= 360;
-            }
+    //        if (angle > 180) {
+    //            angle -= 360;
+    //        }
 
-            this.rigidbody.angularVelocity = (Time.fixedDeltaTime * angle * axis) * rotationFactor;
-        }
+    //        this.rigidbody.angularVelocity = (Time.fixedDeltaTime * angle * axis) * rotationFactor;
+    //    }
 
-        if(attachedHand && currentlyInteracting && isButton) {
+    //    if(attachedHand && currentlyInteracting && isButton) {
 
-        }
+    //    }
 
-    }
+    //}
 
-    public void BeginInteraction(HandController hand) {
-        attachedHand = hand;
-        interactionPoint.position = hand.transform.position;
-        interactionPoint.rotation = hand.transform.rotation;
-        interactionPoint.SetParent(transform, true);
+    //public void BeginInteraction(HandController hand) {
+    //    attachedHand = hand;
+    //    interactionPoint.position = hand.transform.position;
+    //    interactionPoint.rotation = hand.transform.rotation;
+    //    interactionPoint.SetParent(transform, true);
 
-        currentlyInteracting = true;
-    }
+    //    currentlyInteracting = true;
+    //}
 
-    public void EndInteraction(HandController hand) {
-        if (hand == attachedHand) {
-            attachedHand = null;
-            currentlyInteracting = false;
-        }
-    }
+    //public void EndInteraction(HandController hand) {
+    //    if (hand == attachedHand) {
+    //        attachedHand = null;
+    //        currentlyInteracting = false;
+    //    }
+    //}
 
-    public bool IsInteracting() {
-        return currentlyInteracting;
-    }
+    //public bool IsInteracting() {
+    //    return currentlyInteracting;
+    //}
 }
