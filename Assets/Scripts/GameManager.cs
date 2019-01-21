@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour {
     public int[] timeEvents;
 
     public float heatMeter;
+    public float normTimeValue;
 
     public Stats stats;
 
@@ -78,16 +79,22 @@ public class GameManager : MonoBehaviour {
 
         /* Increases heat after certain time */
         if (TimeManager.instance.time % stats.timeDivider == 0) {
-            heatMeter += stats.heatIncreaser;
+
+            normTimeValue = TimeManager.instance.time / (stats.gameLenght);
+            //normTimeValue = normTimeValue*100
+            heatMeter += (stats.heatCurve.Evaluate(normTimeValue) * 10);
             
         }
-        
-        if (TimeManager.instance.time == timeEvents[timeEventId] && timeEventId < timeEvents.Length) {
-            print(TimeManager.instance.gameLenght - TimeManager.instance.time);
+        /* currentTime == eventId  */
+        if (timeEventId == timeEvents.Length - 1) {
+            timeEventId = timeEvents.Length - 1;
+        }
+        else if (TimeManager.instance.time == timeEvents[timeEventId] && timeEventId < timeEvents.Length) {
+            print(stats.gameLenght - TimeManager.instance.time);
             //print(timeEventId);
             timeEventId++;
         }
-        if (TimeManager.instance.time == TimeManager.instance.gameLenght) {
+        if (TimeManager.instance.time == stats.gameLenght) {
             // factory explodes
         }
     }

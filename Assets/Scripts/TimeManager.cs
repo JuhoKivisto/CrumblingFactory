@@ -7,10 +7,11 @@ public class TimeManager : MonoBehaviour {
 
     public static TimeManager instance = null;
 
-    private bool timerRunning;
+    public Stats stats;
+
+    public bool timerRunning;
 
     public float time;
-    public float gameLenght = 125;
 
     public Text timeText;
 
@@ -35,7 +36,7 @@ public class TimeManager : MonoBehaviour {
         int minutes = 0;
         if (time == 0) time = 0;
 
-        seconds = (int)(gameLenght - time);
+        seconds = (int)(stats.gameLenght - time);
         minutes = seconds / 60;
         seconds = seconds - minutes * 60;
 
@@ -52,11 +53,11 @@ public class TimeManager : MonoBehaviour {
             yield return new WaitForSeconds(1f);
             time++;
 
-            seconds = (int)(gameLenght - time);
+            seconds = (int)(stats.gameLenght - time);
             minutes = seconds / 60;
             seconds = seconds - minutes * 60;
 
-            if (gameLenght == time) {
+            if (stats.gameLenght == time) {
                 timerRunning = false;
                 timeText.color = Color.red;
 

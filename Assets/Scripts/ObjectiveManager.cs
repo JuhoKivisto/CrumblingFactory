@@ -53,7 +53,9 @@ public class ObjectiveManager : MonoBehaviour {
     }
 
     void Start() {
-        CreateObjectives___OLD();
+        //CreateObjectives___OLD();
+        TimeManager.instance.StartTimer();
+
     }
 
     /// <summary>
@@ -132,12 +134,14 @@ public class ObjectiveManager : MonoBehaviour {
             }
         }
 
-        while (howManyObjectives != 0) {
+        int createdObjectives = 0;
+        while (createdObjectives != howManyObjectives) {
             int randomIndex = random.Next(0, allObjectivesList.Count);
 
             while (!objectiveList.Contains(allObjectivesList[randomIndex])) {
                 randomIndex = random.Next(0, allObjectivesList.Count);
             }
+            createdObjectives++;
             objectiveList.Add(allObjectivesList[randomIndex]);
         }
 
