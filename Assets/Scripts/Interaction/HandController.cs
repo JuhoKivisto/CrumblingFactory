@@ -52,21 +52,21 @@ public class HandController : MonoBehaviour {
 
     private void OnTriggerEnter(Collider collider) {                                            //when controller collides with object
 
-        InteractableItem colliderItem = collider.GetComponent<InteractableItem>();
+        InteractableItem collidedItem = collider.GetComponent<InteractableItem>();
 
-        if (collider.gameObject.tag == "Pickable") {
+        if (collidedItem.typeOfObject == InteractableItem.ObjectType.PickableObject) {
             pickUp = collider.gameObject;
 
-            collider.gameObject.GetComponent<InteractableItem>().PickingUp = true;
+            collidedItem.PickingUp = true;
         }
-        if (collider.gameObject.tag == "Lever") {
+        if (collidedItem.typeOfObject == InteractableItem.ObjectType.Lever) {
 
             lever = collider.gameObject;
 
-            collider.gameObject.GetComponent<InteractableItem>().LeverUp = true;
+            collidedItem.LeverUp = true;
         }
 
-        if (collider.gameObject.tag == "Button") {
+        if (collidedItem.typeOfObject == InteractableItem.ObjectType.Button) {
 
             GameObject cube = collider.gameObject.transform.GetChild(0).gameObject;
 
@@ -75,35 +75,35 @@ public class HandController : MonoBehaviour {
             buttonLocalPosition = new Vector3(buttonLocalPosition.x, -0.2f, buttonLocalPosition.z);
 
             cube.GetComponent<Transform>().localPosition = buttonLocalPosition;
-            collider.gameObject.GetComponent<InteractableItem>().ButtonPressed = true;
+
+            collidedItem.ButtonPressed = true;
 
         }
     }
 
     private void OnTriggerExit(Collider collider) {                                             //when controller exits object                    
-        //InteractableItem collidedItem = collider.GetComponent<InteractableItem>();
-        //if (collidedItem) {
-        //    objectsHoveringOver.Remove(collidedItem);
-        //}
 
-        if (collider.gameObject.tag == "Pickable") {
+        InteractableItem colliedItem = collider.GetComponent<InteractableItem>();
+
+        if (colliedItem.typeOfObject == InteractableItem.ObjectType.PickableObject) {
             pickUp = null;
-            collider.gameObject.GetComponent<InteractableItem>().PickingUp = false;
+
+            colliedItem.PickingUp = false;
         }
-        if (collider.gameObject.tag == "Lever") {
+        if (colliedItem.typeOfObject == InteractableItem.ObjectType.Lever) {
             lever = null;
 
-            collider.gameObject.GetComponent<InteractableItem>().LeverUp = false;
-
+            colliedItem.LeverUp = false;
         }
 
-        if (collider.gameObject.tag == "Button") {
+        if (colliedItem.typeOfObject == InteractableItem.ObjectType.Button) {
 
             GameObject cube = collider.gameObject.transform.GetChild(0).gameObject;
             Vector3 buttonLocalPosition = collider.gameObject.transform.GetChild(0).gameObject.GetComponent<Transform>().localPosition;
             buttonLocalPosition = Vector3.zero;
             cube.GetComponent<Transform>().localPosition = buttonLocalPosition;
-            collider.gameObject.GetComponent<InteractableItem>().ButtonPressed = false;
+
+            colliedItem.ButtonPressed = false;
 
         }
 
