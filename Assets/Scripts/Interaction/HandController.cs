@@ -34,8 +34,9 @@ public class HandController : MonoBehaviour {
         if (controller.GetPress(gripButton) && handlingObject != null && 
                             interactingItem.typeOfObject == InteractableItem.ObjectType.Lever) {
 
-            handlingObject.transform.LookAt(new Vector3(handlingObject.transform.localPosition.x, this.transform.localPosition.y, this.transform.localPosition.z));
+            //handlingObject.transform.LookAt(new Vector3(handlingObject.transform.localPosition.x, this.transform.localPosition.y, this.transform.localPosition.z));
 
+            handlingObject.GetComponent<Transform>().localPosition = this.GetComponent<Transform>().position;
 
             interactingItem.LeverUp = true;
         }
