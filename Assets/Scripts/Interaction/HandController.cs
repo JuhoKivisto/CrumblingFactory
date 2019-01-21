@@ -65,10 +65,14 @@ public class HandController : MonoBehaviour {
         if (collider.gameObject.tag == "Button") {
 
             GameObject cube = collider.gameObject.transform.GetChild(0).gameObject;
+
+            
             Vector3 buttonLocalPosition = collider.gameObject.transform.GetChild(0).gameObject.GetComponent<Transform>().localPosition;
             buttonLocalPosition = new Vector3(buttonLocalPosition.x, -0.2f, buttonLocalPosition.z);
 
             cube.GetComponent<Transform>().localPosition = buttonLocalPosition;
+            collider.gameObject.GetComponent<InteractableItem>().ButtonPressed = true;
+
         }
     }
 
@@ -90,6 +94,8 @@ public class HandController : MonoBehaviour {
             Vector3 buttonLocalPosition = collider.gameObject.transform.GetChild(0).gameObject.GetComponent<Transform>().localPosition;
             buttonLocalPosition = Vector3.zero;
             cube.GetComponent<Transform>().localPosition = buttonLocalPosition;
+            collider.gameObject.GetComponent<InteractableItem>().ButtonPressed = false;
+
         }
 
     }

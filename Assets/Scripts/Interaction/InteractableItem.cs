@@ -3,8 +3,11 @@ using System.Collections;
 
 public class InteractableItem : MonoBehaviour {
 
+
+    public bool ButtonPressed;
+
     private void Start() {
-        Debug.Log(this.name);
+
     }
 
 
