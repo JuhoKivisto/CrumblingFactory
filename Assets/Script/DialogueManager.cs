@@ -16,8 +16,8 @@ public class DialogueManager : MonoBehaviour {
     
     public Text nametext;
     public Text dialogueText;
-    public GameObject image;
-    
+   
+   
 
 	// Use this for initialization
 	void Start () {
@@ -58,11 +58,14 @@ public class DialogueManager : MonoBehaviour {
             EndDialogue();
             return;
         }
+      //  Loadsprites();
         string sentence = sentences.Dequeue();
 
         StopAllCoroutines();  /* if the user presses continue before all the letter in the last dialogue is completely animated , it stops the function and starts the new dialgue*/
-        StartCoroutine(TypeSentence(sentence)); /* animates the next dialoge */
+        StartCoroutine(TypeSentence(sentence)); /* animates the next dialogue */
     }
+
+    
     IEnumerator TypeSentence(String sentence) /* helps to print the text letters one by onne */
     {
         dialogueText.text = "";
