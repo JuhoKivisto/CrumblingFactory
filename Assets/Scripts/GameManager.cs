@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour {
     public int errorCount = 0;
     public int doomCounter = 0;
     public int timeEventId;
+    public int heatId;
     public int[] timeEvents;
 
     public float heatMeter;
@@ -82,8 +83,8 @@ public class GameManager : MonoBehaviour {
 
             normTimeValue = TimeManager.instance.time / (stats.gameLenght);
             //normTimeValue = normTimeValue*100
-            heatMeter += (stats.heatCurve.Evaluate(normTimeValue) * 10);
-            
+            heatMeter += stats.heatCurve.Evaluate(normTimeValue) * stats.heatLevels[heatId];
+            HeatLevelIncreaser();
         }
         /* currentTime == eventId  */
         if (timeEventId == timeEvents.Length - 1) {
@@ -170,5 +171,30 @@ public class GameManager : MonoBehaviour {
     IEnumerator WaitCoroutine(float waitTime, string functionName) {
         yield return new WaitForSeconds(waitTime);
         Invoke(functionName, 0f);
+    }
+
+    public void HeatLevelIncreaser() {
+
+        if (heatId == 8) {
+            heatId = 8;
+        }
+
+        if (heatMeter > stats.heatLevels[heatId] && heatMeter < stats.heatLevels[heatId + 1]) {
+            heatId++;
+        }
+    }
+
+    /// <summary>
+    /// Stops heating for amount of seconds
+    /// </summary>
+    /// <param name="seconds"></param>
+    /// <returns></returns>
+    public IEnumerator StopHeating(float seconds, float heatDec) {
+
+        stats.timeDivider = (int) seconds;
+        yield return new WaitForSeconds(seconds);
+        stats.timeDivider = 1;
+        heatMeter -= heatDec;
+
     }
 }

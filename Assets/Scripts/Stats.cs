@@ -17,6 +17,14 @@ public class Stats : MonoBehaviour {
     public EnvironmentalEvent[] criticalTemporatures;
     public int timeDivider;
     public float heatIncreaser;
+    public float[] heatLevels;
+    public float decreaseHeatOnObjectiveSetComplete;
+    public float decreaseHeatOnObjectiveComplete;
+    public float waitTimeOnObjectiveComplete;
+    public float waitTimeOnObjectiveSetComplete;
+
+    public bool decreaseHeat;
+    public bool waitTime;
 
 
     [Space]
@@ -38,4 +46,5 @@ public class Stats : MonoBehaviour {
 
     [Header("----------OBJECTTIVE----------")]
     public int maxObjectives;
+
 }

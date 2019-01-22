@@ -59,6 +59,79 @@ public class ObjectiveManager : MonoBehaviour {
     }
 
     /// <summary>
+    /// 
+    /// </summary>
+    private void CreateObjectives() {
+
+        if (gameManager.heatMeter / 10 == 0) {
+            howManyObjectives = 1;
+        }
+        else {
+
+            howManyObjectives = (int) gameManager.heatMeter / 10 + 1;
+
+            if (howManyObjectives > 5) {
+                howManyObjectives = 5;
+            }
+        }
+
+        int createdObjectives = 0;
+        while (createdObjectives != howManyObjectives) {
+            int randomIndex = random.Next(0, allObjectivesList.Count);
+
+            while (!objectiveList.Contains(allObjectivesList[randomIndex])) {
+                randomIndex = random.Next(0, allObjectivesList.Count);
+            }
+            createdObjectives++;
+            objectiveList.Add(allObjectivesList[randomIndex]);
+        }
+
+    }
+
+    /// <summary>
+    /// Shuffles the given list
+    /// </summary>
+    /// <param name="list"></param>
+    /// <returns>list</returns>
+    private List<Objective> Shuffle(List<Objective> list) {
+        System.Random rnd = new System.Random();
+        for (int i = 0; i < list.Count; i++) {
+
+            Objective temp = list[i];
+            int rndIndex = rnd.Next(list.Count);
+            list[i] = list[rndIndex];
+            list[rndIndex] = temp;
+
+        }
+        return list;
+    }
+
+    public void PopulateList(Objective objective) {
+
+        allObjectivesList.Add(objective);
+    }
+
+    public void NextObjectiveSet() {
+
+        if (currentObjectiveId + 1 == howManyObjectives) {
+            gameManager.StopHeating(stats.waitTimeOnObjectiveSetComplete, stats.decreaseHeatOnObjectiveSetComplete);
+            CreateObjectives();
+        }
+    }
+
+    public void CompleteObjective(Objective objective) {
+
+        if (objective == objectiveList[currentObjectiveId]) {
+
+        currentObjectiveId++;
+            if (stats.decreaseHeat) {
+                gameManager.StopHeating(stats.waitTimeOnObjectiveComplete, stats.decreaseHeatOnObjectiveComplete);
+            }
+        }
+
+    }
+
+    /// <summary>
     /// DO NOT USE!!!!!!!!!!!!!!
     /// Creates random objective list from all possible objectives
     /// Also the number of objectives is random
@@ -119,79 +192,5 @@ public class ObjectiveManager : MonoBehaviour {
 
         TimeManager.instance.StartTimer();
     }
-
-    private void CreateObjectives() {
-
-        if (gameManager.heatMeter / 10 == 0) {
-            howManyObjectives = 1;
-        }
-        else {
-
-            howManyObjectives = (int) gameManager.heatMeter / 10 + 1;
-
-            if (howManyObjectives > 5) {
-                howManyObjectives = 5;
-            }
-        }
-
-        int createdObjectives = 0;
-        while (createdObjectives != howManyObjectives) {
-            int randomIndex = random.Next(0, allObjectivesList.Count);
-
-            while (!objectiveList.Contains(allObjectivesList[randomIndex])) {
-                randomIndex = random.Next(0, allObjectivesList.Count);
-            }
-            createdObjectives++;
-            objectiveList.Add(allObjectivesList[randomIndex]);
-        }
-
-    }
-
-    /// <summary>
-    /// Shuffles the given list
-    /// </summary>
-    /// <param name="list"></param>
-    /// <returns>list</returns>
-    private List<Objective> Shuffle(List<Objective> list) {
-        System.Random rnd = new System.Random();
-        for (int i = 0; i < list.Count; i++) {
-
-            Objective temp = list[i];
-            int rndIndex = rnd.Next(list.Count);
-            list[i] = list[rndIndex];
-            list[rndIndex] = temp;
-
-        }
-        return list;
-    }
-
-    public void PopulateList(Objective objective) {
-
-        allObjectivesList.Add(objective);
-    }
-
-    public void NextObjective() {
-
-        if (currentObjectiveId < objectiveList.Count - 1) {
-
-            //objectiveList[currentObjectiveId].interactable.SetActive(false);
-
-            //objectiveList[currentObjectiveId++].interactable.SetActive(true);
-            objectiveList[currentObjectiveId].done = true;
-            objectiveList[currentObjectiveId++].interactable.gameObject.transform.Translate(Vector3.up);
-            GameManager.instance.EventByInteraction();
-
-        }
-    }
-
-    public IEnumerator CompleteObjective() {
-
-        objectiveList[currentObjectiveId].interactable.gameObject.transform.Translate(-Vector3.up);
-        yield return new WaitForSeconds(1f);
-        NextObjective();
-    }
-
-    public void Test() {
-        StartCoroutine(CompleteObjective());
-    }
+    
 }

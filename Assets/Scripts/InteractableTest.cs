@@ -13,7 +13,6 @@ public class InteractableTest : MonoBehaviour {
 
     void Update() {
         if (Input.GetKeyDown(KeyCode.Space) && ObjectiveManager.instance.objectiveList[ObjectiveManager.instance.currentObjectiveId].interactable == gameObject) {
-            ObjectiveManager.instance.Test();
         }
     }
 }
