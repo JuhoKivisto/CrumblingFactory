@@ -55,6 +55,7 @@ public class ObjectiveManager : MonoBehaviour {
     void Start() {
         //CreateObjectives___OLD();
         TimeManager.instance.StartTimer();
+        StartCoroutine(FirstObjectiveSet());
 
     }
 
@@ -79,11 +80,12 @@ public class ObjectiveManager : MonoBehaviour {
         while (createdObjectives != howManyObjectives) {
             int randomIndex = random.Next(0, allObjectivesList.Count);
 
-            while (!objectiveList.Contains(allObjectivesList[randomIndex])) {
+            while (objectiveList.Contains(allObjectivesList[randomIndex])) {
                 randomIndex = random.Next(0, allObjectivesList.Count);
             }
             createdObjectives++;
             objectiveList.Add(allObjectivesList[randomIndex]);
+            //objectiveList[createdObjectives].interactable.
         }
 
     }
@@ -191,6 +193,11 @@ public class ObjectiveManager : MonoBehaviour {
         objectiveList[0].interactable.gameObject.transform.Translate(Vector3.up);
 
         TimeManager.instance.StartTimer();
+    }
+
+    private IEnumerator FirstObjectiveSet() {
+        yield return new WaitForSeconds(4);
+        CreateObjectives();
     }
     
 }
