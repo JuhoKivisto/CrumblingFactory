@@ -38,17 +38,15 @@ public class HandController : MonoBehaviour {
 
             newDistance = Vector3.Distance(handlingObject.GetComponent<Transform>().localPosition, handlingObject.transform.parent.GetChild(1).transform.localPosition);
 
-            Debug.Log(newDistance - interactingItem.distance);
-
             Transform parentOfLever = handlingObject.transform.parent.gameObject.transform;
             GameObject lever = parentOfLever.GetChild(1).gameObject;                //get the lever mesh render
 
             Vector3 temp = (this.GetComponent<Transform>().position - parentOfLever.GetComponent<Transform>().position);
 
-            Vector3 newLocalPosition = new Vector3(handlingObject.GetComponent<Transform>().localPosition.x, temp.y / parentOfLever.localScale.y, temp.z / parentOfLever.localScale.z);
+            Vector3 newLocalPosition = new Vector3(temp.y / parentOfLever.localScale.x, temp.x / parentOfLever.localScale.y, temp.z / parentOfLever.localScale.z);
 
             handlingObject.GetComponent<Transform>().localPosition = newLocalPosition;
-            handlingObject.GetComponent<Transform>().localEulerAngles = parentOfLever.transform.localEulerAngles;
+            //handlingObject.GetComponent<Transform>().localEulerAngles = parentOfLever.transform.localEulerAngles;
 
             lever.transform.LookAt(handlingObject.transform);
             interactingItem.LeverUp = true;
