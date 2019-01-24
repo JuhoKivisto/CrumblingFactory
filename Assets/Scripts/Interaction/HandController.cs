@@ -35,7 +35,7 @@ public class HandController : MonoBehaviour {
         if (controller.GetPress(gripButton) && handlingObject != null && 
                             interactingItem.typeOfObject == InteractableItem.ObjectType.Lever) {
 
-
+            Debug.Log(interactingItem.Distance);
             Transform parentOfLever = handlingObject.transform.parent.gameObject.transform;
             GameObject lever = parentOfLever.GetChild(1).gameObject;                //get the lever mesh render
 

@@ -16,9 +16,15 @@ public class InteractableItem : MonoBehaviour {
 
     public bool LeverUp;
 
+    public Vector3 Distance;
+
 
     private void Start() {
-        Debug.Log(new Vector3(-0.77f, -0.767f, -2.145f) - new Vector3(-0.361f, -1.09f, 2.145f));
+        
+        if(this.typeOfObject == ObjectType.Lever) {
+            Distance = this.GetComponent<Transform>().localPosition - this.transform.parent.transform.GetChild(1).transform.localPosition;
+        }
+
     }
 
 
