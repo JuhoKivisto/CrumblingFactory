@@ -35,14 +35,14 @@ public class HandController : MonoBehaviour {
         if (controller.GetPress(gripButton) && handlingObject != null && 
                             interactingItem.typeOfObject == InteractableItem.ObjectType.Lever) {
 
-            //handlingObject.transform.LookAt(new Vector3(handlingObject.transform.localPosition.x, this.transform.localPosition.y, this.transform.localPosition.z));
-            Debug.Log(transform.InverseTransformPoint(this.GetComponent<Transform>().position) + handlingObject.GetComponent<Transform>().localPosition);
-            Debug.Log(transform.InverseTransformPoint(this.GetComponent<Transform>().position));
+            //GameObject parentOfLever = handlingObject.transform.parent.gameObject;
+            Transform parentOfLever = handlingObject.transform.parent.gameObject.transform;
 
-            handlingObject.GetComponent<Transform>().localPosition = transform.InverseTransformPoint(this.GetComponent<Transform>().position) 
-                    + handlingObject.GetComponent<Transform>().localPosition;
+            Vector3 temp = (this.GetComponent<Transform>().position - parentOfLever.GetComponent<Transform>().position);
 
-           
+            Vector3 newLocalPosition = new Vector3(temp.x / parentOfLever.localScale.x, temp.y / parentOfLever.localScale.y, temp.z / parentOfLever.localScale.z);
+
+            handlingObject.GetComponent<Transform>().localPosition = newLocalPosition;
             interactingItem.LeverUp = true;
         }
 
