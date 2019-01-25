@@ -87,7 +87,7 @@ public class HandController : MonoBehaviour {
             //z = temp.x * sin + temp.z * cosin;
             //x = temp.x * cosin - (temp.z * sin);
 
-            tempX = temp.x * cosin - temp.z * sin;
+            tempX = temp.x * cosin - (temp.z * sin);
             tempY = temp.y;
             tempZ = temp.x * sin + temp.z * cosin;
 
