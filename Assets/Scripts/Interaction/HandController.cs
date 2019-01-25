@@ -78,6 +78,7 @@ public class HandController : MonoBehaviour {
             //interactingItem.LeverUp = true;
         }
 
+
         if (controller.GetPressDown(gripButton) && handlingObject != null
                         && interactingItem.typeOfObject == InteractableItem.ObjectType.PickableObject) {    //pick an object
 
@@ -125,6 +126,7 @@ public class HandController : MonoBehaviour {
 
         InteractableItem colliedItem = collider.GetComponent<InteractableItem>();
 
+        collider.gameObject.transform.localPosition = interactingItem.startLocalPosition;
         interactingItem = null;
         handlingObject = null;
 

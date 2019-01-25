@@ -38,10 +38,6 @@ public class InteractableItem : MonoBehaviour {
                 LeverUp = false;
             }
 
-            if (!LeverUp) {
-                this.transform.localPosition = startLocalPosition;  //return collider to its previous position
-            }
-
         }
     }
 
