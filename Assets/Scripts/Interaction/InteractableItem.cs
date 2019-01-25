@@ -10,9 +10,9 @@ public class InteractableItem : MonoBehaviour {
     };
     public ObjectType typeOfObject;
 
-    public bool ButtonPressed;
+    public bool ButtonPressed;              //when button is press, return true
 
-    public bool PickingUp;
+    public bool PickingUp;                  //when object is picked up, return tru
 
     public bool LeverUp;
 

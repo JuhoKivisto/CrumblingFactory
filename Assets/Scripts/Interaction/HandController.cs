@@ -40,7 +40,7 @@ public class HandController : MonoBehaviour {
         }
 
         if (controller.GetPress(gripButton) && handlingObject != null && 
-                            interactingItem.typeOfObject == InteractableItem.ObjectType.Lever) {
+                            interactingItem.typeOfObject == InteractableItem.ObjectType.Lever) {    //this control lever
 
             newDistance = Vector3.Distance(handlingObject.GetComponent<Transform>().localPosition, handlingObject.transform.parent.GetChild(1).transform.localPosition);
 
@@ -78,7 +78,7 @@ public class HandController : MonoBehaviour {
         }
 
         if (controller.GetPressDown(gripButton) && handlingObject != null 
-                        && interactingItem.typeOfObject == InteractableItem.ObjectType.PickableObject) {
+                        && interactingItem.typeOfObject == InteractableItem.ObjectType.PickableObject) {    //pick an object
 
             handlingObject.transform.parent = this.transform;
             handlingObject.GetComponent<Rigidbody>().isKinematic = true;
@@ -87,7 +87,7 @@ public class HandController : MonoBehaviour {
         }
 
         if (controller.GetPressUp(gripButton) && handlingObject != null
-                    && interactingItem.typeOfObject == InteractableItem.ObjectType.PickableObject) {
+                    && interactingItem.typeOfObject == InteractableItem.ObjectType.PickableObject) {        //this releases the object
             handlingObject.transform.parent = null;
             handlingObject.GetComponent<Rigidbody>().isKinematic = false;
 
@@ -113,7 +113,7 @@ public class HandController : MonoBehaviour {
             Vector3 buttonLocalPosition = collider.gameObject.transform.GetChild(0).gameObject.GetComponent<Transform>().localPosition;
             buttonLocalPosition = new Vector3(buttonLocalPosition.x, -0.2f, buttonLocalPosition.z);
 
-            cube.GetComponent<Transform>().localPosition = buttonLocalPosition;
+            cube.GetComponent<Transform>().localPosition = buttonLocalPosition;         //change the position of button render, like animation
 
             collidedItem.ButtonPressed = true;
 
