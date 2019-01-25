@@ -16,18 +16,6 @@ public class InteractableItem : MonoBehaviour {
 
     public bool LeverUp;
 
-    public Vector3 startLocalPosition;
-
-
-    private void Start() {
-        Debug.Log(Vector3.Angle(new Vector3(3,2,4), new Vector3(0,0,1)));
-
-        if (this.typeOfObject == ObjectType.Lever) {
-
-            startLocalPosition = this.transform.localPosition;
-        }
-
-    }
 
     private void Update() {
         if (this.typeOfObject == ObjectType.Lever) {

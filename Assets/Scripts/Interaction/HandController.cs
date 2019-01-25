@@ -45,13 +45,17 @@ public class HandController : MonoBehaviour {
             Transform parentOfVale = handlingObject.transform.parent.transform;
             Transform secondChildObject = parentOfVale.GetChild(1);
 
+            float newDistance = Vector3.Distance(handlingObject.transform.localPosition, handlingObject.transform.parent.GetChild(1).localPosition);
             Vector3 temp = (this.GetComponent<Transform>().position - parentOfVale.position);
             temp = new Vector3(temp.x / parentOfVale.localScale.x, handlingObject.transform.localPosition.y, temp.z / parentOfVale.localScale.z);
 
-            handlingObject.transform.localPosition = temp;
-            handlingObject.transform.rotation = parentOfVale.rotation;
 
-            secondChildObject.LookAt(handlingObject.transform);
+            if(distance - newDistance >= -0.03 && distance - newDistance <= 0.03) {
+                handlingObject.transform.localPosition = temp;
+                handlingObject.transform.rotation = parentOfVale.rotation;
+
+                secondChildObject.LookAt(handlingObject.transform);
+            }           
 
 
         }
@@ -130,7 +134,7 @@ public class HandController : MonoBehaviour {
         interactingItem = collidedItem;
 
         
-        if(collidedItem.typeOfObject == InteractableItem.ObjectType.Lever) {
+        if(collidedItem.typeOfObject == InteractableItem.ObjectType.Lever || collidedItem.typeOfObject == InteractableItem.ObjectType.Valve) {
             distance = Vector3.Distance(collider.transform.localPosition, collider.transform.parent.GetChild(1).transform.localPosition);
 
         }
