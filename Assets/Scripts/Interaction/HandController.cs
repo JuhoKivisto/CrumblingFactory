@@ -27,6 +27,7 @@ public class HandController : MonoBehaviour {
     // Use this for initialization
     void Start() {
 
+
         trackedObj = GetComponent<SteamVR_TrackedObject>();
 
     }
@@ -36,6 +37,23 @@ public class HandController : MonoBehaviour {
         if (controller == null) {
             Debug.Log("Controller not initialized");
             return;
+        }
+
+        if(controller.GetPress(gripButton) && handlingObject != null 
+            && interactingItem.typeOfObject == InteractableItem.ObjectType.Valve) {     //valve control
+
+            Transform parentOfVale = handlingObject.transform.parent.transform;
+            Transform secondChildObject = parentOfVale.GetChild(1);
+
+            Vector3 temp = (this.GetComponent<Transform>().position - parentOfVale.position);
+            temp = new Vector3(temp.x / parentOfVale.localScale.x, handlingObject.transform.localPosition.y, temp.z / parentOfVale.localScale.z);
+
+            handlingObject.transform.localPosition = temp;
+            handlingObject.transform.rotation = parentOfVale.rotation;
+
+            secondChildObject.LookAt(handlingObject.transform);
+
+
         }
 
         if (controller.GetPress(gripButton) && handlingObject != null &&
@@ -53,7 +71,7 @@ public class HandController : MonoBehaviour {
 
 
 
-            if(distance - newDistance <= 0.07 && distance - newDistance >= -0.07) {
+            if(distance - newDistance <= 0.1 && distance - newDistance >= -0.1) {
                 cosin = Mathf.Cos(parentOfLever.localEulerAngles.y * pi / 180f);                                //math to calculate angle for rotation
                 sin = Mathf.Sin(parentOfLever.localEulerAngles.y * pi / 180);
 

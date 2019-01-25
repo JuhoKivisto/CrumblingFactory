@@ -20,8 +20,9 @@ public class InteractableItem : MonoBehaviour {
 
 
     private void Start() {
-        
-        if(this.typeOfObject == ObjectType.Lever) {
+        Debug.Log(Vector3.Angle(new Vector3(3,2,4), new Vector3(0,0,1)));
+
+        if (this.typeOfObject == ObjectType.Lever) {
 
             startLocalPosition = this.transform.localPosition;
         }
