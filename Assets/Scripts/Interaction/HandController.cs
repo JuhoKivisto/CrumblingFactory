@@ -53,33 +53,34 @@ public class HandController : MonoBehaviour {
 
             Debug.Log(distance - newDistance);
 
-            cosin = Mathf.Cos(parentOfLever.localEulerAngles.y * pi / 180f);                                //math to calculate angle for rotation
-            sin = Mathf.Sin(parentOfLever.localEulerAngles.y * pi / 180);
+            if(distance - newDistance <= 0.1 && distance - newDistance >= -0.1) {
+                cosin = Mathf.Cos(parentOfLever.localEulerAngles.y * pi / 180f);                                //math to calculate angle for rotation
+                sin = Mathf.Sin(parentOfLever.localEulerAngles.y * pi / 180);
 
-            if (parentOfLever.localEulerAngles.y >= 0 && parentOfLever.localEulerAngles.y <= 90 
-                && parentOfLever.rotation.y >= 0.7071f && parentOfLever.rotation.y <= 1f) {
-                cosin *= -1;
+                if (parentOfLever.localEulerAngles.y >= 0 && parentOfLever.localEulerAngles.y <= 90
+                    && parentOfLever.rotation.y >= 0.7071f && parentOfLever.rotation.y <= 1f) {
+                    cosin *= -1;
+                }
+                else if (parentOfLever.localEulerAngles.y >= 0 && parentOfLever.localEulerAngles.y <= 90
+                    && parentOfLever.rotation.y >= 0 && parentOfLever.rotation.y < 0.7071) {
+                    sin *= 1;
+                }
+                else if (parentOfLever.localEulerAngles.y <= 360 && parentOfLever.localEulerAngles.y >= 270
+                    && parentOfLever.rotation.y >= -0.7071f && parentOfLever.rotation.y <= 0) {
+                    sin *= -1;
+                }
+
+                tempX = newLocalPosition.z * sin + newLocalPosition.x * cosin;
+                tempY = newLocalPosition.y;
+                tempZ = newLocalPosition.z * cosin - newLocalPosition.x * sin;
+
+                newLocalPosition = new Vector3(tempX, tempY, tempZ);
+
+                handlingObject.GetComponent<Transform>().localPosition = newLocalPosition;
+
+
+                lever.transform.LookAt(handlingObject.transform);
             }
-            else if (parentOfLever.localEulerAngles.y >= 0 && parentOfLever.localEulerAngles.y <= 90 
-                && parentOfLever.rotation.y >= 0 && parentOfLever.rotation.y < 0.7071) {
-                sin *= 1;
-            }
-            else if (parentOfLever.localEulerAngles.y <= 360 && parentOfLever.localEulerAngles.y >= 270 
-                && parentOfLever.rotation.y >= -0.7071f && parentOfLever.rotation.y <= 0) {
-                sin *= -1;
-            }
-
-            tempX = newLocalPosition.z * sin + newLocalPosition.x * cosin;
-            tempY = newLocalPosition.y;
-            tempZ = newLocalPosition.z * cosin - newLocalPosition.x * sin;
-
-            newLocalPosition = new Vector3(tempX, tempY, tempZ);
-
-            handlingObject.GetComponent<Transform>().localPosition = newLocalPosition;
-
-
-            lever.transform.LookAt(handlingObject.transform);
-
         }
 
 
