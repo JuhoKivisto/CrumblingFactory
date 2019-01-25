@@ -7,13 +7,16 @@ public class Objective {
 
     public GameObject interactable;
 
+    public GameObject alarmLight;
+
     public int controlPanelId;
 
     public bool done;
 
-    public Objective(int cPId, GameObject intact) {
+    public Objective(int cPId, GameObject intact, GameObject aLight) {
 
         interactable = intact;
+        alarmLight = aLight;
         controlPanelId = cPId;
         done = false;
 
@@ -41,6 +44,8 @@ public class ObjectiveManager : MonoBehaviour {
     public GameManager gameManager;
     public Stats stats;
 
+    public Material red;
+
     void Awake() {
 
         if (instance == null) {
@@ -54,8 +59,8 @@ public class ObjectiveManager : MonoBehaviour {
 
     void Start() {
         //CreateObjectives___OLD();
-        TimeManager.instance.StartTimer();
         StartCoroutine(FirstObjectiveSet());
+        TimeManager.instance.StartTimer();
 
     }
 
@@ -83,9 +88,14 @@ public class ObjectiveManager : MonoBehaviour {
             while (objectiveList.Contains(allObjectivesList[randomIndex])) {
                 randomIndex = random.Next(0, allObjectivesList.Count);
             }
-            createdObjectives++;
             objectiveList.Add(allObjectivesList[randomIndex]);
+            objectiveList[createdObjectives].alarmLight.GetComponentInChildren<Renderer>().material = red;
+            objectiveList[createdObjectives].alarmLight.GetComponentInChildren<Light>().color = Color.red;
+            objectiveList[createdObjectives].alarmLight.GetComponentInChildren<Light>().range = 0.12f;
+            objectiveList[createdObjectives].alarmLight.GetComponentInChildren<Light>().intensity = 2.46f;
+            //objectiveList[createdObjectives].alarmLight.GetComponentInChildren<GameObject>().GetComponentInChildren<GameObject>().SetActive(false);
             //objectiveList[createdObjectives].interactable.
+            createdObjectives++;
         }
 
     }
@@ -119,12 +129,16 @@ public class ObjectiveManager : MonoBehaviour {
             gameManager.StopHeating(stats.waitTimeOnObjectiveSetComplete, stats.decreaseHeatOnObjectiveSetComplete);
             CreateObjectives();
         }
+        // More objectives if heat is high enough
+        if (true) {
+
+        }
     }
 
     public void CompleteObjective(Objective objective) {
 
-        if (objective == objectiveList[currentObjectiveId]) {
-
+        if (objectiveList.Contains(objective)) {
+            print("objective DONE!!!");
         currentObjectiveId++;
             if (stats.decreaseHeat) {
                 gameManager.StopHeating(stats.waitTimeOnObjectiveComplete, stats.decreaseHeatOnObjectiveComplete);

@@ -4,10 +4,13 @@ using UnityEngine;
 
 public class InteractableTest : MonoBehaviour {
 
+    public GameObject interactable;
+    public GameObject alarmLigtht;
+
     // Use this for initialization
     void Start() {
 
-        ObjectiveManager.instance.PopulateList(new Objective(GetComponentInParent<ControlPanel>().id, gameObject));
+        ObjectiveManager.instance.PopulateList(new Objective(GetComponentInParent<ControlPanel>().id, interactable, alarmLigtht));
 
     }
 
