@@ -68,7 +68,7 @@ public class HandController : MonoBehaviour {
             tempY = newLocalPosition.y;
             tempZ = newLocalPosition.z * cosin - newLocalPosition.x * sin;
 
-            //newLocalPosition = new Vector3(tempX, tempY, tempZ);
+            newLocalPosition = new Vector3(tempX, tempY, tempZ);
 
             handlingObject.GetComponent<Transform>().localPosition = newLocalPosition;
 
