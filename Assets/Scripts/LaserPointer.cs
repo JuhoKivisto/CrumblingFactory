@@ -47,7 +47,7 @@ public class LaserPointer : MonoBehaviour {
         laserTransform.localScale = new Vector3(laserTransform.localScale.x, laserTransform.localScale.y, hit.distance);
     }
 
-    private void Teleport() 
+    private void Teleport()
     {
         shouldTeleport = false; // sets the bool back to false
         reticle.SetActive(false); // sets reticle to false
@@ -57,8 +57,8 @@ public class LaserPointer : MonoBehaviour {
     }
 
     // Use this for initialization
-    void Start () {
-        Renderer rend = laser.GetComponent<Renderer>();
+    void Start() {
+        //   Renderer rend = laser.GetComponent<Renderer>();
 
         laser = Instantiate(laserP); // instantiates our laser prefab
         laserTransform = laser.transform;
@@ -68,36 +68,33 @@ public class LaserPointer : MonoBehaviour {
 
         areStunned = false;
     }
-	
-	// Update is called once per frame
-	void Update () {
-         
+
+    // Update is called once per frame
+    void Update() {
+
         if (Controller.GetPress(SteamVR_Controller.ButtonMask.Trigger)) // checks for a trigger press
         {
             RaycastHit hit;
             Debug.Log("Trigger Painettu jes");
-            if (Physics.Raycast(trackedObj.transform.position, transform.forward, out hit, length)) // Checks what raycast is colliding with and if it has the correct layer active to teleport
-            {
+            if (Physics.Raycast(trackedObj.transform.position, transform.forward, out hit, length)) // Raycast
                 hitPoint = hit.point;
-                Debug.Log("Tsekki päästy läpi");
-                ShowLaser(hit); 
+            Debug.Log("hitattu");
+            ShowLaser(hit);
+            if (hit.collider.tag == "Ground")
+            {
                 reticle.SetActive(true); // sets reticle active
-                teleportReticleTransform.position = hitPoint + teleportReticleOffset; // changes reticles position to raycasts hit point
-                if (hit.collider.gameObject.layer == 8)
-                {
-                    rend.material = mat1;
-                    shouldTeleport = true; // enables the use of Teleport();
-                }
-                else
-                {
-                    rend.material = mat2;
-                }
+            teleportReticleTransform.position = hitPoint + teleportReticleOffset; // changes reticles position to raycasts hit point
+
+                shouldTeleport = true; // enables the use of Teleport();
             }
-        }
-        else // disables laser and reticle if the trigger isn't pressed
+            else // disables laser and reticle if the trigger isn't pressed
+            {
+                reticle.SetActive(false);
+            }
+            Debug.Log("Touched object " + hit.transform.gameObject.name + " layer is " + hit.transform.gameObject.layer);
+        } else
         {
             laser.SetActive(false);
-            reticle.SetActive(false);
         }
 
         if (Controller.GetPressUp(SteamVR_Controller.ButtonMask.Trigger) && shouldTeleport && !areStunned) // Teleports when the trigger is released if shouldTeleport bool is true
