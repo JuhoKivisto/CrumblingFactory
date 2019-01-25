@@ -50,9 +50,9 @@ public class HandController : MonoBehaviour {
             temp = new Vector3(temp.x / parentOfVale.localScale.x, handlingObject.transform.localPosition.y, temp.z / parentOfVale.localScale.z);
 
 
-            if(distance - newDistance >= -0.03 && distance - newDistance <= 0.03) {
+            if(distance - newDistance >= -0.01 && distance - newDistance <= 0.01) {
                 handlingObject.transform.localPosition = temp;
-                handlingObject.transform.rotation = parentOfVale.rotation;
+                handlingObject.transform.rotation = parentOfVale.GetChild(1).transform.rotation;
 
                 secondChildObject.LookAt(handlingObject.transform);
             }           
