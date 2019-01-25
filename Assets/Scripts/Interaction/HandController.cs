@@ -69,14 +69,14 @@ public class HandController : MonoBehaviour {
                 sin *= -1;
             }
 
-            //z = temp.z * sin + temp.x * cosin;
-            //x = temp.z * cosin - (temp.x * sin);
+            //z = temp.x * sin + temp.z * cosin;
+            //x = temp.x * cosin - (temp.z * sin);
 
-            tempX = temp.z * cosin - temp.x * sin;
+            tempX = temp.x * cosin - temp.z * sin;
             tempY = temp.y;
-            tempZ = temp.z * sin + temp.x * cosin;
+            tempZ = temp.x * sin + temp.z * cosin;
 
-            temp = new Vector3(tempX, tempY, tempZ);
+            temp = new Vector3(tempX, temp.y, tempZ);
 
             handlingObject.GetComponent<Transform>().localPosition = temp;
 
