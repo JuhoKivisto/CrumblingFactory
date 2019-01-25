@@ -74,7 +74,7 @@ public class HandController : MonoBehaviour {
 
 
             lever.transform.LookAt(handlingObject.transform);
-            interactingItem.LeverUp = true;
+            //interactingItem.LeverUp = true;
         }
 
         if (controller.GetPressDown(gripButton) && handlingObject != null 
