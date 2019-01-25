@@ -27,7 +27,7 @@ public class HandController : MonoBehaviour {
 
     // Use this for initialization
     void Start() {
-        
+
         trackedObj = GetComponent<SteamVR_TrackedObject>();
 
     }
@@ -39,7 +39,7 @@ public class HandController : MonoBehaviour {
             return;
         }
 
-        if (controller.GetPress(gripButton) && handlingObject != null && 
+        if (controller.GetPress(gripButton) && handlingObject != null &&
                             interactingItem.typeOfObject == InteractableItem.ObjectType.Lever) {    //this control lever
 
             newDistance = Vector3.Distance(handlingObject.GetComponent<Transform>().localPosition, handlingObject.transform.parent.GetChild(1).transform.localPosition);
@@ -49,58 +49,36 @@ public class HandController : MonoBehaviour {
 
             Vector3 temp = (this.GetComponent<Transform>().position - parentOfLever.GetComponent<Transform>().position);
 
-            temp = new Vector3(temp.x / parentOfLever.localScale.x, 
-                                    temp.y / parentOfLever.localScale.y, 
-                                    temp.z / parentOfLever.localScale.z);
+            Vector3 newLocalPosition = new Vector3(lever.transform.localPosition.x,
+                        temp.y / parentOfLever.localScale.y, temp.z / (parentOfLever.localScale.z));
 
-            //cosin = Mathf.Cos(parentOfLever.localEulerAngles.y * pi / 180f);
-            //sin = Mathf.Sin(parentOfLever.localEulerAngles.y * pi / 180);
+            cosin = Mathf.Cos(parentOfLever.localEulerAngles.y * pi / 180f);
+            sin = Mathf.Sin(parentOfLever.localEulerAngles.y * pi / 180);
 
-            //if (parentOfLever.eulerAngles.y >= 0 && parentOfLever.eulerAngles.y <= 90 
-            //    && parentOfLever.rotation.y >= 0.7071f && parentOfLever.rotation.y <= 1f) {
-            //    cosin *= -1;
-            //}
-            //else if (parentOfLever.eulerAngles.y >= 0 && parentOfLever.eulerAngles.y <= 90 
-            //    && parentOfLever.rotation.y >= 0 && parentOfLever.rotation.y < 0.7071) {
-            //    sin *= 1;
-            //}
-            //else if (parentOfLever.eulerAngles.y <= 360 && parentOfLever.eulerAngles.y >= 270 
-            //    && parentOfLever.rotation.y >= -0.7071f && parentOfLever.rotation.y <= 0) {
-            //    sin *= -1;
-            //}
+            if (parentOfLever.localEulerAngles.y >= 0 && parentOfLever.localEulerAngles.y <= 90 && parentOfLever.rotation.y >= 0.7071f && parentOfLever.rotation.y <= 1f) {
+                cosin *= -1;
+            }
+            else if (parentOfLever.localEulerAngles.y >= 0 && parentOfLever.localEulerAngles.y <= 90 && parentOfLever.rotation.y >= 0 && parentOfLever.rotation.y < 0.7071) {
+                sin *= 1;
+            }
+            else if (parentOfLever.localEulerAngles.y <= 360 && parentOfLever.localEulerAngles.y >= 270 && parentOfLever.rotation.y >= -0.7071f && parentOfLever.rotation.y <= 0) {
+                sin *= -1;
+            }
 
-            ////Vector3 temp = new Vector3((cubeVector.x - spherevector.x) / spherescale.x, (cubeVector.y - spherevector.y) / spherescale.y, (cubeVector.z - spherevector.z) / spherescale.z);
+            tempX = newLocalPosition.z * sin + newLocalPosition.x * cosin;
+            tempY = newLocalPosition.y;
+            tempZ = newLocalPosition.z * cosin - newLocalPosition.x * sin;
 
-            ////if (sphereRotationAngle.y >= 0 && sphereRotationAngle.y <= 90
-            ////        && sphere.transform.rotation.y >= 0.7071f && sphere.transform.rotation.y <= 1f) {
-            ////    cosin *= -1;
-            ////}
-            ////else if (sphereRotationAngle.y >= 0 && sphereRotationAngle.y <= 90
-            ////       && sphere.transform.rotation.y >= 0 && sphere.transform.rotation.y < 0.7071) {
-            ////    sin *= 1;
-            ////}
-            ////else if (sphereRotationAngle.y <= 360 && sphereRotationAngle.y >= 270
-            ////       && sphere.transform.rotation.y >= -0.7071f && sphere.transform.rotation.y <= 0) {
-            ////    sin *= -1;
-            ////}
+            newLocalPosition = new Vector3(tempX, tempY, tempZ);
 
-            ////z = temp.x * sin + temp.z * cosin;
-            ////x = temp.x * cosin - (temp.z * sin);
-
-            //tempX = temp.x * cosin - (temp.z * sin);
-            //tempY = temp.y;
-            //tempZ = temp.x * sin + temp.z * cosin;
-
-            //temp = new Vector3(tempX, temp.y, tempZ);
-
-            handlingObject.GetComponent<Transform>().localPosition = temp;
+            handlingObject.GetComponent<Transform>().localPosition = newLocalPosition;
 
 
             lever.transform.LookAt(handlingObject.transform);
             //interactingItem.LeverUp = true;
         }
 
-        if (controller.GetPressDown(gripButton) && handlingObject != null 
+        if (controller.GetPressDown(gripButton) && handlingObject != null
                         && interactingItem.typeOfObject == InteractableItem.ObjectType.PickableObject) {    //pick an object
 
             handlingObject.transform.parent = this.transform;
@@ -116,7 +94,7 @@ public class HandController : MonoBehaviour {
 
             interactingItem.PickingUp = false;
         }
-        
+
     }
 
     private void OnTriggerEnter(Collider collider) {                                            //when controller collides with object
@@ -132,7 +110,7 @@ public class HandController : MonoBehaviour {
 
             GameObject cube = collider.gameObject.transform.GetChild(0).gameObject;
 
-            
+
             Vector3 buttonLocalPosition = collider.gameObject.transform.GetChild(0).gameObject.GetComponent<Transform>().localPosition;
             buttonLocalPosition = new Vector3(buttonLocalPosition.x, -0.2f, buttonLocalPosition.z);
 
