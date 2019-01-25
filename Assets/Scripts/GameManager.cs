@@ -78,11 +78,15 @@ public class GameManager : MonoBehaviour {
     /// </summary>
     public void EventByTime() {
 
-        /* Increases heat after certain time */
+        /* Increases heat after certain time 
+         current time / time divider, witch is just a value that used to divide time and
+         if result is 0 then heat rises */
         if (TimeManager.instance.time % stats.timeDivider == 0) {
 
+            /* Normalized time value = current time / whole game lenght,  which is fixed value in seconds
+             normalized value is used to access value from curve witch range is 0f-1f */
             normTimeValue = TimeManager.instance.time / (stats.gameLenght);
-            //normTimeValue = normTimeValue*100
+
             heatMeter += stats.heatCurve.Evaluate(normTimeValue) * stats.heatLevels[heatId];
             HeatLevelIncreaser();
         }
