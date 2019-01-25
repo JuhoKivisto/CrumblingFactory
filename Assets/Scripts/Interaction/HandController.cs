@@ -49,9 +49,12 @@ public class HandController : MonoBehaviour {
 
             Vector3 temp = (this.GetComponent<Transform>().position - parentOfLever.GetComponent<Transform>().position);
 
-            Vector3 newLocalPosition = new Vector3(lever.transform.localPosition.x, 
-                        temp.y / parentOfLever.localScale.y, temp.z / (parentOfLever.localScale.z));
+            //Vector3 newLocalPosition = new Vector3(temp.x / parentOfLever.localScale.x, 
+                        //temp.y / parentOfLever.localScale.y, temp.z / (parentOfLever.localScale.z));
 
+            temp = new Vector3(temp.x / parentOfLever.localScale.x, 
+                                    temp.y / parentOfLever.localScale.y, 
+                                    temp.z / parentOfLever.localScale.z);
             cosin = Mathf.Cos(parentOfLever.localEulerAngles.y * pi / 180f);
             sin = Mathf.Sin(parentOfLever.localEulerAngles.y * pi / 180);
 
@@ -64,13 +67,16 @@ public class HandController : MonoBehaviour {
                 sin *= -1;
             }
 
-            tempX = newLocalPosition.x;
-            tempY = newLocalPosition.z * sin + newLocalPosition.x * cosin; ;
-            tempZ = newLocalPosition.z * cosin - newLocalPosition.x * sin;
+            //z = temp.z * sin + temp.x * cosin;
+            //x = temp.z * cosin - (temp.x * sin);
 
-            newLocalPosition = new Vector3(tempX, tempY, tempZ);
+            tempX = temp.z * cosin - temp.x * sin;
+            tempY = temp.y;
+            tempZ = temp.z * sin - temp.x * cosin;
 
-            handlingObject.GetComponent<Transform>().localPosition = newLocalPosition;
+            temp = new Vector3(tempX, tempY, tempZ);
+
+            handlingObject.GetComponent<Transform>().localPosition = temp;
 
 
             lever.transform.LookAt(handlingObject.transform);
