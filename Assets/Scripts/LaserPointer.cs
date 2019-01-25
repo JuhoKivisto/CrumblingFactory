@@ -16,6 +16,7 @@ public class LaserPointer : MonoBehaviour {
     private GameObject laser;
     private Transform laserTransform;
     private Vector3 hitPoint;
+    public int length;
 
     // teleport objects
     public Transform cameraRigTransform;
@@ -26,6 +27,7 @@ public class LaserPointer : MonoBehaviour {
     public Vector3 teleportReticleOffset;
     public LayerMask teleportMask; // You have to create a new layer and put it here to be able to teleport on the floor
     private bool shouldTeleport;
+    private bool areStunned;
 
     private SteamVR_Controller.Device Controller // Gets the controller object
     {
@@ -63,6 +65,8 @@ public class LaserPointer : MonoBehaviour {
 
         reticle = Instantiate(teleportReticlePrefab); // instantiates our reticle prefab
         teleportReticleTransform = reticle.transform;
+
+        areStunned = false;
     }
 	
 	// Update is called once per frame
@@ -70,10 +74,12 @@ public class LaserPointer : MonoBehaviour {
          
         if (Controller.GetPress(SteamVR_Controller.ButtonMask.Trigger)) // checks for a trigger press
         {
-            RaycastHit hit; 
-            if (Physics.Raycast(trackedObj.transform.position, transform.forward, out hit, 25)) // Checks what raycast is colliding with and if it has the correct layer active to teleport
+            RaycastHit hit;
+            Debug.Log("Trigger Painettu jes");
+            if (Physics.Raycast(trackedObj.transform.position, transform.forward, out hit, length)) // Checks what raycast is colliding with and if it has the correct layer active to teleport
             {
                 hitPoint = hit.point;
+                Debug.Log("Tsekki päästy läpi");
                 ShowLaser(hit); 
                 reticle.SetActive(true); // sets reticle active
                 teleportReticleTransform.position = hitPoint + teleportReticleOffset; // changes reticles position to raycasts hit point
@@ -81,7 +87,8 @@ public class LaserPointer : MonoBehaviour {
                 {
                     rend.material = mat1;
                     shouldTeleport = true; // enables the use of Teleport();
-                } else
+                }
+                else
                 {
                     rend.material = mat2;
                 }
@@ -93,7 +100,7 @@ public class LaserPointer : MonoBehaviour {
             reticle.SetActive(false);
         }
 
-        if (Controller.GetPressUp(SteamVR_Controller.ButtonMask.Trigger) && shouldTeleport) // Teleports when the trigger is released if shouldTeleport bool is true
+        if (Controller.GetPressUp(SteamVR_Controller.ButtonMask.Trigger) && shouldTeleport && !areStunned) // Teleports when the trigger is released if shouldTeleport bool is true
         {
             Teleport();
         }
