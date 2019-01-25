@@ -53,45 +53,45 @@ public class HandController : MonoBehaviour {
                                     temp.y / parentOfLever.localScale.y, 
                                     temp.z / parentOfLever.localScale.z);
 
-            cosin = Mathf.Cos(parentOfLever.localEulerAngles.y * pi / 180f);
-            sin = Mathf.Sin(parentOfLever.localEulerAngles.y * pi / 180);
+            //cosin = Mathf.Cos(parentOfLever.localEulerAngles.y * pi / 180f);
+            //sin = Mathf.Sin(parentOfLever.localEulerAngles.y * pi / 180);
 
-            if (parentOfLever.eulerAngles.y >= 0 && parentOfLever.eulerAngles.y <= 90 
-                && parentOfLever.rotation.y >= 0.7071f && parentOfLever.rotation.y <= 1f) {
-                cosin *= -1;
-            }
-            else if (parentOfLever.eulerAngles.y >= 0 && parentOfLever.eulerAngles.y <= 90 
-                && parentOfLever.rotation.y >= 0 && parentOfLever.rotation.y < 0.7071) {
-                sin *= 1;
-            }
-            else if (parentOfLever.eulerAngles.y <= 360 && parentOfLever.eulerAngles.y >= 270 
-                && parentOfLever.rotation.y >= -0.7071f && parentOfLever.rotation.y <= 0) {
-                sin *= -1;
-            }
-
-            //Vector3 temp = new Vector3((cubeVector.x - spherevector.x) / spherescale.x, (cubeVector.y - spherevector.y) / spherescale.y, (cubeVector.z - spherevector.z) / spherescale.z);
-
-            //if (sphereRotationAngle.y >= 0 && sphereRotationAngle.y <= 90
-            //        && sphere.transform.rotation.y >= 0.7071f && sphere.transform.rotation.y <= 1f) {
+            //if (parentOfLever.eulerAngles.y >= 0 && parentOfLever.eulerAngles.y <= 90 
+            //    && parentOfLever.rotation.y >= 0.7071f && parentOfLever.rotation.y <= 1f) {
             //    cosin *= -1;
             //}
-            //else if (sphereRotationAngle.y >= 0 && sphereRotationAngle.y <= 90
-            //       && sphere.transform.rotation.y >= 0 && sphere.transform.rotation.y < 0.7071) {
+            //else if (parentOfLever.eulerAngles.y >= 0 && parentOfLever.eulerAngles.y <= 90 
+            //    && parentOfLever.rotation.y >= 0 && parentOfLever.rotation.y < 0.7071) {
             //    sin *= 1;
             //}
-            //else if (sphereRotationAngle.y <= 360 && sphereRotationAngle.y >= 270
-            //       && sphere.transform.rotation.y >= -0.7071f && sphere.transform.rotation.y <= 0) {
+            //else if (parentOfLever.eulerAngles.y <= 360 && parentOfLever.eulerAngles.y >= 270 
+            //    && parentOfLever.rotation.y >= -0.7071f && parentOfLever.rotation.y <= 0) {
             //    sin *= -1;
             //}
 
-            //z = temp.x * sin + temp.z * cosin;
-            //x = temp.x * cosin - (temp.z * sin);
+            ////Vector3 temp = new Vector3((cubeVector.x - spherevector.x) / spherescale.x, (cubeVector.y - spherevector.y) / spherescale.y, (cubeVector.z - spherevector.z) / spherescale.z);
 
-            tempX = temp.x * cosin - (temp.z * sin);
-            tempY = temp.y;
-            tempZ = temp.x * sin + temp.z * cosin;
+            ////if (sphereRotationAngle.y >= 0 && sphereRotationAngle.y <= 90
+            ////        && sphere.transform.rotation.y >= 0.7071f && sphere.transform.rotation.y <= 1f) {
+            ////    cosin *= -1;
+            ////}
+            ////else if (sphereRotationAngle.y >= 0 && sphereRotationAngle.y <= 90
+            ////       && sphere.transform.rotation.y >= 0 && sphere.transform.rotation.y < 0.7071) {
+            ////    sin *= 1;
+            ////}
+            ////else if (sphereRotationAngle.y <= 360 && sphereRotationAngle.y >= 270
+            ////       && sphere.transform.rotation.y >= -0.7071f && sphere.transform.rotation.y <= 0) {
+            ////    sin *= -1;
+            ////}
 
-            temp = new Vector3(tempX, temp.y, tempZ);
+            ////z = temp.x * sin + temp.z * cosin;
+            ////x = temp.x * cosin - (temp.z * sin);
+
+            //tempX = temp.x * cosin - (temp.z * sin);
+            //tempY = temp.y;
+            //tempZ = temp.x * sin + temp.z * cosin;
+
+            //temp = new Vector3(tempX, temp.y, tempZ);
 
             handlingObject.GetComponent<Transform>().localPosition = temp;
 
