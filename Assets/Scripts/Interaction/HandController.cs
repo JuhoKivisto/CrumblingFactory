@@ -10,18 +10,17 @@ public class HandController : MonoBehaviour {
 
     private SteamVR_Controller.Device controller { get { return SteamVR_Controller.Input((int)trackedObj.index); } }        //get hand sets
     private SteamVR_TrackedObject trackedObj;
-
     private InteractableItem interactingItem;
 
     private GameObject handlingObject;
-
-    float newDistance;  //to check lever
+    
     float tempX = 0;
     float tempY = 0;
     float tempZ = 0;
     float cosin = 0;
     float sin = 0;
     float pi = 3.14159265359f;
+    float distance = 0; //for lever control
 
 
 
@@ -42,26 +41,31 @@ public class HandController : MonoBehaviour {
         if (controller.GetPress(gripButton) && handlingObject != null &&
                             interactingItem.typeOfObject == InteractableItem.ObjectType.Lever) {    //this control lever
 
-            newDistance = Vector3.Distance(handlingObject.GetComponent<Transform>().localPosition, handlingObject.transform.parent.GetChild(1).transform.localPosition);
 
             Transform parentOfLever = handlingObject.transform.parent.gameObject.transform;
             GameObject lever = parentOfLever.GetChild(1).gameObject;                //get the lever mesh render
 
             Vector3 temp = (this.GetComponent<Transform>().position - parentOfLever.GetComponent<Transform>().position);
 
-            Vector3 newLocalPosition = new Vector3(lever.transform.localPosition.x,
-                        temp.y / parentOfLever.localScale.y, temp.z / (parentOfLever.localScale.z));
+            Vector3 newLocalPosition = new Vector3(lever.transform.localPosition.x, temp.y / parentOfLever.localScale.y, temp.z / (parentOfLever.localScale.z));
 
-            cosin = Mathf.Cos(parentOfLever.localEulerAngles.y * pi / 180f);
+            float newDistance = Vector3.Distance(handlingObject.transform.localPosition, handlingObject.transform.parent.GetChild(1).localPosition);
+
+            Debug.Log(distance - newDistance);
+
+            cosin = Mathf.Cos(parentOfLever.localEulerAngles.y * pi / 180f);                                //math to calculate angle for rotation
             sin = Mathf.Sin(parentOfLever.localEulerAngles.y * pi / 180);
 
-            if (parentOfLever.localEulerAngles.y >= 0 && parentOfLever.localEulerAngles.y <= 90 && parentOfLever.rotation.y >= 0.7071f && parentOfLever.rotation.y <= 1f) {
+            if (parentOfLever.localEulerAngles.y >= 0 && parentOfLever.localEulerAngles.y <= 90 
+                && parentOfLever.rotation.y >= 0.7071f && parentOfLever.rotation.y <= 1f) {
                 cosin *= -1;
             }
-            else if (parentOfLever.localEulerAngles.y >= 0 && parentOfLever.localEulerAngles.y <= 90 && parentOfLever.rotation.y >= 0 && parentOfLever.rotation.y < 0.7071) {
+            else if (parentOfLever.localEulerAngles.y >= 0 && parentOfLever.localEulerAngles.y <= 90 
+                && parentOfLever.rotation.y >= 0 && parentOfLever.rotation.y < 0.7071) {
                 sin *= 1;
             }
-            else if (parentOfLever.localEulerAngles.y <= 360 && parentOfLever.localEulerAngles.y >= 270 && parentOfLever.rotation.y >= -0.7071f && parentOfLever.rotation.y <= 0) {
+            else if (parentOfLever.localEulerAngles.y <= 360 && parentOfLever.localEulerAngles.y >= 270 
+                && parentOfLever.rotation.y >= -0.7071f && parentOfLever.rotation.y <= 0) {
                 sin *= -1;
             }
 
@@ -75,7 +79,7 @@ public class HandController : MonoBehaviour {
 
 
             lever.transform.LookAt(handlingObject.transform);
-            //interactingItem.LeverUp = true;
+
         }
 
 
@@ -105,7 +109,9 @@ public class HandController : MonoBehaviour {
         handlingObject = collider.gameObject;
         interactingItem = collidedItem;
 
+        distance = Vector3.Distance(collider.transform.localPosition, collider.transform.parent.GetChild(1).transform.localPosition);
 
+        Debug.Log(distance);
 
         if (collidedItem.typeOfObject == InteractableItem.ObjectType.Button) {
 
@@ -126,7 +132,6 @@ public class HandController : MonoBehaviour {
 
         InteractableItem colliedItem = collider.GetComponent<InteractableItem>();
 
-        collider.gameObject.transform.localPosition = interactingItem.startLocalPosition;
         interactingItem = null;
         handlingObject = null;
 
