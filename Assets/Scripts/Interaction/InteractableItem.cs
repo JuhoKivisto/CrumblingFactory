@@ -37,8 +37,8 @@ public class InteractableItem : MonoBehaviour {
     private void Update() {
         if (this.typeOfObject == ObjectType.Lever) {
 
-            if(this.transform.localPosition.y >= 1.2f) {
-                LeverUp = true;
+            if(this.transform.localPosition.y >= 1.2f) {            //if lever reach this position
+                LeverUp = true;                                     //lever is up
             }
             else {
                 LeverUp = false;
