@@ -64,8 +64,8 @@ public class HandController : MonoBehaviour {
                 sin *= -1;
             }
 
-            tempX = newLocalPosition.z * sin + newLocalPosition.x * cosin;
-            tempY = newLocalPosition.y;
+            tempX = newLocalPosition.x;
+            tempY = newLocalPosition.z * sin + newLocalPosition.x * cosin; ;
             tempZ = newLocalPosition.z * cosin - newLocalPosition.x * sin;
 
             newLocalPosition = new Vector3(tempX, tempY, tempZ);
