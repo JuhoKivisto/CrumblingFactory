@@ -13,7 +13,9 @@ public class LaserPointer : MonoBehaviour {
 
     // laser objects
     public GameObject laserP;
+    public GameObject laserR;
     private GameObject laser;
+    private GameObject laserRed;
     private Transform laserTransform;
     private Vector3 hitPoint;
     public int length;
@@ -47,6 +49,14 @@ public class LaserPointer : MonoBehaviour {
         laserTransform.localScale = new Vector3(laserTransform.localScale.x, laserTransform.localScale.y, hit.distance);
     }
 
+    private void ShowLaserR(RaycastHit hit) // Enables and builds the laser
+    {
+        laserRed.SetActive(true);
+        laserTransform.position = Vector3.Lerp(trackedObj.transform.position, hitPoint, 0.5f);
+        laserTransform.LookAt(hitPoint);
+        laserTransform.localScale = new Vector3(laserTransform.localScale.x, laserTransform.localScale.y, hit.distance);
+    }
+
     private void Teleport()
     {
         shouldTeleport = false; // sets the bool back to false
@@ -62,7 +72,8 @@ public class LaserPointer : MonoBehaviour {
         laser = Instantiate(laserP); // instantiates our laser prefab
         laserTransform = laser.transform;
 
-        Renderer rend = laser.GetComponent<Renderer>();
+        laserRed = Instantiate(laserR); 
+        laserTransform = laserRed.transform;
 
         reticle = Instantiate(teleportReticlePrefab); // instantiates our reticle prefab
         teleportReticleTransform = reticle.transform;
@@ -81,30 +92,43 @@ public class LaserPointer : MonoBehaviour {
             {
                 hitPoint = hit.point;
                 Debug.Log("hitattu");
-                ShowLaser(hit);
+
                 if (hit.collider.tag == "Ground")
                 {
-                    rend.material = mat1;
 
+                    if (laserRed.activeInHierarchy == true)
+                    {
+                        laserRed.SetActive(false);
+                    }
+
+                    ShowLaser(hit);
                     reticle.SetActive(true); // sets reticle active
                     teleportReticleTransform.position = hitPoint + teleportReticleOffset; // changes reticles position to raycasts hit point
 
                     shouldTeleport = true; // enables the use of Teleport();
+                } else
+                {
+                    if (laser.activeInHierarchy == true)
+                    {
+                        laser.SetActive(false);
+                    }
+                    ShowLaserR(hit);
                 }
             }
             else // disables laser and reticle if the trigger isn't pressed
             {
-                rend.material = mat2;
                 reticle.SetActive(false);
             }
             Debug.Log("Touched object " + hit.transform.gameObject.name + " layer is " + hit.transform.gameObject.layer);
         } else
         {
             laser.SetActive(false);
+            laserRed.SetActive(false);
         }
 
         if (Controller.GetPressUp(SteamVR_Controller.ButtonMask.Trigger) && shouldTeleport && !areStunned) // Teleports when the trigger is released if shouldTeleport bool is true
         {
+
             Teleport();
         }
     }
