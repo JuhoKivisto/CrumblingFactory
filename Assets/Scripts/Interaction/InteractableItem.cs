@@ -16,20 +16,14 @@ public class InteractableItem : MonoBehaviour {
 
     public bool LeverUp;
 
-    public float distance;
+    public Vector3 startLocalPosition;
 
 
     private void Start() {
         
         if(this.typeOfObject == ObjectType.Lever) {
 
-            GameObject cube = this.transform.parent.GetChild(1).gameObject;
-
-            distance = Vector3.Distance(this.GetComponent<Transform>().localPosition, this.transform.parent.transform.GetChild(1).transform.localPosition);
-
-            Debug.Log(cube.transform.localEulerAngles.x);
-            Debug.Log(cube.transform.rotation.x);
-
+            startLocalPosition = this.transform.localPosition;
         }
 
     }
@@ -42,6 +36,10 @@ public class InteractableItem : MonoBehaviour {
             }
             else {
                 LeverUp = false;
+            }
+
+            if (!LeverUp) {
+                this.transform.localPosition = startLocalPosition;  //return collider to its previous position
             }
 
         }
