@@ -53,26 +53,30 @@ public class HandController : MonoBehaviour {
                                     temp.y / parentOfLever.localScale.y, 
                                     temp.z / parentOfLever.localScale.z);
 
-            //cosin = Mathf.Cos(parentOfLever.localEulerAngles.y * pi / 180f);
-            //sin = Mathf.Sin(parentOfLever.localEulerAngles.y * pi / 180);
+            cosin = Mathf.Cos(parentOfLever.localEulerAngles.y * pi / 180f);
+            sin = Mathf.Sin(parentOfLever.localEulerAngles.y * pi / 180);
 
-            //if (parentOfLever.localEulerAngles.y >= 0 && parentOfLever.localEulerAngles.y <= 90 && parentOfLever.rotation.y >= 0.7071f && parentOfLever.rotation.y <= 1f) {
-            //    cosin *= -1;
-            //}
-            //else if (parentOfLever.localEulerAngles.y >= 0 && parentOfLever.localEulerAngles.y <= 90 && parentOfLever.rotation.y >= 0 && parentOfLever.rotation.y < 0.7071) {
-            //    sin *= 1;
-            //}else if (parentOfLever.localEulerAngles.y <= 360 && parentOfLever.localEulerAngles.y >= 270 && parentOfLever.rotation.y >= -0.7071f && parentOfLever.rotation.y <= 0) {
-            //    sin *= -1;
-            //}
+            if (parentOfLever.localEulerAngles.y >= 0 && parentOfLever.localEulerAngles.y <= 90 
+                && parentOfLever.rotation.y >= 0.7071f && parentOfLever.rotation.y <= 1f) {
+                cosin *= -1;
+            }
+            else if (parentOfLever.localEulerAngles.y >= 0 && parentOfLever.localEulerAngles.y <= 90 
+                && parentOfLever.rotation.y >= 0 && parentOfLever.rotation.y < 0.7071) {
+                sin *= 1;
+            }
+            else if (parentOfLever.localEulerAngles.y <= 360 && parentOfLever.localEulerAngles.y >= 270 
+                && parentOfLever.rotation.y >= -0.7071f && parentOfLever.rotation.y <= 0) {
+                sin *= -1;
+            }
 
-            ////z = temp.z * sin + temp.x * cosin;
-            ////x = temp.z * cosin - (temp.x * sin);
+            //z = temp.z * sin + temp.x * cosin;
+            //x = temp.z * cosin - (temp.x * sin);
 
-            //tempX = temp.z * cosin - temp.x * sin;
-            //tempY = temp.y;
-            //tempZ = temp.z * sin - temp.x * cosin;
+            tempX = temp.z * cosin - temp.x * sin;
+            tempY = temp.y;
+            tempZ = temp.z * sin + temp.x * cosin;
 
-            //temp = new Vector3(tempX, tempY, tempZ);
+            temp = new Vector3(tempX, tempY, tempZ);
 
             handlingObject.GetComponent<Transform>().localPosition = temp;
 
