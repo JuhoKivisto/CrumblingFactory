@@ -43,7 +43,7 @@ public class HandController : MonoBehaviour {
 
             Vector3 temp = (this.GetComponent<Transform>().position - parentOfLever.GetComponent<Transform>().position);
 
-            Vector3 newLocalPosition = new Vector3(temp.x / parentOfLever.localScale.x, 
+            Vector3 newLocalPosition = new Vector3(lever.transform.localPosition.x, 
                         temp.y / parentOfLever.localScale.y, temp.z / (parentOfLever.localScale.z));
 
             handlingObject.GetComponent<Transform>().localPosition = newLocalPosition;
