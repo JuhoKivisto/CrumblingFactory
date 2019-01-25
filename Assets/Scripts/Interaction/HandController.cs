@@ -50,7 +50,7 @@ public class HandController : MonoBehaviour {
             Vector3 temp = (this.GetComponent<Transform>().position - parentOfLever.GetComponent<Transform>().position);
 
             Vector3 newLocalPosition = new Vector3(lever.transform.localPosition.x, 
-                        temp.y / parentOfLever.localScale.y,lever.transform.localPosition.x);
+                        temp.y / parentOfLever.localScale.y, temp.z / (parentOfLever.localScale.z));
 
             cosin = Mathf.Cos(parentOfLever.localEulerAngles.y * pi / 180f);
             sin = Mathf.Sin(parentOfLever.localEulerAngles.y * pi / 180);
