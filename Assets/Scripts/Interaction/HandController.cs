@@ -51,9 +51,9 @@ public class HandController : MonoBehaviour {
 
             float newDistance = Vector3.Distance(handlingObject.transform.localPosition, handlingObject.transform.parent.GetChild(1).localPosition);
 
-            Debug.Log(distance - newDistance);
 
-            if(distance - newDistance <= 0.1 && distance - newDistance >= -0.1) {
+
+            if(distance - newDistance <= 0.07 && distance - newDistance >= -0.07) {
                 cosin = Mathf.Cos(parentOfLever.localEulerAngles.y * pi / 180f);                                //math to calculate angle for rotation
                 sin = Mathf.Sin(parentOfLever.localEulerAngles.y * pi / 180);
 
@@ -81,6 +81,7 @@ public class HandController : MonoBehaviour {
 
                 lever.transform.LookAt(handlingObject.transform);
             }
+
         }
 
 
@@ -110,9 +111,11 @@ public class HandController : MonoBehaviour {
         handlingObject = collider.gameObject;
         interactingItem = collidedItem;
 
-        distance = Vector3.Distance(collider.transform.localPosition, collider.transform.parent.GetChild(1).transform.localPosition);
+        
+        if(collidedItem.typeOfObject == InteractableItem.ObjectType.Lever) {
+            distance = Vector3.Distance(collider.transform.localPosition, collider.transform.parent.GetChild(1).transform.localPosition);
 
-        Debug.Log(distance);
+        }
 
         if (collidedItem.typeOfObject == InteractableItem.ObjectType.Button) {
 
