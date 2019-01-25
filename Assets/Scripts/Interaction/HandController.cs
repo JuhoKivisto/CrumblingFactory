@@ -16,6 +16,12 @@ public class HandController : MonoBehaviour {
     private GameObject handlingObject;
 
     float newDistance;  //to check lever
+    float tempX = 0;
+    float tempY = 0;
+    float tempZ = 0;
+    float cosin = 0;
+    float sin = 0;
+    float pi = 3.14159265359f;
 
 
 
@@ -45,6 +51,24 @@ public class HandController : MonoBehaviour {
 
             Vector3 newLocalPosition = new Vector3(lever.transform.localPosition.x, 
                         temp.y / parentOfLever.localScale.y, temp.z / (parentOfLever.localScale.z));
+
+            cosin = Mathf.Cos(parentOfLever.localEulerAngles.x * pi / 180f);
+            sin = Mathf.Sin(parentOfLever.localEulerAngles.x * pi / 180);
+
+            if (parentOfLever.localEulerAngles.x >= 0 && parentOfLever.localEulerAngles.x <= 90 && parentOfLever.rotation.x >= 0.7071f && parentOfLever.rotation.x <= 1f) {
+                cosin *= -1;
+            }
+            else if (parentOfLever.localEulerAngles.x >= 0 && parentOfLever.localEulerAngles.x <= 90 && parentOfLever.rotation.x >= 0 && parentOfLever.rotation.x < 0.7071) {
+                sin *= 1;
+            }else if (parentOfLever.localEulerAngles.x <= 360 && parentOfLever.localEulerAngles.x >= 270 && parentOfLever.rotation.x >= -0.7071f && parentOfLever.rotation.x <= 0) {
+                sin *= -1;
+            }
+
+            tempX = newLocalPosition.x;
+            tempY = newLocalPosition.z * sin + newLocalPosition.y * cosin;
+            tempZ = newLocalPosition.z * cosin - newLocalPosition.y * sin;
+
+            newLocalPosition = new Vector3(tempX, tempY, tempZ);
 
             handlingObject.GetComponent<Transform>().localPosition = newLocalPosition;
 
