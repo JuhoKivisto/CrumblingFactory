@@ -58,10 +58,11 @@ public class LaserPointer : MonoBehaviour {
 
     // Use this for initialization
     void Start() {
-        //   Renderer rend = laser.GetComponent<Renderer>();
 
         laser = Instantiate(laserP); // instantiates our laser prefab
         laserTransform = laser.transform;
+
+        Renderer rend = laser.GetComponent<Renderer>();
 
         reticle = Instantiate(teleportReticlePrefab); // instantiates our reticle prefab
         teleportReticleTransform = reticle.transform;
@@ -77,18 +78,23 @@ public class LaserPointer : MonoBehaviour {
             RaycastHit hit;
             Debug.Log("Trigger Painettu jes");
             if (Physics.Raycast(trackedObj.transform.position, transform.forward, out hit, length)) // Raycast
-                hitPoint = hit.point;
-            Debug.Log("hitattu");
-            ShowLaser(hit);
-            if (hit.collider.tag == "Ground")
             {
-                reticle.SetActive(true); // sets reticle active
-            teleportReticleTransform.position = hitPoint + teleportReticleOffset; // changes reticles position to raycasts hit point
+                hitPoint = hit.point;
+                Debug.Log("hitattu");
+                ShowLaser(hit);
+                if (hit.collider.tag == "Ground")
+                {
+                    rend.material = mat1;
 
-                shouldTeleport = true; // enables the use of Teleport();
+                    reticle.SetActive(true); // sets reticle active
+                    teleportReticleTransform.position = hitPoint + teleportReticleOffset; // changes reticles position to raycasts hit point
+
+                    shouldTeleport = true; // enables the use of Teleport();
+                }
             }
             else // disables laser and reticle if the trigger isn't pressed
             {
+                rend.material = mat2;
                 reticle.SetActive(false);
             }
             Debug.Log("Touched object " + hit.transform.gameObject.name + " layer is " + hit.transform.gameObject.layer);
