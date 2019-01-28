@@ -13,6 +13,10 @@ public class Objective {
 
     public bool done;
 
+    /* 1 - 3 */
+    [ReadOnly]
+    public int warningLevel;
+
     public Objective(int cPId, GameObject intact, GameObject aLight) {
 
         interactable = intact;
@@ -37,6 +41,8 @@ public class ObjectiveManager : MonoBehaviour {
     public int currentObjectiveId;
     public int howManyObjectives;
     public int objectivesDone;
+    public int objectivesActivated = 0;
+    public int warningLevel = 3;
 
     public List<Objective> objectiveList = new List<Objective>();
     public List<Objective> allObjectivesList = new List<Objective>();
@@ -47,6 +53,8 @@ public class ObjectiveManager : MonoBehaviour {
     public Stats stats;
 
     public Material red;
+    public Material orange;
+    public Material yellow;
 
     void Awake() {
 
@@ -80,6 +88,7 @@ public class ObjectiveManager : MonoBehaviour {
         }
         else {
 
+
             howManyObjectives = (int) gameManager.heatMeter / 10 + 1;
 
             if (howManyObjectives > stats.maxObjectives) {
@@ -87,23 +96,61 @@ public class ObjectiveManager : MonoBehaviour {
             }
         }
 
-        //howManyObjectives = 10;
-
         int createdObjectives = 0;
         while (createdObjectives != howManyObjectives) {
+
+            switch (objectivesActivated) {
+
+                case 1:
+                    warningLevel--;
+                    break;
+                case 3:
+                    warningLevel--;
+                    break;
+                case 6:
+                    warningLevel = 3;
+                    objectivesActivated = 0;
+                    break;
+
+            }
+
             int randomIndex = random.Next(0, allObjectivesList.Count);
 
             while (objectiveList.Contains(allObjectivesList[randomIndex])) {
                 randomIndex = random.Next(0, allObjectivesList.Count);
             }
+
             objectiveList.Add(allObjectivesList[randomIndex]);
-            objectiveList[objectiveList.Count-1].alarmLight.GetComponentInChildren<Renderer>().material = red;
-            objectiveList[objectiveList.Count-1].alarmLight.GetComponentInChildren<Light>().color = Color.red;
+            //objectiveList[objectiveList.Count-1].alarmLight.GetComponentInChildren<Renderer>().material = red;
+            //objectiveList[objectiveList.Count-1].alarmLight.GetComponentInChildren<Light>().color = Color.red;
             objectiveList[objectiveList.Count-1].alarmLight.GetComponentInChildren<Light>().range = 0.12f;
             objectiveList[objectiveList.Count-1].alarmLight.GetComponentInChildren<Light>().intensity = 2.46f;
             //objectiveList[createdObjectives].alarmLight.GetComponentInChildren<GameObject>().GetComponentInChildren<GameObject>().SetActive(false);
             //objectiveList[createdObjectives].interactable.
+            print("switch");
+            switch (warningLevel) {
+                case 1:
+                    objectiveList[objectiveList.Count - 1].warningLevel = 1;
+                    //objectiveList[objectiveList.Count - 1].alarmLight.GetComponentInChildren<Renderer>().material = yellow;
+                    //objectiveList[objectiveList.Count - 1].alarmLight.GetComponentInChildren<Light>().color = Color.yellow;
+                    break;
+                case 2:
+                    objectiveList[objectiveList.Count - 1].warningLevel = 2;
+                    //objectiveList[objectiveList.Count - 1].alarmLight.GetComponentInChildren<Renderer>().material = orange;
+                    //objectiveList[objectiveList.Count - 1].alarmLight.GetComponentInChildren<Light>().color = Color.HSVToRGB(255, 165, 0);
+                    break;
+                case 3:
+                    objectiveList[objectiveList.Count - 1].warningLevel = 3;
+                    //objectiveList[objectiveList.Count - 1].alarmLight.GetComponentInChildren<Renderer>().material = red;
+                    //objectiveList[objectiveList.Count - 1].alarmLight.GetComponentInChildren<Light>().color = Color.red;
+                    break;
+                    
+            }
             createdObjectives++;
+            objectivesActivated++;
+            print("activate");
+
+
         }
 
         StartCoroutine(WaitNextSet());
@@ -134,14 +181,18 @@ public class ObjectiveManager : MonoBehaviour {
 
     public void NextObjectiveSet() {
 
-        /* current objective == how many objectives total in set */
+        /*
+        //current objective == how many objectives total in set 
         if (currentObjectiveId + 1 == howManyObjectives + 1) {
             gameManager.StopHeating(stats.waitTimeOnObjectiveSetComplete, stats.decreaseHeatOnObjectiveSetComplete);
             CreateObjectives();
         }
+        */
         // More objectives if heat is high enough
         if (nextSet) {
-            //CreateObjectives();
+            print("too long");
+            CreateObjectives();
+            nextSet = false;
         }
     }
 
@@ -229,7 +280,8 @@ public class ObjectiveManager : MonoBehaviour {
     }
     
     private IEnumerator WaitNextSet() {
-        yield return new WaitForSeconds(20);
+        print("Wait next set");
+        yield return new WaitForSeconds(5);
         nextSet = true;
     }
 }
