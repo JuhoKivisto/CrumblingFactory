@@ -94,6 +94,7 @@ public class GameManager : MonoBehaviour {
         if (timeEventId == timeEvents.Length - 1) {
             timeEventId = timeEvents.Length - 1;
         }
+
         else if (TimeManager.instance.time == timeEvents[timeEventId] && timeEventId < timeEvents.Length) {
             print(stats.gameLenght - TimeManager.instance.time);
             //print(timeEventId);
@@ -126,7 +127,9 @@ public class GameManager : MonoBehaviour {
     /// temperature high enough events happens
     /// </summary>
     public void EventByHeat() {
-        if (heatMeter == stats.criticalTemporatures[0].heatOfTheEvent) {
+        if (heatMeter > stats.criticalTemporatures[0].heatOfTheEvent && heatMeter < stats.criticalTemporatures[1].heatOfTheEvent && !stats.criticalTemporatures[0].happened) {
+            stats.criticalTemporatures[0].happened = true;
+            print("<color = blue> kivikasa </color>");
             Vector3 spwnpoint = new Vector3(player.transform.position.x, 60, player.transform.position.z);
 
             GameObject tempGameO = GameObject.Instantiate(stats.criticalTemporatures[0].eventObject,spwnpoint, Quaternion.identity, null);

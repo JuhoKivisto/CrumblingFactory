@@ -7,6 +7,7 @@ public class EnvironmentalEvent {
 
     public GameObject eventObject;
     public int heatOfTheEvent;
+    public bool happened;
 
 }
 

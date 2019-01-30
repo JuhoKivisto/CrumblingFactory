@@ -52,9 +52,17 @@ public class ObjectiveManager : MonoBehaviour {
     public GameManager gameManager;
     public Stats stats;
 
-    public Material red;
-    public Material orange;
-    public Material yellow;
+    //public Material alarmLvl_3_material;
+    //public Material alarmLvl_2_material;
+    //public Material alarmLvl_1_material;
+
+    private Material material;
+
+    public Color alarmLvl_3_color;
+    public Color alarmLvl_2_color;
+    public Color alarmLvl_1_color;
+
+    private Color color;
 
     void Awake() {
 
@@ -131,18 +139,15 @@ public class ObjectiveManager : MonoBehaviour {
             switch (warningLevel) {
                 case 1:
                     objectiveList[objectiveList.Count - 1].warningLevel = 1;
-                    //objectiveList[objectiveList.Count - 1].alarmLight.GetComponentInChildren<Renderer>().material = yellow;
-                    //objectiveList[objectiveList.Count - 1].alarmLight.GetComponentInChildren<Light>().color = Color.yellow;
+                    AlarmLightController(warningLevel, alarmLvl_1_color);
                     break;
                 case 2:
                     objectiveList[objectiveList.Count - 1].warningLevel = 2;
-                    //objectiveList[objectiveList.Count - 1].alarmLight.GetComponentInChildren<Renderer>().material = orange;
-                    //objectiveList[objectiveList.Count - 1].alarmLight.GetComponentInChildren<Light>().color = Color.HSVToRGB(255, 165, 0);
+                    AlarmLightController(warningLevel, alarmLvl_2_color);                    
                     break;
                 case 3:
                     objectiveList[objectiveList.Count - 1].warningLevel = 3;
-                    //objectiveList[objectiveList.Count - 1].alarmLight.GetComponentInChildren<Renderer>().material = red;
-                    //objectiveList[objectiveList.Count - 1].alarmLight.GetComponentInChildren<Light>().color = Color.red;
+                    AlarmLightController(warningLevel, alarmLvl_3_color);
                     break;
                     
             }
@@ -283,5 +288,36 @@ public class ObjectiveManager : MonoBehaviour {
         print("Wait next set");
         yield return new WaitForSeconds(5);
         nextSet = true;
+    }
+
+    private void AlarmLightController(int alarmLevel, Color color) {
+
+        material = Instantiate(objectiveList[objectiveList.Count - 1].alarmLight.GetComponentInChildren<MeshRenderer>().material);
+        objectiveList[objectiveList.Count - 1].alarmLight.GetComponentInChildren<MeshRenderer>().material = material;
+
+        //switch (alarmLevel) {
+
+        //    case 1:
+        //        material = alarmLvl_1_material;
+        //        color = alarmLvl_1_color;
+        //        break;
+        //    case 2:
+        //        material = alarmLvl_2_material;
+        //        color = alarmLvl_2_color;
+        //        break;
+        //    case 3:
+        //        material = alarmLvl_3_material;
+        //        color = alarmLvl_3_color;
+        //        break;
+            
+        //}
+
+        material.EnableKeyword("_EMISSION");
+        material.SetColor("_Color", color);
+        material.SetColor("_EmissionColor", color * 1);
+
+        //objectiveList[objectiveList.Count - 1].alarmLight.GetComponentInChildren<Renderer>().material = material;
+        objectiveList[objectiveList.Count - 1].alarmLight.GetComponentInChildren<Light>().color = color;
+
     }
 }
