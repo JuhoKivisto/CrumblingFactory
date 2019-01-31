@@ -33,6 +33,7 @@ public class Stats : MonoBehaviour {
     [Header("----------TIME----------")]
     public float gameLenght;
     public AnimationCurve heatCurve;
+    public AnimationCurve heatCurve2;
     [Tooltip("Time events are created from random number between timeEventRandomLow + previous time event and timeEventRandomHigh + previous time event")]
     public int timeEventRandomLow;
     public int timeEventRandomHigh;

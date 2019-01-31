@@ -87,7 +87,8 @@ public class GameManager : MonoBehaviour {
              normalized value is used to access value from curve witch range is 0f-1f */
             normTimeValue = TimeManager.instance.time / (stats.gameLenght);
 
-            heatMeter += stats.heatCurve.Evaluate(normTimeValue) * stats.heatLevels[heatId];
+            //HeatIncreaser(stats.heatCurve.Evaluate(normTimeValue) * stats.heatLevels[heatId]);
+            HeatIncreaser(stats.heatCurve2.Evaluate(normTimeValue));
             HeatLevelIncreaser();
         }
         /* currentTime == eventId  */
@@ -203,5 +204,20 @@ public class GameManager : MonoBehaviour {
         stats.timeDivider = 1;
         heatMeter -= heatDec;
 
+    }
+
+    private void HeatIncreaser(float heatToIncreser) {
+        StopCoroutine(IncreaseHeat(heatToIncreser));
+        StartCoroutine(IncreaseHeat(heatToIncreser));
+    }
+
+    private IEnumerator IncreaseHeat(float heatToIncrese) {
+
+        float heat = 0f;
+        while (heat < heatToIncrese) {
+            heat += 0.1f;
+        yield return new WaitForSeconds(0.1f);
+            heatMeter += heat;
+        }
     }
 }
