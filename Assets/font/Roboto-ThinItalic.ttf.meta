@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: ff3a015580ef046ac85fa087703e0a2d
+guid: 0f0eadc098b902649a9fd56b6f1fdfc3
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -8,11 +8,10 @@ TrueTypeFontImporter:
   characterSpacing: 0
   characterPadding: 1
   includeFontData: 1
-  fontName: Asap
+  fontName: Roboto
   fontNames:
-  - Asap
-  fallbackFontReferences:
-  - {fileID: 12800000, guid: f79c0638c9ad24986acd8d34c0e20256, type: 3}
+  - Roboto
+  fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0
   ascentCalculationMode: 1
