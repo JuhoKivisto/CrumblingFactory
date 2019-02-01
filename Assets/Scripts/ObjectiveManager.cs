@@ -35,6 +35,7 @@ public class ObjectiveManager : MonoBehaviour {
     public bool debugMode;
 
     bool nextSet = false;
+    public bool tooManyObjectives;
 
     /* DO NOT USE */
     public int numberOfPanelSwitch;
@@ -51,6 +52,7 @@ public class ObjectiveManager : MonoBehaviour {
 
     public GameManager gameManager;
     public Stats stats;
+    public HeatManager heatManager;
 
     //public Material alarmLvl_3_material;
     //public Material alarmLvl_2_material;
@@ -91,13 +93,14 @@ public class ObjectiveManager : MonoBehaviour {
     /// </summary>
     private void CreateObjectives() {
 
-        if ((int) gameManager.heatMeter / 10 == 0) {
+        if ((int) heatManager.heat / 10 == 0) {
             howManyObjectives = 1;
         }
         else {
 
 
-            howManyObjectives = (int) gameManager.heatMeter / 10 + 1;
+            //howManyObjectives = (int) heatManager.heat / 10 + 1;
+            howManyObjectives = heatManager.currentHeatLevel;
 
             if (howManyObjectives > stats.maxObjectives) {
                 howManyObjectives = stats.maxObjectives;
@@ -105,7 +108,15 @@ public class ObjectiveManager : MonoBehaviour {
         }
 
         int createdObjectives = 0;
-        while (createdObjectives != howManyObjectives) {
+        while (createdObjectives != howManyObjectives && !tooManyObjectives) {
+
+            if (objectiveList.Count == allObjectivesList.Count) {
+                RemoveObjectives();
+                tooManyObjectives = true;
+            }
+            else {
+                tooManyObjectives = false;
+            }
 
             switch (objectivesActivated) {
 
@@ -125,6 +136,7 @@ public class ObjectiveManager : MonoBehaviour {
             int randomIndex = random.Next(0, allObjectivesList.Count);
 
             while (objectiveList.Contains(allObjectivesList[randomIndex])) {
+                
                 randomIndex = random.Next(0, allObjectivesList.Count);
             }
 
@@ -161,6 +173,13 @@ public class ObjectiveManager : MonoBehaviour {
         StartCoroutine(WaitNextSet());
     }
 
+    private void RemoveObjectives() {
+       
+            objectiveList.RemoveAt(0);
+            AlarmLightController(0, Color.black);
+
+        
+    }
     /// <summary>
     /// Shuffles the given list
     /// </summary>
@@ -210,7 +229,7 @@ public class ObjectiveManager : MonoBehaviour {
             /* decreaseHeat bool is true */
             if (stats.decreaseHeat) {
                 /* Stops heating for x amount of second(s) and also decrease heat x amount */
-                gameManager.StopHeating(stats.waitTimeOnObjectiveComplete, stats.decreaseHeatOnObjectiveComplete);
+                
             }
             //NextObjectiveSet();
         }
@@ -287,13 +306,17 @@ public class ObjectiveManager : MonoBehaviour {
     private IEnumerator WaitNextSet() {
         print("Wait next set");
         yield return new WaitForSeconds(5);
+        //yield return null;
         nextSet = true;
+        RemoveObjectives();
+        
     }
 
     private void AlarmLightController(int alarmLevel, Color color) {
 
-        material = Instantiate(objectiveList[objectiveList.Count - 1].alarmLight.GetComponentInChildren<MeshRenderer>().material);
-        objectiveList[objectiveList.Count - 1].alarmLight.GetComponentInChildren<MeshRenderer>().material = material;
+        
+
+        
 
         //switch (alarmLevel) {
 
@@ -312,12 +335,30 @@ public class ObjectiveManager : MonoBehaviour {
             
         //}
 
-        material.EnableKeyword("_EMISSION");
-        material.SetColor("_Color", color);
-        material.SetColor("_EmissionColor", color * 1);
+        
+
+        switch (alarmLevel) {
+            case 0:
+                material = Instantiate(objectiveList[0].alarmLight.GetComponentInChildren<MeshRenderer>().material);
+                objectiveList[0].alarmLight.GetComponentInChildren<MeshRenderer>().material = material;
+                objectiveList[0].alarmLight.GetComponentInChildren<Light>().intensity = 0;
+                material.EnableKeyword("_EMISSION");
+                material.SetColor("_Color", Color.grey);
+                material.SetColor("_EmissionColor", Color.grey * 0);
+                break;
+
+            default:
+                material = Instantiate(objectiveList[objectiveList.Count - 1].alarmLight.GetComponentInChildren<MeshRenderer>().material);
+                objectiveList[objectiveList.Count - 1].alarmLight.GetComponentInChildren<MeshRenderer>().material = material;
+                objectiveList[objectiveList.Count - 1].alarmLight.GetComponentInChildren<Light>().intensity = 2.46f;
+                material.EnableKeyword("_EMISSION");
+                material.SetColor("_Color", color);
+                material.SetColor("_EmissionColor", color * 1);
+                objectiveList[objectiveList.Count - 1].alarmLight.GetComponentInChildren<Light>().color = color;
+                break;
+        }
 
         //objectiveList[objectiveList.Count - 1].alarmLight.GetComponentInChildren<Renderer>().material = material;
-        objectiveList[objectiveList.Count - 1].alarmLight.GetComponentInChildren<Light>().color = color;
 
     }
 }

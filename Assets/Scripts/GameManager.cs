@@ -9,14 +9,13 @@ public class GameManager : MonoBehaviour {
 
     public int errorCount = 0;
     public int doomCounter = 0;
-    public int timeEventId;
-    public int heatId;
+    public int timeEventId;    
     public int[] timeEvents;
-
-    public float heatMeter;
+   
     public float normTimeValue;
 
     public Stats stats;
+    public HeatManager heatManager;
 
     public GameObject player;
 
@@ -77,20 +76,7 @@ public class GameManager : MonoBehaviour {
     /// After certain amount of time witch is random, some events will hapen
     /// </summary>
     public void EventByTime() {
-
-        /* Increases heat after certain time 
-         current time / time divider, witch is just a value that used to divide time and
-         if result is 0 then heat rises */
-        if (TimeManager.instance.time % stats.timeDivider == 0) {
-
-            /* Normalized time value = current time / whole game lenght,  which is fixed value in seconds
-             normalized value is used to access value from curve witch range is 0f-1f */
-            normTimeValue = TimeManager.instance.time / (stats.gameLenght);
-
-            //HeatIncreaser(stats.heatCurve.Evaluate(normTimeValue) * stats.heatLevels[heatId]);
-            HeatIncreaser(stats.heatCurve2.Evaluate(normTimeValue));
-            HeatLevelIncreaser();
-        }
+              
         /* currentTime == eventId  */
         if (timeEventId == timeEvents.Length - 1) {
             timeEventId = timeEvents.Length - 1;
@@ -128,7 +114,8 @@ public class GameManager : MonoBehaviour {
     /// temperature high enough events happens
     /// </summary>
     public void EventByHeat() {
-        if (heatMeter > stats.criticalTemporatures[0].heatOfTheEvent && heatMeter < stats.criticalTemporatures[1].heatOfTheEvent && !stats.criticalTemporatures[0].happened) {
+        if (false) {
+            // heatMeter > stats.criticalTemporatures[0].heatOfTheEvent && heatMeter < stats.criticalTemporatures[1].heatOfTheEvent && stats.criticalTemporatures[0].happened
             stats.criticalTemporatures[0].happened = true;
             print("<color = blue> kivikasa </color>");
             Vector3 spwnpoint = new Vector3(player.transform.position.x, 60, player.transform.position.z);
@@ -137,19 +124,7 @@ public class GameManager : MonoBehaviour {
             //tempGameO.GetComponentInChildren<Rigidbody>().AddForce(Vector3.up * 1000f);
             // minor explosions
             // factory shaking 
-        }
-        else if (heatMeter == 75) {
-            // screen turns red
-            // explosions
-            // some of the conrol panel interactables could explode
-
-        }
-        else if (heatMeter == 80) {
-            // one of the controll panel explode
-        }
-        else if (heatMeter == 100) {
-            // factory explodes
-        }
+        }       
     }
 
     /// <summary>
@@ -164,8 +139,8 @@ public class GameManager : MonoBehaviour {
                 stats.timeEventRandomHigh + timeEvents[i-indexDecreaser]);
             indexDecreaser = 1;
         }
-    }
-
+    }       
+    
     IEnumerator WaitList() 
     {
         yield return StartCoroutine(WaitCoroutine(2f, "SetKinematic"));
@@ -179,45 +154,5 @@ public class GameManager : MonoBehaviour {
     IEnumerator WaitCoroutine(float waitTime, string functionName) {
         yield return new WaitForSeconds(waitTime);
         Invoke(functionName, 0f);
-    }
-
-    public void HeatLevelIncreaser() {
-
-        if (heatId == 8) {
-            heatId = 8;
-        }
-
-        if (heatMeter > stats.heatLevels[heatId] && heatMeter < stats.heatLevels[heatId + 1]) {
-            heatId++;
-        }
-    }
-
-    /// <summary>
-    /// Stops heating for amount of seconds
-    /// </summary>
-    /// <param name="seconds"></param>
-    /// <returns></returns>
-    public IEnumerator StopHeating(float seconds, float heatDec) {
-
-        stats.timeDivider = (int) seconds;
-        yield return new WaitForSeconds(seconds);
-        stats.timeDivider = 1;
-        heatMeter -= heatDec;
-
-    }
-
-    private void HeatIncreaser(float heatToIncreser) {
-        StopCoroutine(IncreaseHeat(heatToIncreser));
-        StartCoroutine(IncreaseHeat(heatToIncreser));
-    }
-
-    private IEnumerator IncreaseHeat(float heatToIncrese) {
-
-        float heat = 0f;
-        while (heat < heatToIncrese) {
-            heat += 0.1f;
-        yield return new WaitForSeconds(0.1f);
-            heatMeter += heat;
-        }
     }
 }

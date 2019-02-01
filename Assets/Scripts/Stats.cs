@@ -13,6 +13,8 @@ public class EnvironmentalEvent {
 
 public class Stats : MonoBehaviour {
 
+    public static Stats instance = null;
+
     [Header("----------HEAT-----------")]
     //[Range(50,100)]
     public EnvironmentalEvent[] criticalTemporatures;
@@ -23,9 +25,12 @@ public class Stats : MonoBehaviour {
     public float decreaseHeatOnObjectiveComplete;
     public float waitTimeOnObjectiveComplete;
     public float waitTimeOnObjectiveSetComplete;
+    [Space]
+    public float maxHeat;
 
     public bool decreaseHeat;
     public bool waitTime;
+
 
 
     [Space]
@@ -34,6 +39,7 @@ public class Stats : MonoBehaviour {
     public float gameLenght;
     public AnimationCurve heatCurve;
     public AnimationCurve heatCurve2;
+    public AnimationCurve heatCurve3;
     [Tooltip("Time events are created from random number between timeEventRandomLow + previous time event and timeEventRandomHigh + previous time event")]
     public int timeEventRandomLow;
     public int timeEventRandomHigh;
@@ -49,4 +55,14 @@ public class Stats : MonoBehaviour {
     [Header("----------OBJECTTIVE----------")]
     public int maxObjectives;
 
+    void Awake() {
+
+        if (instance == null) {
+            instance = this;
+        }
+
+        else if (instance != this) {
+            Destroy(gameObject);
+        }
+    }
 }
