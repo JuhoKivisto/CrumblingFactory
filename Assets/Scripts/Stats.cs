@@ -11,6 +11,20 @@ public class EnvironmentalEvent {
 
 }
 
+[System.Serializable]
+public class WarningLevel {
+
+    public int level;
+    public Color color;
+
+    public WarningLevel(int lvl, Color colour) {
+
+        lvl = level;
+        colour = color;
+
+    }
+}
+
 public class Stats : MonoBehaviour {
 
     public static Stats instance = null;
@@ -54,6 +68,8 @@ public class Stats : MonoBehaviour {
 
     [Header("----------OBJECTTIVE----------")]
     public int maxObjectives;
+
+    public List<WarningLevel> warningLevels;
 
     void Awake() {
 

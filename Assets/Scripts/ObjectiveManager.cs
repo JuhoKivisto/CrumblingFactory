@@ -7,7 +7,7 @@ public class Objective {
 
     public GameObject interactable;
 
-    public GameObject alarmLight;
+    public GameObject warningLight;
 
     public int controlPanelId;
 
@@ -17,10 +17,10 @@ public class Objective {
     [ReadOnly]
     public int warningLevel;
 
-    public Objective(int cPId, GameObject intact, GameObject aLight) {
+    public Objective(int cPId, GameObject intact, GameObject wLight) {
 
         interactable = intact;
-        alarmLight = aLight;
+        warningLight = wLight;
         controlPanelId = cPId;
         done = false;
 
@@ -43,7 +43,7 @@ public class ObjectiveManager : MonoBehaviour {
     public int howManyObjectives;
     public int objectivesDone;
     public int objectivesActivated = 0;
-    public int warningLevel = 3;
+    public int currentWarningLevel = 3;
 
     public List<Objective> objectiveList = new List<Objective>();
     public List<Objective> allObjectivesList = new List<Objective>();
@@ -58,11 +58,7 @@ public class ObjectiveManager : MonoBehaviour {
     //public Material alarmLvl_2_material;
     //public Material alarmLvl_1_material;
 
-    private Material material;
-
-    public Color alarmLvl_3_color;
-    public Color alarmLvl_2_color;
-    public Color alarmLvl_1_color;
+    private Material material;    
 
     private Color color;
 
@@ -97,9 +93,7 @@ public class ObjectiveManager : MonoBehaviour {
             howManyObjectives = 1;
         }
         else {
-
-
-            //howManyObjectives = (int) heatManager.heat / 10 + 1;
+            
             howManyObjectives = heatManager.currentHeatLevel;
 
             if (howManyObjectives > stats.maxObjectives) {
@@ -111,7 +105,7 @@ public class ObjectiveManager : MonoBehaviour {
         while (createdObjectives != howManyObjectives && !tooManyObjectives) {
 
             if (objectiveList.Count == allObjectivesList.Count) {
-                RemoveObjectives();
+                //RemoveObjectives();
                 tooManyObjectives = true;
             }
             else {
@@ -121,13 +115,13 @@ public class ObjectiveManager : MonoBehaviour {
             switch (objectivesActivated) {
 
                 case 1:
-                    warningLevel--;
+                    currentWarningLevel--;
                     break;
                 case 3:
-                    warningLevel--;
+                    currentWarningLevel--;
                     break;
                 case 6:
-                    warningLevel = 3;
+                    currentWarningLevel = 3;
                     objectivesActivated = 0;
                     break;
 
@@ -141,45 +135,32 @@ public class ObjectiveManager : MonoBehaviour {
             }
 
             objectiveList.Add(allObjectivesList[randomIndex]);
-            //objectiveList[objectiveList.Count-1].alarmLight.GetComponentInChildren<Renderer>().material = red;
-            //objectiveList[objectiveList.Count-1].alarmLight.GetComponentInChildren<Light>().color = Color.red;
-            objectiveList[objectiveList.Count-1].alarmLight.GetComponentInChildren<Light>().range = 0.12f;
-            objectiveList[objectiveList.Count-1].alarmLight.GetComponentInChildren<Light>().intensity = 2.46f;
-            //objectiveList[createdObjectives].alarmLight.GetComponentInChildren<GameObject>().GetComponentInChildren<GameObject>().SetActive(false);
-            //objectiveList[createdObjectives].interactable.
+           
+            objectiveList[objectiveList.Count-1].warningLight.GetComponentInChildren<Light>().range = 0.12f;
+            objectiveList[objectiveList.Count-1].warningLight.GetComponentInChildren<Light>().intensity = 2.46f;
+           
             print("switch");
-            switch (warningLevel) {
-                case 1:
-                    objectiveList[objectiveList.Count - 1].warningLevel = 1;
-                    AlarmLightController(warningLevel, alarmLvl_1_color);
-                    break;
-                case 2:
-                    objectiveList[objectiveList.Count - 1].warningLevel = 2;
-                    AlarmLightController(warningLevel, alarmLvl_2_color);                    
-                    break;
-                case 3:
-                    objectiveList[objectiveList.Count - 1].warningLevel = 3;
-                    AlarmLightController(warningLevel, alarmLvl_3_color);
-                    break;
-                    
-            }
+            
+            objectiveList[objectiveList.Count - 1].warningLevel = currentWarningLevel;
+            EnableWarningLight(objectiveList[objectiveList.Count - 1], stats.warningLevels[stats.warningLevels.Count - currentWarningLevel]);
+
             createdObjectives++;
             objectivesActivated++;
             print("activate");
 
-
+            StartCoroutine(DisableObjectiveByTime(objectiveList[objectiveList.Count - 1], 5));
         }
 
         StartCoroutine(WaitNextSet());
     }
 
-    private void RemoveObjectives() {
-       
-            objectiveList.RemoveAt(0);
-            AlarmLightController(0, Color.black);
+    private void RemoveObjective(Objective objective) {
 
-        
-    }
+        if (objectiveList.Contains(objective)) {
+            objectiveList.Remove(objective);
+        }
+    }              
+    
     /// <summary>
     /// Shuffles the given list
     /// </summary>
@@ -308,57 +289,54 @@ public class ObjectiveManager : MonoBehaviour {
         yield return new WaitForSeconds(5);
         //yield return null;
         nextSet = true;
-        RemoveObjectives();
+        //RemoveObjectives();
         
+    }   
+
+    private void EnableWarningLight(Objective objective, WarningLevel warningLvl) {
+
+        material = Instantiate(objective.warningLight.GetComponentInChildren<MeshRenderer>().material);
+        objective.warningLight.GetComponentInChildren<MeshRenderer>().material = material;
+
+        objective.warningLight.GetComponentInChildren<Light>().intensity = 2.46f;
+        material.SetColor("_EmissionColor", warningLvl.color * 1);
+
+        material.EnableKeyword("_EMISSION");
+        material.SetColor("_Color", warningLvl.color);
+
+        objective.warningLight.GetComponentInChildren<Light>().color = warningLvl.color;
+
+        print("<color=blue>Light enabled</color> warnLvl: " + warningLvl.level);
     }
 
-    private void AlarmLightController(int alarmLevel, Color color) {
+    private void DisableWarningLight(Objective objective) {
 
-        
+        material = Instantiate(objective.warningLight.GetComponentInChildren<MeshRenderer>().material);
+        objective.warningLight.GetComponentInChildren<MeshRenderer>().material = material;
 
-        
+        objective.warningLight.GetComponentInChildren<Light>().intensity = 0;
 
-        //switch (alarmLevel) {
+        material.SetColor("_EmissionColor", Color.gray * 0);
+        material.EnableKeyword("_EMISSION");
+        material.SetColor("_Color", Color.gray);
+    }
 
-        //    case 1:
-        //        material = alarmLvl_1_material;
-        //        color = alarmLvl_1_color;
-        //        break;
-        //    case 2:
-        //        material = alarmLvl_2_material;
-        //        color = alarmLvl_2_color;
-        //        break;
-        //    case 3:
-        //        material = alarmLvl_3_material;
-        //        color = alarmLvl_3_color;
-        //        break;
-            
-        //}
+    private IEnumerator DisableObjectiveByTime(Objective objective, float duration) {
+        print("ghkdgsonfg");
+        float time = 0;
 
-        
+        while (time < duration) {
 
-        switch (alarmLevel) {
-            case 0:
-                material = Instantiate(objectiveList[0].alarmLight.GetComponentInChildren<MeshRenderer>().material);
-                objectiveList[0].alarmLight.GetComponentInChildren<MeshRenderer>().material = material;
-                objectiveList[0].alarmLight.GetComponentInChildren<Light>().intensity = 0;
-                material.EnableKeyword("_EMISSION");
-                material.SetColor("_Color", Color.grey);
-                material.SetColor("_EmissionColor", Color.grey * 0);
-                break;
-
-            default:
-                material = Instantiate(objectiveList[objectiveList.Count - 1].alarmLight.GetComponentInChildren<MeshRenderer>().material);
-                objectiveList[objectiveList.Count - 1].alarmLight.GetComponentInChildren<MeshRenderer>().material = material;
-                objectiveList[objectiveList.Count - 1].alarmLight.GetComponentInChildren<Light>().intensity = 2.46f;
-                material.EnableKeyword("_EMISSION");
-                material.SetColor("_Color", color);
-                material.SetColor("_EmissionColor", color * 1);
-                objectiveList[objectiveList.Count - 1].alarmLight.GetComponentInChildren<Light>().color = color;
-                break;
+            time += Time.deltaTime;
+            //time++;
+            yield return null;
         }
 
-        //objectiveList[objectiveList.Count - 1].alarmLight.GetComponentInChildren<Renderer>().material = material;
+        RemoveObjective(objective);
+        DisableWarningLight(objective);
+
+        print("<color=blue>time over</color>");
+        print("<color=yellow>time: </color>"+ time);
 
     }
 }
