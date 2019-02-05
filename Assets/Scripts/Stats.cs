@@ -69,6 +69,9 @@ public class Stats : MonoBehaviour {
     [Header("----------OBJECTTIVE----------")]
     public int maxObjectives;
 
+    public float objectiveLifeTime;
+    public float[] heatDecreaseMultipliers;
+
     public List<WarningLevel> warningLevels;
 
     void Awake() {
