@@ -70,6 +70,8 @@ public class Stats : MonoBehaviour {
     public int maxObjectives;
 
     public float objectiveLifeTime;
+    public float waitBeforeFirstSet;
+    public float waitBeforeNextSet;
     public float[] heatDecreaseMultipliers;
 
     public List<WarningLevel> warningLevels;

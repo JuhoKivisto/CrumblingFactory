@@ -40,9 +40,13 @@ public class ObjectiveManager : MonoBehaviour {
     /* DO NOT USE */
     public int numberOfPanelSwitch;
     public int currentObjectiveId;
+    [ReadOnly]
     public int howManyObjectives;
+    [ReadOnly]
     public int objectivesDone;
+    [ReadOnly]
     public int objectivesActivated = 0;
+    [ReadOnly]
     public int currentWarningLevel = 3;
 
     public List<Objective> objectiveList = new List<Objective>();
@@ -89,7 +93,7 @@ public class ObjectiveManager : MonoBehaviour {
     /// </summary>
     private void CreateObjectives() {
 
-        if ((int) heatManager.heat / 10 == 0) {
+        if (heatManager.currentHeatLevel == 0) {
             howManyObjectives = 1;
         }
         else {
@@ -280,13 +284,13 @@ public class ObjectiveManager : MonoBehaviour {
     }
 
     private IEnumerator FirstObjectiveSet() {
-        yield return new WaitForSeconds(4);
+        yield return new WaitForSeconds(stats.waitBeforeFirstSet);
         CreateObjectives();
     }
     
     private IEnumerator WaitNextSet() {
         print("Wait next set");
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(stats.waitBeforeNextSet);
         //yield return null;
         nextSet = true;
         //RemoveObjectives();
