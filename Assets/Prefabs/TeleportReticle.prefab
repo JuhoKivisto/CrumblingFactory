@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 33772584658376392}
   - component: {fileID: 23140215756205616}
   - component: {fileID: 135582310679747936}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: TeleportReticle
   m_TagString: Untagged
   m_Icon: {fileID: 0}

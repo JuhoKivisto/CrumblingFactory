@@ -6,19 +6,37 @@ public class LaserPointer : MonoBehaviour {
 
     private SteamVR_TrackedObject trackedObj;
 
-    // material objects
-    public Material mat1;
-    public Material mat2;
-    private Renderer rend;
+    // To use this script you have to create a tag "Ground" and assign it to all the object you want to be able to teleport to
+
+    // Button objects
+    public enum EbuttonToUse // Uses which button you choose from unity editor 
+    {
+        Touchpad,
+        Trigger
+    }
+
+    public EbuttonToUse buttonToUse;
+    private ulong button;
 
     // laser objects
-    public GameObject laserP;
-    public GameObject laserR;
-    private GameObject laser;
-    private GameObject laserRed;
+    public Material mat1;
+    public Material mat2;
+
+    private Transform point0, point1, point2;
+
+    private int numPoints = 50;
+    private Vector3[] positions = new Vector3[50];
+    private Vector3 RedLaserLength;
+    
     private Transform laserTransform;
     private Vector3 hitPoint;
     public int length;
+    public LineRenderer lineRenderer;
+    public GameObject ControllerPrefab;
+    private float distanceFromGround;
+
+    RaycastHit hit;
+    RaycastHit hit2;
 
     // teleport objects
     public Transform cameraRigTransform;
@@ -27,7 +45,7 @@ public class LaserPointer : MonoBehaviour {
     private Transform teleportReticleTransform;
     public Transform headTransform;
     public Vector3 teleportReticleOffset;
-    public LayerMask teleportMask; // You have to create a new layer and put it here to be able to teleport on the floor
+    // public LayerMask teleportMask;
     private bool shouldTeleport;
     private bool areStunned;
 
@@ -43,10 +61,33 @@ public class LaserPointer : MonoBehaviour {
 
     private void ShowLaser(RaycastHit hit) // Enables and builds the laser
     {
-        laser.SetActive(true);
-        laserTransform.position = Vector3.Lerp(trackedObj.transform.position, hitPoint, 0.5f);
+        Debug.Log("Piirretään kurvi :)");
+
+
+
+        lineRenderer.widthMultiplier = 0.1f;
+        
+        lineRenderer.SetPosition(0, ControllerPrefab.transform.position);
+        lineRenderer.SetPosition(1, hitPoint);
+
+        /*laserTransform.position = Vector3.Lerp(trackedObj.transform.position, hitPoint, 0.5f);
         laserTransform.LookAt(hitPoint);
-        laserTransform.localScale = new Vector3(laserTransform.localScale.x, laserTransform.localScale.y, hit.distance);
+        laserTransform.localScale = new Vector3(laserTransform.localScale.x, laserTransform.localScale.y, hit.distance);*/
+    }
+
+    private void DisableLaser() // Enables and builds the laser
+    {
+
+    
+
+        lineRenderer.SetPosition(0, ControllerPrefab.transform.position); 
+        lineRenderer.SetPosition(1, ControllerPrefab.transform.position);
+
+
+        
+        /*laserTransform.position = Vector3.Lerp(trackedObj.transform.position, hitPoint, 0.5f);
+        laserTransform.LookAt(hitPoint);
+        laserTransform.localScale = new Vector3(laserTransform.localScale.x, laserTransform.localScale.y, hit.distance);*/
     }
 
     private void Teleport()
@@ -62,8 +103,18 @@ public class LaserPointer : MonoBehaviour {
     // Use this for initialization
     void Start() {
 
-        laser = Instantiate(laserP); // instantiates our laser prefab
-        laserTransform = laser.transform;
+        if (buttonToUse == EbuttonToUse.Touchpad)
+        {
+            button = SteamVR_Controller.ButtonMask.Touchpad;
+
+        }
+        else 
+        {
+            button = SteamVR_Controller.ButtonMask.Trigger;
+        } 
+
+        /*laser = Instantiate(laserP); // instantiates our laser prefab
+        laserTransform = laser.transform;*/
 
         reticle = Instantiate(teleportReticlePrefab); // instantiates our reticle prefab
         teleportReticleTransform = reticle.transform;
@@ -72,42 +123,71 @@ public class LaserPointer : MonoBehaviour {
     }
 
     // Update is called once per frame
+    private void FixedUpdate()
+    {
+        
+    }
     void Update() {
 
-        if (Controller.GetPress(SteamVR_Controller.ButtonMask.Trigger)) // checks for a trigger press
+
+        if (Controller.GetPress(button)) // checks for a trigger press
         {
-            RaycastHit hit;
+
             Debug.Log("Trigger Painettu jes");
-            if (Physics.Raycast(trackedObj.transform.position, transform.forward, out hit, length)) // Raycast
-            {
-                hitPoint = hit.point;
-                Debug.Log("hitattu");
-                ShowLaser(hit);
 
-                if (hit.collider.tag == "Ground")
+                if (Physics.Raycast(trackedObj.transform.position, transform.forward, out hit, length)) // Raycast
                 {
-                    reticle.SetActive(true); // sets reticle active
-                    teleportReticleTransform.position = hitPoint + teleportReticleOffset; // changes reticles position to raycasts hit point
+                    hitPoint = hit.point;
+                    ShowLaser(hit);
+                    // changes reticles position to raycasts hit point
 
-                    shouldTeleport = true; // enables the use of Teleport();
-
-                    if (Controller.GetPressUp(SteamVR_Controller.ButtonMask.Trigger) && shouldTeleport && !areStunned /*&& hitPoint.y == 0*/) // Teleports when the trigger is released if shouldTeleport bool is true
+                    if (hit.collider.tag == "Ground")
                     {
-                        Teleport();
+                        Debug.Log("hitattu");
+                        lineRenderer.material = mat1;
+                        reticle.SetActive(true); // sets reticle active
+                        // teleportReticleTransform.position = hitPoint + teleportReticleOffset; // changes reticles position to raycasts hit point
+                        teleportReticleTransform.position = hit.point + teleportReticleOffset;
+                        shouldTeleport = true; // enables the use of Teleport();
                     }
+                    else
+                    {
+                        Debug.Log(hit.collider.gameObject.name);
+                        shouldTeleport = false;
+                        lineRenderer.material = mat2;
+                        reticle.SetActive(false);
 
-                } else
-                {
-                    shouldTeleport = false;
-                    reticle.SetActive(false);
+                    }
                 }
-            }
-            else // disables laser and reticle if the trigger isn't pressed
-            {
-                laser.SetActive(false);
-            }
+                else // disables laser and reticle if the trigger isn't pressed
+                {
+                    reticle.SetActive(false);
+                    shouldTeleport = false;
+                    DisableLaser();
+                }
+            
+        } else
+        {
+            reticle.SetActive(false);
+            DisableLaser();
         }
 
-       
+
+
+        if (Controller.GetPressUp(button) && shouldTeleport && !areStunned /*&& hitPoint.y == 0*/) // Teleports when the trigger is released if shouldTeleport bool is true
+        {
+            Teleport();
+        }
+    }
+
+    private Vector3 CalculateCurve(float t, Vector3 p0, Vector3 p1, Vector3 p2) // Calculates bezier
+    {
+        float u = 1 - t;
+        float tt = t * t;
+        float uu = u * u;
+        Vector3 p = uu * p0;
+        p += 2 * u * t * p1;
+        p += tt * p2;
+        return p;
     }
 }
