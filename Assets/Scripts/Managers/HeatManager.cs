@@ -1,8 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HeatManager : MonoBehaviour {
+
+    public Text heatText;
 
     public Stats stats;
 
@@ -33,10 +36,13 @@ public class HeatManager : MonoBehaviour {
     /// <summary>
     /// Incrases heat level when heat is high enough
     /// </summary>
-    public void IncreaseHeatLevel () {
+    public void ChangeHeatLevel () {
 
         if (heat > heatLevelLenght * currentHeatLevel) {
             currentHeatLevel++;
+        }
+        if(heat < heatLevelLenght * currentHeatLevel - 1) {
+            currentHeatLevel--;
         }
     }
 
@@ -45,13 +51,17 @@ public class HeatManager : MonoBehaviour {
     /// </summary>
     /// <param name="seconds"></param>
     /// <returns></returns>
-    public IEnumerator StopHeating(float seconds, float heatDec) {
+    public IEnumerator StopHeating(Objective objective) {
 
-        stats.timeDivider = (int)seconds;
-        yield return new WaitForSeconds(seconds);
-        stats.timeDivider = 1;
-        heat -= heatDec;
+        for (int i = 0; i < stats.warningLevels.Count; i++) {
+            if (stats.warningLevels[i].level == objective.warningLevel) {
+                heatMultiplier = -stats.warningLevels[i].heatMultiplier;
+            }
+        }
 
+        yield return new WaitForSeconds(2f);
+        heatMultiplier = 5;
+        
     }
     
     /// <summary>
@@ -68,7 +78,8 @@ public class HeatManager : MonoBehaviour {
 
                 heat += stats.heatCurve2.Evaluate(heat / maxHeat) * Time.deltaTime * heatMultiplier + (GameManager.instance.errorCount * errorMultiplier);
                 yield return null;
-                IncreaseHeatLevel();
+                heatText.text = heat.ToString();
+                ChangeHeatLevel();
             }
         }
     }

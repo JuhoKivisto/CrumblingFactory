@@ -11,6 +11,8 @@ public class Objective {
 
     public int controlPanelId;
 
+    public int lifeTimeId;
+
     public bool done;
 
     /* 1 - 3 */
@@ -34,6 +36,8 @@ public class ObjectiveManager : MonoBehaviour {
     [Header("Debug")]
     public bool debugMode;
 
+    public bool objcomp;
+
     bool nextSet = false;
     public bool tooManyObjectives;
 
@@ -48,9 +52,12 @@ public class ObjectiveManager : MonoBehaviour {
     public int objectivesActivated = 0;
     [ReadOnly]
     public int currentWarningLevel = 3;
+    public int lifeTimeId = 0;
 
     public List<Objective> objectiveList = new List<Objective>();
     public List<Objective> allObjectivesList = new List<Objective>();
+
+    public List<Coroutine> objectiveLifeTimes = new List<Coroutine>();
 
     System.Random random = new System.Random();
 
@@ -84,8 +91,12 @@ public class ObjectiveManager : MonoBehaviour {
 
     }
 
-    private void Update() {
+    void Update() {
         NextObjectiveSet();
+
+        if (objcomp) {
+            CompleteObjective(objectiveList[0]);
+        }
     }
 
     /// <summary>
@@ -142,20 +153,28 @@ public class ObjectiveManager : MonoBehaviour {
            
             objectiveList[objectiveList.Count-1].warningLight.GetComponentInChildren<Light>().range = 0.12f;
             objectiveList[objectiveList.Count-1].warningLight.GetComponentInChildren<Light>().intensity = 2.46f;
-           
+            if (debugMode) {
             print("switch");
+
+            }
             
             objectiveList[objectiveList.Count - 1].warningLevel = currentWarningLevel;
             EnableWarningLight(objectiveList[objectiveList.Count - 1], stats.warningLevels[stats.warningLevels.Count - currentWarningLevel]);
 
             createdObjectives++;
             objectivesActivated++;
-            print("activate");
+            if (debugMode) {
 
-            StartCoroutine(DisableObjectiveByTime(objectiveList[objectiveList.Count - 1], stats.warningLevels[stats.warningLevels.Count - currentWarningLevel], stats.objectiveLifeTime));
+            print("activate");
+            }
+
+            objectiveLifeTimes.Add(StartCoroutine(DisableObjective(objectiveList[objectiveList.Count - 1],
+                stats.warningLevels[stats.warningLevels.Count - currentWarningLevel], stats.objectiveLifeTime, lifeTimeId)));
+            objectiveList[objectiveList.Count - 1].lifeTimeId = lifeTimeId;
+            lifeTimeId++;
         }
 
-        StartCoroutine(WaitNextSet());
+        StartCoroutine(WaitNextSet()); 
     }
 
     private void RemoveObjective(Objective objective) {
@@ -199,7 +218,10 @@ public class ObjectiveManager : MonoBehaviour {
         */
         // More objectives if heat is high enough
         if (nextSet) {
+            if (debugMode) {
+
             print("too long");
+            }
             CreateObjectives();
             nextSet = false;
         }
@@ -210,12 +232,11 @@ public class ObjectiveManager : MonoBehaviour {
         /* Objective that player is acting with is on objective list*/
         if (objectiveList.Contains(objective)) {
             print("objective DONE!!!");
-        currentObjectiveId++;
+            objcomp = false;
+            StartCoroutine(heatManager.StopHeating(objective));
+            DisableObjective(objective, stats.warningLevels[stats.warningLevels.Count - objective.warningLevel], 0, objective.lifeTimeId);
             /* decreaseHeat bool is true */
-            if (stats.decreaseHeat) {
-                /* Stops heating for x amount of second(s) and also decrease heat x amount */
-                
-            }
+            
             //NextObjectiveSet();
         }
         
@@ -310,7 +331,10 @@ public class ObjectiveManager : MonoBehaviour {
 
         objective.warningLight.GetComponentInChildren<Light>().color = warningLvl.color;
 
+        if (debugMode) {
+
         print("<color=blue>Light enabled</color> warnLvl: " + warningLvl.level);
+        }
     }
 
     private void DisableWarningLight(Objective objective) {
@@ -325,7 +349,7 @@ public class ObjectiveManager : MonoBehaviour {
         material.SetColor("_Color", Color.gray);
     }
 
-    private IEnumerator DisableObjectiveByTime(Objective objective,WarningLevel currentWarningLvl, float duration) {
+    private IEnumerator DisableObjective(Objective objective,WarningLevel currentWarningLvl, float duration, int lifeTimeId) {
         //print("ghkdgsonfg");
         float time = 0;
         int lightOn = 1;        
@@ -352,6 +376,7 @@ public class ObjectiveManager : MonoBehaviour {
 
         RemoveObjective(objective);
         DisableWarningLight(objective);
+        objectiveLifeTimes.RemoveAt(lifeTimeId);
 
         print("<color=blue>time over</color>");
         print("<color=yellow>time: </color>"+ time);

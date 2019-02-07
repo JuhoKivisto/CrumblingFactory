@@ -15,6 +15,9 @@ public class EnvironmentalEvent {
 public class WarningLevel {
 
     public int level;
+
+    public float heatMultiplier;
+
     public Color color;
 
     public WarningLevel(int lvl, Color colour) {
@@ -71,8 +74,7 @@ public class Stats : MonoBehaviour {
 
     public float objectiveLifeTime;
     public float waitBeforeFirstSet;
-    public float waitBeforeNextSet;
-    public float[] heatDecreaseMultipliers;
+    public float waitBeforeNextSet;    
 
     public List<WarningLevel> warningLevels;
 
