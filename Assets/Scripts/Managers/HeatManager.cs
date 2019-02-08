@@ -5,7 +5,9 @@ using UnityEngine.UI;
 
 public class HeatManager : MonoBehaviour {
 
-    public Text heatText;
+    //public Text heatText;
+
+    public Slider HeatUI;
 
     public Stats stats;
 
@@ -17,6 +19,8 @@ public class HeatManager : MonoBehaviour {
     public float heatMultiplier;
     public float errorMultiplier;
 
+    public bool working = false;
+
     private float maxHeat;
     
     // Use this for initialization
@@ -24,7 +28,7 @@ public class HeatManager : MonoBehaviour {
 
         maxHeat = stats.maxHeat;
         CalculateHeatLevelLenght();
-        StartCoroutine(IncreaseHeat());
+        
 	}
 
     /// <summary>
@@ -70,7 +74,7 @@ public class HeatManager : MonoBehaviour {
     /// after that if heat is high enough heat level increases
     /// </summary>
     /// <returns></returns>
-    private IEnumerator IncreaseHeat() {
+    public IEnumerator IncreaseHeat() {
         
         while (heat < maxHeat && heat > -1) {
 
@@ -78,7 +82,7 @@ public class HeatManager : MonoBehaviour {
 
                 heat += stats.heatCurve2.Evaluate(heat / maxHeat) * Time.deltaTime * heatMultiplier + (GameManager.instance.errorCount * errorMultiplier);
                 yield return null;
-                heatText.text = heat.ToString();
+                HeatUI.value = heat;
                 ChangeHeatLevel();
             }
         }

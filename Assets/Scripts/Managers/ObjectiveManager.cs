@@ -307,6 +307,8 @@ public class ObjectiveManager : MonoBehaviour {
     private IEnumerator FirstObjectiveSet() {
         yield return new WaitForSeconds(stats.waitBeforeFirstSet);
         CreateObjectives();
+        //heatManager.working = true;
+        StartCoroutine(heatManager.IncreaseHeat());
     }
     
     private IEnumerator WaitNextSet() {

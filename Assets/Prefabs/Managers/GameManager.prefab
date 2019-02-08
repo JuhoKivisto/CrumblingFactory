@@ -53,8 +53,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   errorCount: 0
   doomCounter: 0
-  timeEvents: 
   timeEventId: 0
-  heatMeter: 0
+  timeEvents: 
+  normTimeValue: 0
   stats: {fileID: 0}
+  heatManager: {fileID: 0}
   player: {fileID: 0}

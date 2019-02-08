@@ -52,7 +52,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   debugMode: 0
+  objcomp: 0
+  tooManyObjectives: 0
   numberOfPanelSwitch: 0
+  currentObjectiveId: 0
+  howManyObjectives: 0
+  objectivesDone: 0
+  objectivesActivated: 0
+  currentWarningLevel: 3
+  lifeTimeId: 0
   objectiveList: []
   allObjectivesList: []
-  currentObjectiveId: 0
+  gameManager: {fileID: 0}
+  stats: {fileID: 0}
+  heatManager: {fileID: 0}

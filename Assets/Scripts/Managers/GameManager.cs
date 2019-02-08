@@ -131,14 +131,14 @@ public class GameManager : MonoBehaviour {
     /// Creates times for time based events
     /// </summary>
     public void CreateTimeEvents() {
-        System.Random rnd = new System.Random();
+        //System.Random rnd = new System.Random();
 
-        int indexDecreaser = 0;
-        for (int i = 0; i < timeEvents.Length; i++) {
-            timeEvents[i] = rnd.Next(stats.timeEventRandomLow + timeEvents[i-indexDecreaser],
-                stats.timeEventRandomHigh + timeEvents[i-indexDecreaser]);
-            indexDecreaser = 1;
-        }
+        //int indexDecreaser = 0;
+        //for (int i = 0; i < timeEvents.Length; i++) {
+        //    timeEvents[i] = rnd.Next(stats.timeEventRandomLow + timeEvents[i-indexDecreaser],
+        //        stats.timeEventRandomHigh + timeEvents[i-indexDecreaser]);
+        //    indexDecreaser = 1;
+        //}
     }       
     
     IEnumerator WaitList() 
