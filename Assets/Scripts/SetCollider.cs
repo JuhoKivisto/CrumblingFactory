@@ -36,14 +36,17 @@ public class SetCollider : MonoBehaviour {
             button.GetComponent<Collider>().enabled = setActive;
         }*/
         //print(other.gameObject.name);
-        if (other == hand.GetComponent<Collider>()) {
+        if (setActive == false && other == hand.GetComponent<Collider>()) {
             button.GetComponent<Collider>().enabled = setActive;
         }
     }
 
     void OnTriggerExit(Collider other) {
-        if (setActive == false && other == hand.GetComponent<Collider>()) {
+        if (other == hand.GetComponent<Collider>()) {
             button.GetComponent<Collider>().enabled = setActive;
         }
+        //if (setActive == true && other == hand.GetComponent<Collider>()) {
+        //    button.GetComponent<Collider>().enabled = setActive;
+        //}
     }
 }

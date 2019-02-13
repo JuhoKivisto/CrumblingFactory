@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ButtonTest : MonoBehaviour {
-    public GameObject hand;
+    //public GameObject hand;
     public GameObject button;
     public GameObject triggerDown;
     public GameObject triggerUp;
@@ -20,7 +20,7 @@ public class ButtonTest : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        CheckIfInsideOfBoundries();
+        //CheckIfInsideOfBoundries();
 	}
     private void OnTriggerEnter(Collider other) {
         if (active && other == triggerDown.GetComponent<Collider>() && other.tag == tag ) {
@@ -43,17 +43,17 @@ public class ButtonTest : MonoBehaviour {
 
     }
 
-    private void CheckIfInsideOfBoundries() {
-        if (hand.GetComponent<SphereCollider>().bounds.Intersects(enableCollider.GetComponent<BoxCollider>().bounds) && !isEnabled) {
-            print("enable");
-            isEnabled = true;
-            button.GetComponent<Collider>().enabled = true;
-        }
-        if (hand.GetComponent<SphereCollider>().bounds.Intersects(disableCollider.GetComponent<BoxCollider>().bounds) && isEnabled) {
-            print("disable");
-            isEnabled = false;
-            button.GetComponent<Collider>().enabled = false;
-        }
-    }
+    //private void CheckIfInsideOfBoundries() {
+    //    if (hand.GetComponent<SphereCollider>().bounds.Intersects(enableCollider.GetComponent<BoxCollider>().bounds) && !isEnabled) {
+    //        print("enable");
+    //        isEnabled = true;
+    //        button.GetComponent<Collider>().enabled = true;
+    //    }
+    //    if (hand.GetComponent<SphereCollider>().bounds.Intersects(disableCollider.GetComponent<BoxCollider>().bounds) && isEnabled) {
+    //        print("disable");
+    //        isEnabled = false;
+    //        button.GetComponent<Collider>().enabled = false;
+    //    }
+    //}
     
 }
