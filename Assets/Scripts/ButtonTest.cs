@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ButtonTest : MonoBehaviour {
-    //public GameObject hand;
+   
     public GameObject button;
     public GameObject triggerDown;
     public GameObject triggerUp;
@@ -23,22 +23,32 @@ public class ButtonTest : MonoBehaviour {
         //CheckIfInsideOfBoundries();
 	}
     private void OnTriggerEnter(Collider other) {
-        if (active && other == triggerDown.GetComponent<Collider>() && other.tag == tag ) {
-            active = false;
+
+        //print(other.gameObject.name);
+
+        if (active && other == triggerDown.GetComponent<Collider>() && other.tag == tag  ) {
             print("Button down");
+            button.GetComponent<Rigidbody>().AddForce(transform.up * 20);
+            active = false;
+            ObjectiveManager.instance.CompleteObjective(button.GetComponentInParent<InteractableTest>().objectiveInfo);
         }
         if (!active && other == triggerUp.GetComponent<Collider>() && other.tag == tag) {
             active = true;
             print("Button up");
         }
-        if (other == enableCollider.GetComponent<Collider>()) {
-            print("enable");
-            //button.GetComponent<Collider>().enabled = true;
+        if (other.tag == InteractableManager.instance.handTag && active) {
+            print("Add force");
+            button.GetComponent<Rigidbody>().AddForce(-transform.up * 50);
+            //active = false;
         }
-        if (other == disableCollider.GetComponent<Collider>()) {
-            print("disable");
-            button.GetComponent<Collider>().enabled = false;
-        }
+        //if (other == enableCollider.GetComponent<Collider>()) {
+        //    print("enable");
+        //    //button.GetComponent<Collider>().enabled = true;
+        //}
+        //if (other == disableCollider.GetComponent<Collider>()) {
+        //    print("disable");
+        //    button.GetComponent<Collider>().enabled = false;
+        //}
 
 
     }
