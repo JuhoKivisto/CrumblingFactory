@@ -16,6 +16,22 @@ public class InteractableItem : MonoBehaviour {
 
     public bool LeverUp;
 
+    public int count;
+
+    private Vector3 firstPosition;
+
+    private bool left;
+
+    private bool right;
+
+    private float flag;
+
+    private void Start() {
+        firstPosition = this.transform.localPosition;
+        count = 0;
+        flag = 0f;
+    }
+
 
     private void Update() {
         if (this.typeOfObject == ObjectType.Lever) {
@@ -28,7 +44,13 @@ public class InteractableItem : MonoBehaviour {
             }
 
         }
+
+        if(firstPosition.x - this.transform.position.x < 0.05f && firstPosition.x - this.transform.position.x > -0.05f) {
+            if (right) {
+                count++;
+            }else if (left) {
+                count--;
+            }
+        }
     }
-
-
 }
