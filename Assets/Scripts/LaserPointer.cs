@@ -21,6 +21,7 @@ public class LaserPointer : MonoBehaviour {
     // laser objects
     public Material mat1;
     public Material mat2;
+    public float amount;
 
     private Transform point0, point1, point2;
 
@@ -30,7 +31,7 @@ public class LaserPointer : MonoBehaviour {
     
     private Transform laserTransform;
     private Vector3 startPoint;
-    public int length;
+    public float length;
     public LineRenderer lineRenderer;
     public GameObject ControllerPrefab;
     private float distanceFromGround;
@@ -79,7 +80,7 @@ public class LaserPointer : MonoBehaviour {
 
     private void ShowCurveLaser() 
     {
-        for (int i = 0; i < 50; i++)
+        for (int i = 0; i <= amount; i++)
         {
             lineRenderer.SetPosition(i, positions[i]);
         }
@@ -135,6 +136,7 @@ public class LaserPointer : MonoBehaviour {
             lineRenderer.widthMultiplier = 0.1f;
             newDir = transform.forward;
             startPoint = trackedObj.transform.position;
+            positions[0] = startPoint;
 
             for (int i = 1; i < 50; i++)
             {
@@ -142,7 +144,9 @@ public class LaserPointer : MonoBehaviour {
                 {
                     if (hit.collider.tag == "Ground")
                     {
+                        positions[i] = hit.point;
                         lineRenderer.material = mat1;
+                        amount = i;
                         ShowCurveLaser();
                         reticle.SetActive(true);
                         shouldTeleport = true;
@@ -150,7 +154,9 @@ public class LaserPointer : MonoBehaviour {
                     }
                     else
                     {
+                        positions[i] = hit.point;
                         lineRenderer.material = mat2;
+                        amount = i;
                         ShowCurveLaser();
                         shouldTeleport = false;
                         break;
@@ -160,10 +166,9 @@ public class LaserPointer : MonoBehaviour {
                 {
                     shouldTeleport = false;
                     lineRenderer.material = mat2;
-                    newDir = Quaternion.AngleAxis(15f, transform.right) * transform.forward;
                     startPoint = startPoint + newDir * length;
-                    startPoint = hit.point;
-                    positions[i] = hit.point;
+                    positions[i] = startPoint;
+                    newDir = Quaternion.AngleAxis(15f, transform.right) * (newDir - startPoint);
                 }
             }
 
