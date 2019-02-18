@@ -49,6 +49,7 @@ public class LaserPointer : MonoBehaviour {
     private bool shouldTeleport;
     private bool areStunned;
 
+
     private SteamVR_Controller.Device Controller // Gets the controller object
     {
         get { return SteamVR_Controller.Input((int)trackedObj.index); }
@@ -61,7 +62,6 @@ public class LaserPointer : MonoBehaviour {
 
     private void ShowLaser(RaycastHit hit) // Enables and builds the laser
     {
-        Debug.Log("Piirretään kurvi :)");
 
 
 
@@ -75,19 +75,51 @@ public class LaserPointer : MonoBehaviour {
         laserTransform.localScale = new Vector3(laserTransform.localScale.x, laserTransform.localScale.y, hit.distance);*/
     }
 
-    private void DisableLaser() // Enables and builds the laser
+    private void ShowCurveLaser(RaycastHit hit) 
     {
+        Debug.Log("Piirretään kurvi :)");
 
-    
+        Quaternion direction = Quaternion.AngleAxis(15, Vector3.up);
+        lineRenderer.widthMultiplier = 0.1f;
 
-        lineRenderer.SetPosition(0, ControllerPrefab.transform.position); 
-        lineRenderer.SetPosition(1, ControllerPrefab.transform.position);
+        hitPoint = trackedObj.transform.position;
 
+        for (int i = 1; i < 50; i++)
+        {
+            if (Physics.Raycast(hitPoint, direction * transform.forward, out hit, length))
+            {
+                if (hit.collider.tag == "Ground")
+                {
+                    lineRenderer.material = mat1;
+                    ShowCurveLaser(hit);
+                    reticle.SetActive(true);
+                    break;
+                }
+                else
+                {
+                    lineRenderer.material = mat2;
+                    ShowCurveLaser(hit);
+                    break;
+                }
+            }
+            else
+            {
+                lineRenderer.material = mat2;
+                hitPoint = hit.point;
+                positions[i] = hit.point;
+            }
+        }
 
-        
-        /*laserTransform.position = Vector3.Lerp(trackedObj.transform.position, hitPoint, 0.5f);
-        laserTransform.LookAt(hitPoint);
-        laserTransform.localScale = new Vector3(laserTransform.localScale.x, laserTransform.localScale.y, hit.distance);*/
+        for (int i = 0; i < 50; i++)
+        {
+            lineRenderer.SetPosition(i, positions[i]);
+        }
+
+    }
+
+    private void DisableLaser() // Disables the laser
+    {
+        lineRenderer.positionCount = 0;
     }
 
     private void Teleport()
@@ -123,54 +155,51 @@ public class LaserPointer : MonoBehaviour {
     }
 
     // Update is called once per frame
-    private void FixedUpdate()
-    {
-        
-    }
     void Update() {
+
 
 
         if (Controller.GetPress(button)) // checks for a trigger press
         {
 
+
+
+
             Debug.Log("Trigger Painettu jes");
 
-                if (Physics.Raycast(trackedObj.transform.position, transform.forward, out hit, length)) // Raycast
+            if (Physics.Raycast(trackedObj.transform.position, transform.forward, out hit, length)) // Raycast
+            {
+                hitPoint = hit.point;
+                ShowLaser(hit);
+                // changes reticles position to raycasts hit point
+
+                if (hit.collider.tag == "Ground")
                 {
-                    hitPoint = hit.point;
-                    ShowLaser(hit);
-                    // changes reticles position to raycasts hit point
-
-                    if (hit.collider.tag == "Ground")
-                    {
-                        Debug.Log("hitattu");
-                        lineRenderer.material = mat1;
-                        reticle.SetActive(true); // sets reticle active
-                        // teleportReticleTransform.position = hitPoint + teleportReticleOffset; // changes reticles position to raycasts hit point
-                        teleportReticleTransform.position = hit.point + teleportReticleOffset;
-                        shouldTeleport = true; // enables the use of Teleport();
-                    }
-                    else
-                    {
-                        Debug.Log(hit.collider.gameObject.name);
-                        shouldTeleport = false;
-                        lineRenderer.material = mat2;
-                        reticle.SetActive(false);
-
-                    }
+                    Debug.Log("hitattu");
+                    lineRenderer.material = mat1;
+                    reticle.SetActive(true); // sets reticle active
+                    // teleportReticleTransform.position = hitPoint + teleportReticleOffset; // changes reticles position to raycasts hit point
+                    teleportReticleTransform.position = hit.point + teleportReticleOffset;
+                    shouldTeleport = true; // enables the use of Teleport();
                 }
-                else // disables laser and reticle if the trigger isn't pressed
+                else
                 {
-                    reticle.SetActive(false);
+                    Debug.Log(hit.collider.gameObject.name);
                     shouldTeleport = false;
-                    DisableLaser();
+                    lineRenderer.material = mat2;
+                    reticle.SetActive(false);
+
                 }
-            
-        } else
+            }
+        }
+        else // disables laser and reticle if the trigger isn't pressed
         {
             reticle.SetActive(false);
+            shouldTeleport = false;
             DisableLaser();
-        }
+
+        } 
+        
 
 
 
@@ -179,7 +208,6 @@ public class LaserPointer : MonoBehaviour {
             Teleport();
         }
     }
-
     private Vector3 CalculateCurve(float t, Vector3 p0, Vector3 p1, Vector3 p2) // Calculates bezier
     {
         float u = 1 - t;
