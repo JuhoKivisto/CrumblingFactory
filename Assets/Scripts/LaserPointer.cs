@@ -29,7 +29,7 @@ public class LaserPointer : MonoBehaviour {
     private Vector3 RedLaserLength;
     
     private Transform laserTransform;
-    private Vector3 hitPoint;
+    private Vector3 startPoint;
     public int length;
     public LineRenderer lineRenderer;
     public GameObject ControllerPrefab;
@@ -45,6 +45,8 @@ public class LaserPointer : MonoBehaviour {
     private Transform teleportReticleTransform;
     public Transform headTransform;
     public Vector3 teleportReticleOffset;
+    private Vector3 newDir;
+
     // public LayerMask teleportMask;
     private bool shouldTeleport;
     private bool areStunned;
@@ -68,48 +70,15 @@ public class LaserPointer : MonoBehaviour {
         lineRenderer.widthMultiplier = 0.1f;
         
         lineRenderer.SetPosition(0, ControllerPrefab.transform.position);
-        lineRenderer.SetPosition(1, hitPoint);
+        lineRenderer.SetPosition(1, startPoint);
 
         /*laserTransform.position = Vector3.Lerp(trackedObj.transform.position, hitPoint, 0.5f);
         laserTransform.LookAt(hitPoint);
         laserTransform.localScale = new Vector3(laserTransform.localScale.x, laserTransform.localScale.y, hit.distance);*/
     }
 
-    private void ShowCurveLaser(RaycastHit hit) 
+    private void ShowCurveLaser() 
     {
-        Debug.Log("Piirretään kurvi :)");
-
-        Quaternion direction = Quaternion.AngleAxis(15, Vector3.up);
-        lineRenderer.widthMultiplier = 0.1f;
-
-        hitPoint = trackedObj.transform.position;
-
-        for (int i = 1; i < 50; i++)
-        {
-            if (Physics.Raycast(hitPoint, direction * transform.forward, out hit, length))
-            {
-                if (hit.collider.tag == "Ground")
-                {
-                    lineRenderer.material = mat1;
-                    ShowCurveLaser(hit);
-                    reticle.SetActive(true);
-                    break;
-                }
-                else
-                {
-                    lineRenderer.material = mat2;
-                    ShowCurveLaser(hit);
-                    break;
-                }
-            }
-            else
-            {
-                lineRenderer.material = mat2;
-                hitPoint = hit.point;
-                positions[i] = hit.point;
-            }
-        }
-
         for (int i = 0; i < 50; i++)
         {
             lineRenderer.SetPosition(i, positions[i]);
@@ -129,7 +98,7 @@ public class LaserPointer : MonoBehaviour {
         Vector3 difference = cameraRigTransform.position - headTransform.position;
         difference.y = 0; // keeps you in the correct area on y-axis
         //hitPoint.y = 0;
-        cameraRigTransform.position = hitPoint + difference; // teleports Camera Rig to the reticle
+        cameraRigTransform.position = startPoint + difference; // teleports Camera Rig to the reticle
     }
 
     // Use this for initialization
@@ -163,13 +132,47 @@ public class LaserPointer : MonoBehaviour {
         {
 
 
+            lineRenderer.widthMultiplier = 0.1f;
+            newDir = transform.forward;
+            startPoint = trackedObj.transform.position;
+
+            for (int i = 1; i < 50; i++)
+            {
+                if (Physics.Raycast(startPoint, newDir, out hit, length))
+                {
+                    if (hit.collider.tag == "Ground")
+                    {
+                        lineRenderer.material = mat1;
+                        ShowCurveLaser();
+                        reticle.SetActive(true);
+                        shouldTeleport = true;
+                        break;
+                    }
+                    else
+                    {
+                        lineRenderer.material = mat2;
+                        ShowCurveLaser();
+                        shouldTeleport = false;
+                        break;
+                    }
+                }
+                else
+                {
+                    shouldTeleport = false;
+                    lineRenderer.material = mat2;
+                    newDir = Quaternion.AngleAxis(15f, transform.right) * transform.forward;
+                    startPoint = startPoint + newDir * length;
+                    startPoint = hit.point;
+                    positions[i] = hit.point;
+                }
+            }
 
 
-            Debug.Log("Trigger Painettu jes");
+            /*Debug.Log("Trigger Painettu jes");
 
             if (Physics.Raycast(trackedObj.transform.position, transform.forward, out hit, length)) // Raycast
             {
-                hitPoint = hit.point;
+                startPoint = hit.point;
                 ShowLaser(hit);
                 // changes reticles position to raycasts hit point
 
@@ -190,7 +193,7 @@ public class LaserPointer : MonoBehaviour {
                     reticle.SetActive(false);
 
                 }
-            }
+            }*/
         }
         else // disables laser and reticle if the trigger isn't pressed
         {
