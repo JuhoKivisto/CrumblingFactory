@@ -368,7 +368,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   audioPrefab: {fileID: 1046264391456768, guid: 97cae1206ba2faa46a2aa9aa199bd6f9,
     type: 2}
-  FireAlarmSound: {fileID: 8300000, guid: 4b9543db3f8bc28448298aea0bbe0c91, type: 3}
+  FireAlarmSound: {fileID: 8300000, guid: 95859e2c5ea29624a817cb73e8c2c56f, type: 3}
   BackgroundMusic: {fileID: 8300000, guid: e14a3d7b460e3a0438010fba40bd9229, type: 3}
 --- !u!4 &588092377
 Transform:
