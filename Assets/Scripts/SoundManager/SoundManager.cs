@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class SoundManager : MonoBehaviour {
-
     public static SoundManager instance;
 
     [SerializeField] private GameObject audioPrefab;
@@ -12,59 +11,51 @@ public class SoundManager : MonoBehaviour {
     public AudioClip FireAlarmSound;
     public AudioClip BackgroundMusic;
 
-    private AudioSource audioSource;
-
-
     private void Awake() {
         instance = this;
     }
 
-    public AudioSource audioToPlay(AudioClip clipName, bool isLoop, float volume) { //this return audio with setting
+    public AudioSource audioToPlay(AudioClip clipName, bool isLoop, float volume, float timeToStop, Transform parentTransform, Vector3 newPosition) { //this return audio with setting
 
         GameObject audioObject = (GameObject)Instantiate(audioPrefab);
+
+        if (parentTransform != null) {                                     //attach to parent and set local position
+            audioObject.transform.SetParent(parentTransform);
+        }
+
+        audioObject.transform.position = newPosition;
         AudioSource audio = audioObject.GetComponent<AudioSource>();
 
         audio.clip = clipName;
         audio.volume = volume;
         audio.loop = (isLoop) ? true : false;
+        audio.Play();
+
+        if (timeToStop > 0)                                     //if time = 0, do not stop audio
+            StartCoroutine(waitForSeconds(audio, timeToStop));
+
+        StartCoroutine(DestroyWhenStop(audio));                 //destroy game object
 
         return audio;
     }
 
-    public void playAudio(AudioSource audio, bool isPlaying) {      //play and stop audio
+    public void stopAudio(AudioSource audio) {      //stop audio
         if(audio != null) {
-
-            if (isPlaying)
-                audio.Play();
-            else
-                audio.Stop();
-
-            StartCoroutine(stopAudioCoroutine(audio));
-        }
-
-        
-        
+            audio.Stop();
+        }               
     }
-    IEnumerator stopAudioCoroutine(AudioSource audio) { //wait audio to stop then destroy game object which has audio source
-        bool test = audio.isPlaying;
+    IEnumerator DestroyWhenStop(AudioSource audio) { //wait audio to stop then destroy game object which has audio source
 
         yield return new WaitUntil(() => !audio.isPlaying);
 
         if(audio != null)
             Destroy(audio.gameObject);
-
     }
-       
-    
-    //public void test(AudioClip clipName, bool isLoop, float volume, float timeToDestroy) {
 
-    //    GameObject sound = (GameObject)Instantiate(audioPrefab);
+    IEnumerator waitForSeconds(AudioSource audio, float time) {
 
-    //    audioSource = sound.GetComponent<AudioSource>();
-    //    audioSource.clip = clipName;
-    //    audioSource.volume = volume;
-    //    audioSource.loop = isLoop;
-    //    audioSource.Play();
-    //    Destroy(sound, timeToDestroy);
-    //}
+        yield return new WaitForSeconds(time);
+        if(audio != null)
+            audio.Stop();
+    }
 }
