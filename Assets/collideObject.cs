@@ -4,29 +4,21 @@ using UnityEngine;
 
 public class collideObject : MonoBehaviour {
 
-    AudioSource test;
+    private AudioSource test;
+    private AudioSource backgroudMusic;
 
-    private void Start() {
 
-    }
 
     private void Update() {
         if (Input.GetKeyDown(KeyCode.Space)) {
-            test = SoundManager.instance.audioToPlay(SoundManager.instance.FireAlarmSound);
+            test = SoundManager.instance.audioToPlay(SoundManager.instance.FireAlarmSound, true, 1);
             SoundManager.instance.playAudio(test, true);
         }
-        if (Input.GetKeyDown(KeyCode.S)) {
+        else if (Input.GetKeyDown(KeyCode.S)) {
             SoundManager.instance.playAudio(test, false);
         }
     }
 
 
-    private void OnCollisionEnter(Collision collision) {
-        //AudioSource test = SoundManager.instance.audioToPlay(SoundManager.instance.FireAlarmSound);
-        
-        //if (this.name == "Cube")
-        //    SoundManager.instance.playAudio(test, true);
-        
 
-    }
 }

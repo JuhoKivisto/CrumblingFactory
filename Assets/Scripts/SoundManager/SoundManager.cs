@@ -14,37 +14,45 @@ public class SoundManager : MonoBehaviour {
 
     private AudioSource audioSource;
 
-    bool b = false;
-    // Use this for initialization
+
     private void Awake() {
         instance = this;
     }
 
-    public AudioSource audioToPlay(AudioClip clipName) {
+    public AudioSource audioToPlay(AudioClip clipName, bool isLoop, float volume) { //this return audio with setting
+
         GameObject audioObject = (GameObject)Instantiate(audioPrefab);
-        AudioSource test = audioObject.GetComponent<AudioSource>();
-        test.clip = clipName;
-        //test.Play();
-        return test;
+        AudioSource audio = audioObject.GetComponent<AudioSource>();
+
+        audio.clip = clipName;
+        audio.volume = volume;
+        audio.loop = (isLoop) ? true : false;
+
+        return audio;
     }
 
-    public void playAudio(AudioSource audio, bool isPlaying) {
-        if (isPlaying)
-            audio.Play();
-        if (!isPlaying)
-            audio.Stop();
+    public void playAudio(AudioSource audio, bool isPlaying) {      //play and stop audio
+        if(audio != null) {
 
-        StartCoroutine(stopAudioCoroutine(audio));
+            if (isPlaying)
+                audio.Play();
+            else
+                audio.Stop();
+
+            StartCoroutine(stopAudioCoroutine(audio));
+        }
+
+        
         
     }
-    IEnumerator stopAudioCoroutine(AudioSource audio) {
+    IEnumerator stopAudioCoroutine(AudioSource audio) { //wait audio to stop then destroy game object which has audio source
         bool test = audio.isPlaying;
-        Debug.Log(test);
-        yield return new WaitUntil(() => test = false);
-        Debug.Log(audio.gameObject.name);
-        Debug.Log(test);
 
-        Debug.Log("ther");
+        yield return new WaitUntil(() => !audio.isPlaying);
+
+        if(audio != null)
+            Destroy(audio.gameObject);
+
     }
        
     
