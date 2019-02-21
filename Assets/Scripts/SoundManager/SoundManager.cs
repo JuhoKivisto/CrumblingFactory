@@ -10,6 +10,8 @@ public class SoundManager : MonoBehaviour {
     [Header("Audio Clip Names")]
     public AudioClip FireAlarmSound;
     public AudioClip BackgroundMusic;
+
+    [Header("Audio Sources")]
     public List<GameObject> AudioSourceList;
 
 

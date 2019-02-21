@@ -20,7 +20,7 @@ public class collideObject : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.A)) {
             if (test == null) {
-                test = SoundManager.instance.audioSourceToPlay(SoundManager.instance.AudioSourceList[0], 0, null, Vector3.zero);
+                test = SoundManager.instance.audioSourceToPlay(SoundManager.instance.AudioSourceList[1], 0, null, Vector3.zero);
             }
         }
         
