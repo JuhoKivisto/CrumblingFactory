@@ -10,22 +10,46 @@ public class SoundManager : MonoBehaviour {
     [Header("Audio Clip Names")]
     public AudioClip FireAlarmSound;
     public AudioClip BackgroundMusic;
+    public List<GameObject> AudioSourceList;
+
 
     private void Awake() {
         instance = this;
     }
 
-    public AudioSource audioToPlay(AudioClip clipName, bool isLoop, float volume, float timeToStop, Transform parentTransform, Vector3 newPosition) { //this return audio with setting
 
-        GameObject audioObject = (GameObject)Instantiate(audioPrefab);
+    //this method is used when there are too many settings on audio source and audio source settings are done at inspector
+    public AudioSource audioSourceToPlay(GameObject audioSource, float timeToStop, Transform parentTransform, Vector3 newPosition) {   
+
+        GameObject audioObject = (GameObject)Instantiate(audioSource, newPosition, new Quaternion());
+        AudioSource temp = audioObject.GetComponent<AudioSource>();
+
+        if(parentTransform != null) {
+            audioObject.transform.SetParent(parentTransform);
+        }
+
+        temp.Play();
+
+        if (timeToStop > 0)                                     //if time = 0, do not stop audio
+            StartCoroutine(waitForSeconds(temp, timeToStop));
+
+        StartCoroutine(DestroyWhenStop(temp));                 //destroy game object
+
+        return temp;
+    }
+
+
+    //this method is used when there isn't many settings on audio source
+    public AudioSource audioClipToPlay(AudioClip clipName, bool isLoop, float volume, float timeToStop, Transform parentTransform, Vector3 newPosition) { 
+
+        GameObject audioObject = (GameObject)Instantiate(audioPrefab, newPosition, new Quaternion());
 
         if (parentTransform != null) {                                     //attach to parent and set local position
             audioObject.transform.SetParent(parentTransform);
         }
 
-        audioObject.transform.position = newPosition;
         AudioSource audio = audioObject.GetComponent<AudioSource>();
-
+        
         audio.clip = clipName;
         audio.volume = volume;
         audio.loop = (isLoop) ? true : false;
@@ -39,12 +63,16 @@ public class SoundManager : MonoBehaviour {
         return audio;
     }
 
-    public void stopAudio(AudioSource audio) {      //stop audio
+    //stop audio
+    public void stopAudio(AudioSource audio) {      
         if(audio != null) {
             audio.Stop();
         }               
     }
-    IEnumerator DestroyWhenStop(AudioSource audio) { //wait audio to stop then destroy game object which has audio source
+
+
+    //wait audio to stop then destroy game object which has audio source
+    IEnumerator DestroyWhenStop(AudioSource audio) { 
 
         yield return new WaitUntil(() => !audio.isPlaying);
 
