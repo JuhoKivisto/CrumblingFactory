@@ -21,12 +21,13 @@ public class LaserPointer : MonoBehaviour {
     // laser objects
     public Material mat1;
     public Material mat2;
-    public float amount;
+    public int amount;
+    public float cooldown;
 
     private Transform point0, point1, point2;
 
     private int numPoints = 50;
-    private Vector3[] positions = new Vector3[50];
+    private Vector3[] positions = new Vector3[100];
     private Vector3 RedLaserLength;
     
     private Transform laserTransform;
@@ -47,10 +48,13 @@ public class LaserPointer : MonoBehaviour {
     public Transform headTransform;
     public Vector3 teleportReticleOffset;
     private Vector3 newDir;
+    public float angle;
+    private float angleCount;
+
 
     // public LayerMask teleportMask;
     private bool shouldTeleport;
-    private bool areStunned;
+    private bool onCooldown;
 
 
     private SteamVR_Controller.Device Controller // Gets the controller object
@@ -80,7 +84,9 @@ public class LaserPointer : MonoBehaviour {
 
     private void ShowCurveLaser() 
     {
-        for (int i = 0; i <= amount; i++)
+        lineRenderer.positionCount = amount;
+        lineRenderer.SetPosition(0, positions[0]);
+        for (int i = 1; i < amount; i++)
         {
             lineRenderer.SetPosition(i, positions[i]);
         }
@@ -94,16 +100,18 @@ public class LaserPointer : MonoBehaviour {
 
     private void Teleport()
     {
+        Debug.Log("Nonii");
         shouldTeleport = false; // sets the bool back to false
         reticle.SetActive(false); // sets reticle to false
         Vector3 difference = cameraRigTransform.position - headTransform.position;
         difference.y = 0; // keeps you in the correct area on y-axis
         //hitPoint.y = 0;
-        cameraRigTransform.position = startPoint + difference; // teleports Camera Rig to the reticle
+        cameraRigTransform.position = reticle.transform.position; // teleports Camera Rig to the reticle
     }
 
     // Use this for initialization
     void Start() {
+
 
         if (buttonToUse == EbuttonToUse.Touchpad)
         {
@@ -121,24 +129,24 @@ public class LaserPointer : MonoBehaviour {
         reticle = Instantiate(teleportReticlePrefab); // instantiates our reticle prefab
         teleportReticleTransform = reticle.transform;
 
-        areStunned = false;
+        onCooldown = false;
     }
 
     // Update is called once per frame
     void Update() {
 
 
-
         if (Controller.GetPress(button)) // checks for a trigger press
         {
-
+            angleCount = angle;
 
             lineRenderer.widthMultiplier = 0.1f;
             newDir = transform.forward;
             startPoint = trackedObj.transform.position;
             positions[0] = startPoint;
+            Vector3 laserAxis = transform.right;
 
-            for (int i = 1; i < 50; i++)
+            for (int i = 1; i < 100; i++)
             {
                 if (Physics.Raycast(startPoint, newDir, out hit, length))
                 {
@@ -149,6 +157,7 @@ public class LaserPointer : MonoBehaviour {
                         amount = i;
                         ShowCurveLaser();
                         reticle.SetActive(true);
+                        teleportReticleTransform.position = hit.point + teleportReticleOffset;
                         shouldTeleport = true;
                         break;
                     }
@@ -158,17 +167,25 @@ public class LaserPointer : MonoBehaviour {
                         lineRenderer.material = mat2;
                         amount = i;
                         ShowCurveLaser();
+                        reticle.SetActive(false);
                         shouldTeleport = false;
                         break;
                     }
                 }
                 else
                 {
+                    DisableLaser();
+                    reticle.SetActive(false);
                     shouldTeleport = false;
                     lineRenderer.material = mat2;
                     startPoint = startPoint + newDir * length;
                     positions[i] = startPoint;
-                    newDir = Quaternion.AngleAxis(15f, transform.right) * (newDir - startPoint);
+                    if (angleCount < 90)
+                    {
+                        
+                        angleCount += angle;
+                        newDir = Quaternion.AngleAxis(angle, laserAxis) * newDir;
+                    }
                 }
             }
 
@@ -203,7 +220,6 @@ public class LaserPointer : MonoBehaviour {
         else // disables laser and reticle if the trigger isn't pressed
         {
             reticle.SetActive(false);
-            shouldTeleport = false;
             DisableLaser();
 
         } 
@@ -211,7 +227,7 @@ public class LaserPointer : MonoBehaviour {
 
 
 
-        if (Controller.GetPressUp(button) && shouldTeleport && !areStunned /*&& hitPoint.y == 0*/) // Teleports when the trigger is released if shouldTeleport bool is true
+        if (Controller.GetPressUp(button) && shouldTeleport && !onCooldown /*&& hitPoint.y == 0*/) // Teleports when the trigger is released if shouldTeleport bool is true
         {
             Teleport();
         }
