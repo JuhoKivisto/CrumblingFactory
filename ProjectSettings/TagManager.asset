@@ -6,6 +6,9 @@ TagManager:
   tags:
   - button
   - trigger
+  - hand
+  - Ground
+  - Lever
   layers:
   - Default
   - TransparentFX
