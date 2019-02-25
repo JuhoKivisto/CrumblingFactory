@@ -8,15 +8,15 @@ public class light : MonoBehaviour
 {
 
     public float speed;
-    private Color firstcolor= Color.yellow;
+    private Color firstcolor= Color.blue;
     private Color firstendcolor= Color.blue;
-    private Color midcolor = Color.gray;
-    private Color midendcolor= Color.green;
+    private Color midcolor = Color.green;
+    private Color midendcolor= Color.magenta;
     private Color endcolor = Color.red;
-    private Color endlastcolor = Color.black;
+    private Color endlastcolor = Color.grey;
     public Slider slidervalue;
     public AnimationCurve heatcurve;
-    float starttime;
+    float starttime = 1f;
     
     private void Start()
     {
@@ -30,29 +30,32 @@ public class light : MonoBehaviour
     public void  change()
     {
         
-        if (slidervalue.value > 0 && slidervalue.value <= 40)
+        if (slidervalue.value > 0 && slidervalue.value <= 40 )
         {
             float t = Time.time * speed;
+        
       
 
-            GetComponent<Light>().color = Color.Lerp(firstcolor, firstendcolor, heatcurve.Evaluate(t));
+            GetComponent<Light>().color = Color.Lerp(firstcolor, firstendcolor, t);
+          
            
            
         
 
         }
-        else  if (slidervalue.value >= 40 && slidervalue.value <= 80)
+        else  if (slidervalue.value > 40 && slidervalue.value <= 80)
         {
             Debug.Log(slidervalue.value);
             float t = Time.time * speed;
-            GetComponent<Light>().color = Color.Lerp(midcolor, midendcolor, heatcurve.Evaluate(t));
+            GetComponent<Light>().color = Color.Lerp(midcolor, midendcolor, t);
+           
         
         }
-         else if (slidervalue.value >= 80 && slidervalue.value <= 100)
+         else if (slidervalue.value > 80 && slidervalue.value <= 100)
         {
             float t = (Time.time - starttime) * speed;
            
-            GetComponent<Light>().color = Color.Lerp(endcolor, endlastcolor, heatcurve.Evaluate(t));
+            GetComponent<Light>().color = Color.Lerp(endcolor, endlastcolor, t);
         }
 
 

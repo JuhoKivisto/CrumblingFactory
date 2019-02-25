@@ -71,4 +71,11 @@ public class click : MonoBehaviour {
         this.GetComponent<AudioSource>().Stop();
 
     }
+
+    public void OnTriggerEnter(Collider other)
+    {
+        this.gameObject.AddComponent<AudioSource>();
+        this.GetComponent<AudioSource>().clip = help;
+        this.GetComponent<AudioSource>().Play();
+    }
 }
