@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LaserPointer : MonoBehaviour {
 
@@ -29,7 +30,7 @@ public class LaserPointer : MonoBehaviour {
     public float length;
     private float angleCount;
     private float distanceFromGround;
-    public float cooldownTime;
+    private float cooldownTime;
 
     // Vector3 positions used for calculations
     private Vector3[] positions = new Vector3[100];    
@@ -39,6 +40,7 @@ public class LaserPointer : MonoBehaviour {
 
     public LineRenderer lineRenderer;
     RaycastHit hit;
+    public Image cooldownSprite;
 
     // Reticle objects
     public GameObject teleportReticlePrefab;
@@ -86,8 +88,10 @@ public class LaserPointer : MonoBehaviour {
         Vector3 difference = cameraRigTransform.position - headTransform.position;
         difference.y = 0; // keeps you in the correct area on y-axis
         cameraRigTransform.position = reticle.transform.position; // teleports Camera Rig to the reticle
+        headTransform.position = reticle.transform.position;
         onCooldown = true; // Puts the teleport on cooldown
-        cooldownTime += Time.time;
+        cooldownTime = cooldown + Time.time;
+        cooldownSprite.fillAmount = 1.0f;
     }
 
     // Use this for initialization
@@ -102,9 +106,10 @@ public class LaserPointer : MonoBehaviour {
         else 
         {
             button = SteamVR_Controller.ButtonMask.Trigger;
-        } 
+        }
 
-        reticle = Instantiate(teleportReticlePrefab); // instantiates our reticle prefab
+        reticle = teleportReticlePrefab;
+        // reticle = Instantiate(teleportReticlePrefab); // instantiates our reticle prefab
         teleportReticleTransform = reticle.transform;
 
         onCooldown = false; // Takes the movement off cooldown at launch
@@ -118,9 +123,9 @@ public class LaserPointer : MonoBehaviour {
             onCooldown = false;
         }
 
-        if (onCooldown)
+        if (cooldownSprite.fillAmount > 0f)
         {
-            // Visualize the cooldown somehow
+            cooldownSprite.fillAmount -= 1.0f / cooldown * Time.deltaTime;
         }
 
         if (Controller.GetPress(button)) // checks for a button press
