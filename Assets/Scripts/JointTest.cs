@@ -15,7 +15,7 @@ public class JointTest : MonoBehaviour {
 	}
 
     public void OnCollisionEnter(Collision collision) {
-        GetComponent<SpringJoint>().connectedBody = collision.rigidbody;
+        //GetComponent<SpringJoint>().connectedBody = collision.rigidbody;
     }
 
     public void OnTriggerEnter(Collider other)

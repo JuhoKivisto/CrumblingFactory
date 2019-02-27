@@ -6,11 +6,76 @@ public class Controller : MonoBehaviour {
 
     public int controllerId;
 
-    public void InitController() {
-        controllerId = (int) GetComponent<SteamVR_TrackedController>().controllerIndex;
+    public SteamVR_TrackedController svrc;
+
+    [Range(0f, 4f)]
+    [SerializeField]
+    private float hapticPulse;
+
+    public float HapticPulse {
+        get {
+            return hapticPulse;
+        }
+
+        set {
+            hapticPulse = value;
+        }
+    }
+    private bool triggerPressed;
+
+    public bool TriggerPressed {
+        get {
+            return triggerPressed;
+        }
+
+        set {
+            triggerPressed = value;
+        }
     }
 
-    public void EnableHapticFeedBack() {
-        SteamVR_Controller.Input(controllerId).TriggerHapticPulse(2000);
+
+    private void OnEnable()
+    {
+        InitController();
     }
+
+    private void Update()
+    {
+        if (svrc == null) {
+            return;
+        }
+
+       
+    }
+
+    public void InitController() {
+        svrc = GetComponent<SteamVR_TrackedController>();
+    }
+
+    
+
+    public void EnableHapticFeedBack() {
+        
+        SteamVR_Controller.Input((int) svrc.controllerIndex).TriggerHapticPulse((ushort)(HapticPulse * 1000));
+       
+    }
+
+    public void EnableHapticFeedBack(float pulseStrengh)
+    {
+
+        SteamVR_Controller.Input((int)svrc.controllerIndex).TriggerHapticPulse((ushort)(pulseStrengh * 1000));
+
+    }
+
+    public void EnableHapticFeedBackLoop(float pulseInterval, float pulseStrengh) {
+        //StartCoroutine(EnableHapticFeedBackLoop())
+    }
+
+    //public IEnumerator EnableHapticFeedBackLoop(float pulseInterval, float pulseStrengh) {
+
+    //    while (GetComponent<SteamVR_TrackedController>().triggerPressed) {
+    //        EnableHapticFeedBack(pulseStrengh);
+    //    yield return new WaitForSeconds(pulseInterval);
+    //    }
+    //}
 }

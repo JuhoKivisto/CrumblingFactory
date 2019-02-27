@@ -1941,6 +1941,7 @@ GameObject:
   - component: {fileID: 427030358}
   - component: {fileID: 427030357}
   - component: {fileID: 427030356}
+  - component: {fileID: 427030362}
   m_Layer: 0
   m_Name: Sphere (1)
   m_TagString: Untagged
@@ -2064,6 +2065,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &427030362
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 427030355}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6c75f3480c13524cba2bfb2ac84a570, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  other: {fileID: 1434649063}
 --- !u!1 &432371008
 GameObject:
   m_ObjectHideFlags: 0
@@ -2851,6 +2864,39 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 652511436}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!21 &679487169
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: Sprites/Default
+  m_Shader: {fileID: 10753, guid: 0000000000000000f000000000000000, type: 0}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _AlphaTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - PixelSnap: 0
+    - _EnableExternalAlpha: 0
+    m_Colors:
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Flip: {r: 1, g: 1, b: 1, a: 1}
+    - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &793226089
 GameObject:
   m_ObjectHideFlags: 0
@@ -3563,7 +3609,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1035880838}
   - component: {fileID: 1035880837}
-  - component: {fileID: 1035880839}
   m_Layer: 0
   m_Name: LeverBase
   m_TagString: Untagged
@@ -3601,26 +3646,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1035880839
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1035880836}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2b825110b3abdbf42b925915ab5113dc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  interactableType: 0
-  button: {fileID: 0}
-  triggerDown: {fileID: 0}
-  triggerUp: {fileID: 0}
-  enableCollider: {fileID: 0}
-  disableCollider: {fileID: 0}
-  active: 0
-  isEnabled: 0
-  tag: 
 --- !u!1 &1242571834
 GameObject:
   m_ObjectHideFlags: 0
@@ -3722,90 +3747,7 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1242571834}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &1282451812 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1315959082063972, guid: 568882bcd71068f40b2acf0c85904494,
-    type: 2}
-  m_PrefabInternal: {fileID: 1471411114}
---- !u!114 &1282451813
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1282451812}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c6a59968af89ce4fadcf06c5a1bf8c2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  controllerId: 0
---- !u!114 &1282451814
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1282451812}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7346a42905a29b347b1f492e8ad7b49f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  controllerIndex: 0
-  triggerPressed: 0
-  steamPressed: 0
-  menuPressed: 0
-  padPressed: 0
-  padTouched: 0
-  gripped: 0
---- !u!114 &1282451816
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1282451812}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af49d21b553ae7f428369c4189927ca9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!145 &1282451817
-SpringJoint:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1282451812}
-  m_ConnectedBody: {fileID: 0}
-  m_Anchor: {x: 0, y: 0, z: 0}
-  m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -2.333, y: 0.02, z: -0.22}
-  serializedVersion: 2
-  m_Spring: 10
-  m_Damper: 0.2
-  m_MinDistance: 0
-  m_MaxDistance: 0
-  m_Tolerance: 0.025
-  m_BreakForce: Infinity
-  m_BreakTorque: Infinity
-  m_EnableCollision: 0
-  m_EnablePreprocessing: 1
-  m_MassScale: 1
-  m_ConnectedMassScale: 1
---- !u!54 &1282451818
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1282451812}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
---- !u!43 &1389091893
+--- !u!43 &1397747671
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4201,7 +4143,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4039054227466144, guid: 568882bcd71068f40b2acf0c85904494, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -2.333
+      value: -0.674
       objectReference: {fileID: 0}
     - target: {fileID: 4039054227466144, guid: 568882bcd71068f40b2acf0c85904494, type: 2}
       propertyPath: m_LocalPosition.y
@@ -4209,7 +4151,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4039054227466144, guid: 568882bcd71068f40b2acf0c85904494, type: 2}
       propertyPath: m_LocalPosition.z
-      value: -0.22
+      value: 0.72
       objectReference: {fileID: 0}
     - target: {fileID: 4039054227466144, guid: 568882bcd71068f40b2acf0c85904494, type: 2}
       propertyPath: m_LocalRotation.x
@@ -4231,54 +4173,31 @@ Prefab:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 33169612633658774, guid: 568882bcd71068f40b2acf0c85904494,
-        type: 2}
-      propertyPath: m_Mesh
-      value: 
-      objectReference: {fileID: 1389091893}
     - target: {fileID: 23952421516971976, guid: 568882bcd71068f40b2acf0c85904494,
         type: 2}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2099774785}
-    m_RemovedComponents: []
+      objectReference: {fileID: 679487169}
+    - target: {fileID: 33169612633658774, guid: 568882bcd71068f40b2acf0c85904494,
+        type: 2}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 1397747671}
+    - target: {fileID: 145217259592723376, guid: 568882bcd71068f40b2acf0c85904494,
+        type: 2}
+      propertyPath: m_MaxDistance
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 145217259592723376, guid: 568882bcd71068f40b2acf0c85904494,
+        type: 2}
+      propertyPath: m_Spring
+      value: 10
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 114514350322326002, guid: 568882bcd71068f40b2acf0c85904494, type: 2}
+    - {fileID: 114674101814713458, guid: 568882bcd71068f40b2acf0c85904494, type: 2}
   m_SourcePrefab: {fileID: 100100000, guid: 568882bcd71068f40b2acf0c85904494, type: 2}
   m_IsPrefabAsset: 0
---- !u!1 &1471411115 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1433665724395588, guid: 568882bcd71068f40b2acf0c85904494,
-    type: 2}
-  m_PrefabInternal: {fileID: 1471411114}
---- !u!114 &1471411116
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1471411115}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c6a59968af89ce4fadcf06c5a1bf8c2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  controllerId: 0
---- !u!114 &1471411117
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1471411115}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7346a42905a29b347b1f492e8ad7b49f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  controllerIndex: 0
-  triggerPressed: 0
-  steamPressed: 0
-  menuPressed: 0
-  padPressed: 0
-  padTouched: 0
-  gripped: 0
 --- !u!1 &1519886866
 GameObject:
   m_ObjectHideFlags: 0
@@ -6878,39 +6797,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1967521794}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
---- !u!21 &2099774785
-Material:
-  serializedVersion: 6
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: Sprites/Default
-  m_Shader: {fileID: 10753, guid: 0000000000000000f000000000000000, type: 0}
-  m_ShaderKeywords: 
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs:
-    - _AlphaTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _MainTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Floats:
-    - PixelSnap: 0
-    - _EnableExternalAlpha: 0
-    m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _Flip: {r: 1, g: 1, b: 1, a: 1}
-    - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &2121339005
 GameObject:
   m_ObjectHideFlags: 0
@@ -6922,6 +6808,7 @@ GameObject:
   - component: {fileID: 2121339007}
   - component: {fileID: 2121339006}
   - component: {fileID: 2121339009}
+  - component: {fileID: 2121339010}
   m_Layer: 0
   m_Name: LeverHinge
   m_TagString: Lever
@@ -6961,7 +6848,7 @@ HingeJoint:
   m_BreakTorque: Infinity
   m_EnableCollision: 0
   m_EnablePreprocessing: 1
-  m_MassScale: 1
+  m_MassScale: 5
   m_ConnectedMassScale: 1
 --- !u!54 &2121339007
 Rigidbody:
@@ -6999,12 +6886,37 @@ CapsuleCollider:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2121339005}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: 0.041110665
-  m_Height: 0.08222133
+  m_Radius: 0.025390372
+  m_Height: 0.101385
   m_Direction: 1
-  m_Center: {x: 0, y: 0.28922006, z: 0}
+  m_Center: {x: 0.0004491508, y: 0.29610705, z: -0.000000014901161}
+--- !u!114 &2121339010
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2121339005}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b825110b3abdbf42b925915ab5113dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactableType: 2
+  button: {fileID: 0}
+  triggerDown: {fileID: 0}
+  triggerUp: {fileID: 0}
+  enableCollider: {fileID: 0}
+  disableCollider: {fileID: 0}
+  active: 0
+  isEnabled: 0
+  hand: {fileID: 0}
+  SpringBreakDistance: 0.3
+  spring: {fileID: 0}
+  leverHapticPulseInterval: 2
+  interacting: 0
+  tag: 
 --- !u!1 &2140520857
 GameObject:
   m_ObjectHideFlags: 0
@@ -7024,7 +6936,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!145 &2140520858
 SpringJoint:
   m_ObjectHideFlags: 0

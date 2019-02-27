@@ -9,7 +9,12 @@ public class InteractableController : MonoBehaviour {
     public enum InteractableType {None, Button, Lever, Valve};
 
     public InteractableType interactableType;
-    
+
+    private Controller handController;
+
+  
+
+
     #region Button
     public GameObject button;
     public GameObject triggerDown;
@@ -22,6 +27,16 @@ public class InteractableController : MonoBehaviour {
     #endregion
 
     #region Lever
+    public GameObject hand;
+
+    public float SpringBreakDistance;
+
+    public SpringJoint spring;
+
+    [Range(2f, 0f)]
+    public float leverHapticPulseInterval;
+
+    public bool interacting;
 
     #endregion
 
@@ -38,6 +53,7 @@ public class InteractableController : MonoBehaviour {
 	}
 
     private void OnTriggerEnter(Collider other) {
+
 
         switch (interactableType) {
             case InteractableType.None:
@@ -63,12 +79,95 @@ public class InteractableController : MonoBehaviour {
 
                 break;
             case InteractableType.Lever:
-                //GetComponent<SpringJoint>().connectedBody = other.GetComponent<Rigidbody>();
+
+                //print("switch");
+               
+
+                if (other.tag == "hand" && !interacting) {
+                    //GetComponent<Collider>().enabled = false;
+                    hand = other.gameObject;
+                    if (hand.GetComponent<SteamVR_TrackedController>().triggerPressed)
+                    {
+
+                    print("if " + other.gameObject);
+                    handController = hand.GetComponent<Controller>();
+                    StartCoroutine(OnLeverInteraction());
+                    }
+
+                   
+                }                
+
                 break;
             case InteractableType.Valve:
                 break;
             default:
                 break;
         }
+    }
+
+    public IEnumerator OnLeverInteraction() {
+
+        interacting = true;
+
+        print("lever interaction");
+
+        spring = hand.GetComponent<SpringJoint>();
+
+            if (spring.connectedBody == null)
+            {
+                spring.connectedBody = GetComponent<Rigidbody>();
+
+            }
+        else
+        {
+            yield break;
+        }
+
+        print("Trigger pressed" + hand.GetComponent<SteamVR_TrackedController>().triggerPressed);
+
+        float timer = 0;
+        float startTime = 0;
+
+        while (hand.GetComponent<SteamVR_TrackedController>().triggerPressed) {
+
+            if (timer - startTime > leverHapticPulseInterval) {
+                handController.EnableHapticFeedBack();
+                startTime = timer;
+
+                //print("Haptic start " + startTime + " current " + timer);
+            }
+
+            //Debug.DrawRay(transform.TransformPoint(hand.GetComponent<SphereCollider>().center), transform.TransformPoint(GetComponent<CapsuleCollider>().center), Color.red);
+            //print(Vector3.Distance(hand.transform.position, transform.TransformPoint(GetComponent<CapsuleCollider>().center)));
+
+
+            //if (Vector3.Distance(spring.anchor, spring.connectedAnchor) > SpringBreakDistance) {
+            //    print("break joint");
+            //    DetachSpringJoint();
+            //    yield break;
+            //}
+            
+           
+
+        timer += Time.deltaTime;
+        //print("time " + timer);
+            
+            yield return null;
+
+        }
+
+        DetachSpringJoint();
+
+        
+    }
+
+    private void DetachSpringJoint() {
+        handController.EnableHapticFeedBack(4f);
+        hand.GetComponent<SpringJoint>().connectedBody = null;
+        //GetComponent<Collider>().enabled = true;
+        print("Enabled col");
+        interacting = false;
+        
+
     }
 }
