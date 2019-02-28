@@ -5,7 +5,10 @@ using UnityEngine;
 public class ParticleSystemManager : MonoBehaviour {
 
     public static ParticleSystemManager instance;
+
     public GameObject particleSystemPrefab;
+
+    public GameObject particle2;
 
     private void Awake() {
         instance = this;
@@ -15,13 +18,12 @@ public class ParticleSystemManager : MonoBehaviour {
 
         Quaternion changeDirection = new Quaternion();
 
-        
 
-        if (particleSys.GetComponent<ChangeDirection>().canChange) {        //this can change direction of particle
+        if (direction == Vector3.zero) {                                //check that the direction is not zero
+            direction = Vector3.up;                                     //default direction is up
+        }
 
-            if (direction == Vector3.zero) {
-                direction = Vector3.up;
-            }
+        if (particleSys.GetComponent<ChangeDirection>().canChange) {        //this changes direction of particle      
             changeDirection = Quaternion.LookRotation(direction);
         }
 
@@ -29,7 +31,7 @@ public class ParticleSystemManager : MonoBehaviour {
 
         ParticleSystem temp = clone.GetComponent<ParticleSystem>();
 
-        stopAction = stopAction.ToLower();
+        stopAction = stopAction.ToLower();                              //to avoid any spelling mistake
 
         var main = temp.main;
 
@@ -60,13 +62,12 @@ public class ParticleSystemManager : MonoBehaviour {
 
                 Quaternion childQuaternion = new Quaternion();
 
-                if(childGameObject.GetComponent<ChangeDirection>() != null) {
-                    if (childGameObject.GetComponent<ChangeDirection>().canChange) {
-                        childQuaternion = Quaternion.LookRotation(direction);
-                    }
+                if (childGameObject.GetComponent<ChangeDirection>().canChange) {        //this can change direction of particle
+
+                    childQuaternion = Quaternion.LookRotation(direction);
                 }
 
-                childGameObject.transform.rotation = childQuaternion;
+                childGameObject.transform.rotation= childQuaternion;
 
                 var mainChild = tempChild.main;
 

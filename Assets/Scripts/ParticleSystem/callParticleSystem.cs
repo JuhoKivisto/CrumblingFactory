@@ -5,23 +5,34 @@ using UnityEngine;
 public class callParticleSystem : MonoBehaviour {
 
     private ParticleSystem test;
+    private ParticleSystem particle2;
+    private ParticleSystem particle3;
 
 	// Use this for initialization
 	void Start () {
-        test = ParticleSystemManager.instance.test(ParticleSystemManager.instance.particleSystemPrefab, "none", Vector3.zero, Vector3.down);
+        //test = ParticleSystemManager.instance.test(ParticleSystemManager.instance.particleSystemPrefab, "none", Vector3.zero);
     }
 	
 	// Update is called once per frame
 	void Update () {
 
-        Debug.Log(test.isPlaying);
         if (Input.GetKeyDown(KeyCode.Space)) {
 
-            Debug.Log("Space");
-
-            ParticleSystemManager.instance.stopParticleSystem(test);
+            if(test == null)
+                test = ParticleSystemManager.instance.test(ParticleSystemManager.instance.particleSystemPrefab, "destroy", Vector3.zero, Vector3.up);
 
             //test.Stop();
+        }
+        if (Input.GetKeyDown(KeyCode.A)) {
+            particle2 = ParticleSystemManager.instance.test(ParticleSystemManager.instance.particleSystemPrefab, "none", new Vector3(10, 0, 0), Vector3.down);
+
+        }
+        if (Input.GetKeyDown(KeyCode.B)) {
+            particle3 = ParticleSystemManager.instance.test(ParticleSystemManager.instance.particleSystemPrefab, "none", new Vector3(20, -10, 0), Vector3.right);
+        }
+
+        if (Input.GetKeyDown(KeyCode.S)) {
+            ParticleSystemManager.instance.stopParticleSystem(test);
         }
 	}
 }
