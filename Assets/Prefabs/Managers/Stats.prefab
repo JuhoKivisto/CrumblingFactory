@@ -123,26 +123,26 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0.0672495
     - serializedVersion: 3
-      time: 0.28315532
-      value: 0.331658
-      inSlope: -0.25765383
-      outSlope: -0.25765383
+      time: 0.30329692
+      value: 0.5037161
+      inSlope: 0.59504855
+      outSlope: 0.59504855
       tangentMode: 0
       weightedMode: 0
       inWeight: 0.33333334
-      outWeight: 0.33333334
+      outWeight: 0.04792715
     - serializedVersion: 3
       time: 0.64360523
       value: 0.623285
-      inSlope: 0.057085186
-      outSlope: 0.057085186
+      inSlope: 0.44414872
+      outSlope: 0.44414872
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.33333334
+      inWeight: 0.066531554
       outWeight: 0.0923827
     - serializedVersion: 3
-      time: 0.99618477
-      value: 0.6474674
+      time: 0.9830012
+      value: 0.70523715
       inSlope: 0.44484687
       outSlope: 0.44484687
       tangentMode: 0
@@ -329,11 +329,11 @@ MonoBehaviour:
   waitBeforeNextSet: 5
   warningLevels:
   - level: 3
-    heatMultiplier: 10
+    heatMultiplier: 100
     color: {r: 1, g: 0, b: 0, a: 0}
   - level: 2
-    heatMultiplier: 5
+    heatMultiplier: 50
     color: {r: 1, g: 0.4392157, b: 0, a: 0}
   - level: 1
-    heatMultiplier: 2.5
+    heatMultiplier: 25
     color: {r: 1, g: 0.9424448, b: 0, a: 0}

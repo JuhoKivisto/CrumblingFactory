@@ -7,10 +7,14 @@ public class InteractableTest : MonoBehaviour {
     public GameObject interactable;
     public GameObject alarmLigtht;
 
+    public Objective objectiveInfo;
+
     // Use this for initialization
     void Start() {
 
-        ObjectiveManager.instance.PopulateList(new Objective(GetComponentInParent<ControlPanel>().id, interactable, alarmLigtht));
+
+        objectiveInfo = new Objective(GetComponentInParent<ControlPanel>().id, interactable, alarmLigtht);
+        ObjectiveManager.instance.PopulateList(objectiveInfo);
 
     }
 
