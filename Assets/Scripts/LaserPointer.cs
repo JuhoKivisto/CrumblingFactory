@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LaserPointer : MonoBehaviour {
 
@@ -18,36 +19,42 @@ public class LaserPointer : MonoBehaviour {
     public EbuttonToUse buttonToUse;
     private ulong button;
 
-    // laser objects
-    public Material mat1;
-    public Material mat2;
+    // Materials objects
+    public Material canTeleportMat;
+    public Material canNotTeleportMat;
 
-    private Transform point0, point1, point2;
-
-    private int numPoints = 50;
-    private Vector3[] positions = new Vector3[50];
-    private Vector3 RedLaserLength;
-    
-    private Transform laserTransform;
-    private Vector3 hitPoint;
-    public int length;
-    public LineRenderer lineRenderer;
-    public GameObject ControllerPrefab;
+    // Variables used to calculate stuff in the code
+    private int amount;
+    public float cooldown;
+    public float angle;
+    public float length;
+    private float angleCount;
     private float distanceFromGround;
+    private float cooldownTime;
 
+    // Vector3 positions used for calculations
+    private Vector3[] positions = new Vector3[100];    
+    private Vector3 startPoint;
+    public Vector3 teleportReticleOffset;
+    private Vector3 newDir;
+
+    public LineRenderer lineRenderer;
     RaycastHit hit;
-    RaycastHit hit2;
+    public Image cooldownSprite;
 
-    // teleport objects
-    public Transform cameraRigTransform;
+    // Reticle objects
     public GameObject teleportReticlePrefab;
     private GameObject reticle;
     private Transform teleportReticleTransform;
+
+    // Camera and headset transforms
     public Transform headTransform;
-    public Vector3 teleportReticleOffset;
-    // public LayerMask teleportMask;
+    public Transform cameraRigTransform;
+
+    // Teleportation checks
     private bool shouldTeleport;
-    private bool areStunned;
+    private bool onCooldown;
+
 
     private SteamVR_Controller.Device Controller // Gets the controller object
     {
@@ -59,35 +66,19 @@ public class LaserPointer : MonoBehaviour {
         trackedObj = GetComponent<SteamVR_TrackedObject>();
     }
 
-    private void ShowLaser(RaycastHit hit) // Enables and builds the laser
+    private void ShowCurveLaser() 
     {
-        Debug.Log("Piirretään kurvi :)");
-
-
-
-        lineRenderer.widthMultiplier = 0.1f;
-        
-        lineRenderer.SetPosition(0, ControllerPrefab.transform.position);
-        lineRenderer.SetPosition(1, hitPoint);
-
-        /*laserTransform.position = Vector3.Lerp(trackedObj.transform.position, hitPoint, 0.5f);
-        laserTransform.LookAt(hitPoint);
-        laserTransform.localScale = new Vector3(laserTransform.localScale.x, laserTransform.localScale.y, hit.distance);*/
+        lineRenderer.positionCount = amount;
+        lineRenderer.SetPosition(0, positions[0]); // Sets the starting position to the controller
+        for (int i = 1; i < amount; i++) // Sets the other positions to the line renderer to create a curve
+        {
+            lineRenderer.SetPosition(i, positions[i]);
+        }
     }
 
-    private void DisableLaser() // Enables and builds the laser
+    private void DisableLaser() // Disables the laser
     {
-
-    
-
-        lineRenderer.SetPosition(0, ControllerPrefab.transform.position); 
-        lineRenderer.SetPosition(1, ControllerPrefab.transform.position);
-
-
-        
-        /*laserTransform.position = Vector3.Lerp(trackedObj.transform.position, hitPoint, 0.5f);
-        laserTransform.LookAt(hitPoint);
-        laserTransform.localScale = new Vector3(laserTransform.localScale.x, laserTransform.localScale.y, hit.distance);*/
+        lineRenderer.positionCount = 0;
     }
 
     private void Teleport()
@@ -96,13 +87,17 @@ public class LaserPointer : MonoBehaviour {
         reticle.SetActive(false); // sets reticle to false
         Vector3 difference = cameraRigTransform.position - headTransform.position;
         difference.y = 0; // keeps you in the correct area on y-axis
-        //hitPoint.y = 0;
-        cameraRigTransform.position = hitPoint + difference; // teleports Camera Rig to the reticle
+        cameraRigTransform.position = reticle.transform.position; // teleports Camera Rig to the reticle
+        headTransform.position = reticle.transform.position;
+        onCooldown = true; // Puts the teleport on cooldown
+        cooldownTime = cooldown + Time.time;
+        cooldownSprite.fillAmount = 1.0f;
     }
 
     // Use this for initialization
     void Start() {
 
+        // Set the used button for teleportation
         if (buttonToUse == EbuttonToUse.Touchpad)
         {
             button = SteamVR_Controller.ButtonMask.Touchpad;
@@ -111,83 +106,89 @@ public class LaserPointer : MonoBehaviour {
         else 
         {
             button = SteamVR_Controller.ButtonMask.Trigger;
-        } 
+        }
 
-        /*laser = Instantiate(laserP); // instantiates our laser prefab
-        laserTransform = laser.transform;*/
-
-        reticle = Instantiate(teleportReticlePrefab); // instantiates our reticle prefab
+        reticle = teleportReticlePrefab;
+        // reticle = Instantiate(teleportReticlePrefab); // instantiates our reticle prefab
         teleportReticleTransform = reticle.transform;
 
-        areStunned = false;
+        onCooldown = false; // Takes the movement off cooldown at launch
     }
 
     // Update is called once per frame
-    private void FixedUpdate()
-    {
-        
-    }
     void Update() {
 
-
-        if (Controller.GetPress(button)) // checks for a trigger press
+        if (cooldownTime < Time.time)
         {
+            onCooldown = false;
+        }
 
-            Debug.Log("Trigger Painettu jes");
+        if (cooldownSprite.fillAmount > 0f)
+        {
+            cooldownSprite.fillAmount -= 1.0f / cooldown * Time.deltaTime;
+        }
 
-                if (Physics.Raycast(trackedObj.transform.position, transform.forward, out hit, length)) // Raycast
+        if (Controller.GetPress(button)) // checks for a button press
+        {
+            angleCount = angle; // Variable used to calculate that the curves angle will never go much above 90
+
+            lineRenderer.widthMultiplier = 0.1f; // Sets our line renderers width to 0.1
+            newDir = transform.forward;
+            startPoint = trackedObj.transform.position;
+            positions[0] = startPoint;
+            Vector3 laserAxis = transform.right;
+
+            for (int i = 1; i < 100; i++) // Casts multiple raycasts in a curve until it hits something
+            {
+                if (Physics.Raycast(startPoint, newDir, out hit, length))
                 {
-                    hitPoint = hit.point;
-                    ShowLaser(hit);
-                    // changes reticles position to raycasts hit point
-
-                    if (hit.collider.tag == "Ground")
+                    if (hit.collider.tag == "Ground") // If the ray hits ground (teleportable area), changes the material to green unlit color & draws the laser & enables the reticle & enables teleportation
                     {
-                        Debug.Log("hitattu");
-                        lineRenderer.material = mat1;
-                        reticle.SetActive(true); // sets reticle active
-                        // teleportReticleTransform.position = hitPoint + teleportReticleOffset; // changes reticles position to raycasts hit point
+                        positions[i] = hit.point; 
+                        lineRenderer.material = canTeleportMat;
+                        amount = i;
+                        ShowCurveLaser();
+                        reticle.SetActive(true);
                         teleportReticleTransform.position = hit.point + teleportReticleOffset;
-                        shouldTeleport = true; // enables the use of Teleport();
+                        shouldTeleport = true;
+                        break;
                     }
-                    else
+                    else // If the ray hits unteleportable area, changes the material to red unlit color & draws the laser
                     {
-                        Debug.Log(hit.collider.gameObject.name);
-                        shouldTeleport = false;
-                        lineRenderer.material = mat2;
+                        positions[i] = hit.point;
+                        lineRenderer.material = canNotTeleportMat;
+                        amount = i;
+                        ShowCurveLaser();
                         reticle.SetActive(false);
-
+                        shouldTeleport = false;
+                        break;
                     }
                 }
-                else // disables laser and reticle if the trigger isn't pressed
+                else // If the ray doesnt hit, does calculations to find out the end point of the ray and new angle for the next ray
                 {
+                    DisableLaser();
                     reticle.SetActive(false);
                     shouldTeleport = false;
-                    DisableLaser();
+                    lineRenderer.material = canNotTeleportMat;
+                    startPoint = startPoint + newDir * length;
+                    positions[i] = startPoint;
+                    if (angleCount < 90) // max angle of the curve is 90 degrees, checks that
+                    {                
+                        angleCount += angle;
+                        newDir = Quaternion.AngleAxis(angle, laserAxis) * newDir; // Calculates a new angle for the next ray
+                    }
                 }
-            
-        } else
+            }
+        }
+        else // disables laser and reticle if the trigger isn't pressed
         {
             reticle.SetActive(false);
             DisableLaser();
-        }
+        } 
 
-
-
-        if (Controller.GetPressUp(button) && shouldTeleport && !areStunned /*&& hitPoint.y == 0*/) // Teleports when the trigger is released if shouldTeleport bool is true
+        if (Controller.GetPressUp(button) && shouldTeleport && !onCooldown) // Teleports when the trigger is released if shouldTeleport bool is true and the teleport isn't on cooldown
         {
             Teleport();
         }
-    }
-
-    private Vector3 CalculateCurve(float t, Vector3 p0, Vector3 p1, Vector3 p2) // Calculates bezier
-    {
-        float u = 1 - t;
-        float tt = t * t;
-        float uu = u * u;
-        Vector3 p = uu * p0;
-        p += 2 * u * t * p1;
-        p += tt * p2;
-        return p;
     }
 }

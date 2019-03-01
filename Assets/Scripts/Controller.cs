@@ -33,7 +33,6 @@ public class Controller : MonoBehaviour {
         }
     }
 
-
     private void OnEnable()
     {
         InitController();
@@ -50,9 +49,7 @@ public class Controller : MonoBehaviour {
 
     public void InitController() {
         svrc = GetComponent<SteamVR_TrackedController>();
-    }
-
-    
+    }    
 
     public void EnableHapticFeedBack() {
         

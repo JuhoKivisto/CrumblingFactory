@@ -24,6 +24,10 @@ public class InteractableController : MonoBehaviour {
 
     public bool active;
     public bool isEnabled;
+
+    [Range(2f, 0f)]
+    public float buttonHapticPulseInterval;
+    public float buttonPulseTime;
     #endregion
 
     #region Lever
@@ -38,13 +42,26 @@ public class InteractableController : MonoBehaviour {
 
     public bool interacting;
 
+    public float pulseIncreaser;
+
+    public HingeJoint hinge;
+
+    public float startAngle;
+
+    public float endAngle;
+
+    public float previousDAngle;
+
     #endregion
 
     public string tag;
 
     // Use this for initialization
     void Start () {
-		
+        hinge = GetComponent<HingeJoint>();
+
+        startAngle = hinge.limits.min;
+        endAngle = hinge.limits.max;
 	}
 	
 	// Update is called once per frame
@@ -54,6 +71,13 @@ public class InteractableController : MonoBehaviour {
 
     private void OnTriggerEnter(Collider other) {
 
+        if (other.tag == "hand" && !interacting)
+        {
+            //GetComponent<Collider>().enabled = false;
+            hand = other.gameObject;
+            handController = hand.GetComponent<Controller>();
+
+        }
 
         switch (interactableType) {
             case InteractableType.None:
@@ -65,6 +89,7 @@ public class InteractableController : MonoBehaviour {
                     print("Button down");
                     button.GetComponent<Rigidbody>().AddForce(transform.up * 20);
                     active = false;
+                    StartCoroutine(OnButtonInteraction());
                     ObjectiveManager.instance.CompleteObjective(button.GetComponentInParent<InteractableTest>().objectiveInfo);
                 }
                 if (!active && other == triggerUp.GetComponent<Collider>() && other.tag == tag) {
@@ -118,7 +143,7 @@ public class InteractableController : MonoBehaviour {
                 spring.connectedBody = GetComponent<Rigidbody>();
 
             }
-        else
+            else
         {
             yield break;
         }
@@ -129,6 +154,33 @@ public class InteractableController : MonoBehaviour {
         float startTime = 0;
 
         while (hand.GetComponent<SteamVR_TrackedController>().triggerPressed) {
+
+            //Debug.DrawRay(transform.TransformPoint(spring.anchor), transform.TransformPoint(spring.connectedAnchor), Color.red);
+            //Debug.DrawRay(spring.anchor, spring.connectedAnchor, Color.red);
+            Debug.DrawRay(spring.transform.TransformPoint(spring.anchor), Vector3.up, Color.red);
+            Debug.DrawRay(spring.transform.TransformPoint(spring.connectedAnchor), Vector3.up, Color.red);
+
+            spring.anchor = transform.InverseTransformPoint(hand.GetComponent<SteamVR_TrackedObject>().transform.position);
+
+            print(Mathf.Abs( Mathf.DeltaAngle(hinge.angle, startAngle)));
+
+            if (Mathf.Abs(Mathf.DeltaAngle(hinge.angle, startAngle)) > pulseIncreaser) {
+                print("-- interval");
+                leverHapticPulseInterval -= 0.01f;
+                previousDAngle = Mathf.Abs(Mathf.DeltaAngle(hinge.angle, startAngle));
+                startAngle = hinge.angle;
+            }
+
+            //else if (Mathf.Abs(Mathf.DeltaAngle(hinge.angle, startAngle)) > previousDAngle)
+            //{
+            //    print("++ interval");
+            //    leverHapticPulseInterval += 0.01f;
+            //    startAngle = hinge.angle;
+            //}
+            else
+            {
+
+            }
 
             if (timer - startTime > leverHapticPulseInterval) {
                 handController.EnableHapticFeedBack();
@@ -159,6 +211,28 @@ public class InteractableController : MonoBehaviour {
         DetachSpringJoint();
 
         
+    }
+
+    public IEnumerator OnButtonInteraction() {
+        interacting = true;
+
+
+        float timer = 0;
+        float startTime = 0;
+        while (timer < buttonPulseTime) {
+            print("Button pulse");
+
+
+            if (timer - startTime > buttonHapticPulseInterval) {
+                handController.EnableHapticFeedBack();
+                startTime = timer;
+
+                //print("Haptic start " + startTime + " current " + timer);
+            }
+
+            timer += Time.deltaTime;
+            yield return null;
+        }
     }
 
     private void DetachSpringJoint() {

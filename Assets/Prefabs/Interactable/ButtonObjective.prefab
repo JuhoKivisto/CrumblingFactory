@@ -214,7 +214,7 @@ GameObject:
   - component: {fileID: 65525393600752450}
   - component: {fileID: 54092235670241730}
   - component: {fileID: 145282217503376012}
-  - component: {fileID: 114488116546669524}
+  - component: {fileID: 114576975115191188}
   - component: {fileID: 114452669960437676}
   m_Layer: 0
   m_Name: TestButton
@@ -257,8 +257,8 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1711305580744162}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -7.6717706, y: 1.1403016, z: -2.8167446}
+  m_LocalRotation: {x: -0.06975647, y: 0, z: 0, w: 0.9975641}
+  m_LocalPosition: {x: 0.3997, y: 1.1853, z: -0.6873}
   m_LocalScale: {x: 0.12439854, y: 0.0124398535, z: 0.12439854}
   m_Children:
   - {fileID: 4463684068841034}
@@ -268,7 +268,7 @@ Transform:
   - {fileID: 4328141782334224}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -8, y: 0, z: 0}
 --- !u!4 &4463684068841034
 Transform:
   m_ObjectHideFlags: 1
@@ -780,6 +780,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactable: {fileID: 1887101582798768}
   alarmLigtht: {fileID: 1008596908766362}
+  objectiveInfo:
+    interactable: {fileID: 0}
+    warningLight: {fileID: 0}
+    controlPanelId: 0
+    lifeTimeId: 0
+    done: 0
+    warningLevel: 0
 --- !u!114 &114288184936378358
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3120,25 +3127,6 @@ MonoBehaviour:
   x: 1
   y: 0
   z: 1
---- !u!114 &114488116546669524
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1887101582798768}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ad5a36d12a9fc244db131130777035b1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  button: {fileID: 1887101582798768}
-  triggerDown: {fileID: 1240722103682322}
-  triggerUp: {fileID: 1059570089954826}
-  enableCollider: {fileID: 1193367598708494}
-  disableCollider: {fileID: 1040838557895738}
-  active: 1
-  isEnabled: 0
-  tag: trigger
 --- !u!114 &114503309929098136
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3156,6 +3144,38 @@ MonoBehaviour:
   alarmNormal: {fileID: 2100000, guid: 131929d86f58c2a4aa69f26cb69f58da, type: 2}
   range: 0.12
   intensity: 2.46
+--- !u!114 &114576975115191188
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1887101582798768}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b825110b3abdbf42b925915ab5113dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactableType: 1
+  button: {fileID: 1887101582798768}
+  triggerDown: {fileID: 1240722103682322}
+  triggerUp: {fileID: 1059570089954826}
+  enableCollider: {fileID: 0}
+  disableCollider: {fileID: 0}
+  active: 1
+  isEnabled: 0
+  buttonHapticPulseInterval: 0.04
+  buttonPulseTime: 0.05
+  hand: {fileID: 0}
+  SpringBreakDistance: 0
+  spring: {fileID: 0}
+  leverHapticPulseInterval: 0
+  interacting: 0
+  pulseIncreaser: 0
+  hinge: {fileID: 0}
+  startAngle: 0
+  endAngle: 0
+  previousDAngle: 0
+  tag: trigger
 --- !u!114 &114580306348394558
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3168,6 +3188,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   button: {fileID: 1887101582798768}
+  hand: {fileID: 0}
   enableCollider: {fileID: 1193367598708494}
   disableCollider: {fileID: 1040838557895738}
   setActive: 1
@@ -3183,6 +3204,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   button: {fileID: 1887101582798768}
+  hand: {fileID: 0}
   enableCollider: {fileID: 1193367598708494}
   disableCollider: {fileID: 1040838557895738}
   setActive: 0
@@ -6881,7 +6903,7 @@ SpringJoint:
   m_ConnectedBody: {fileID: 54131140933332288}
   m_Anchor: {x: 0, y: 0.50000006, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0.012629444, y: 6.497837, z: -0.28100014}
+  m_ConnectedAnchor: {x: 0.012629979, y: 6.49784, z: -0.28100017}
   serializedVersion: 2
   m_Spring: 1000
   m_Damper: 0.5

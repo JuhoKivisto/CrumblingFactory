@@ -251,7 +251,9 @@ public class ObjectiveManager : MonoBehaviour {
         if (objectiveList.Contains(objective)) {
             print("objective DONE!!!");
             objcomp = false;
-            StartCoroutine(heatManager.StopHeating(objective));
+            StartCoroutine(heatManager.StopHeating(objective, 0.1f));
+            StopCoroutine(objectiveLifeTimes[objective.lifeTimeId]);
+            //objectiveLifeTimes.RemoveAt(objective.lifeTimeId);
             StartCoroutine(DisableObjective(objective, stats.warningLevels[stats.warningLevels.Count - objective.warningLevel], 0, objective.lifeTimeId));
             /* decreaseHeat bool is true */
             
@@ -369,10 +371,25 @@ public class ObjectiveManager : MonoBehaviour {
         material.SetColor("_Color", Color.gray);
     }
 
+    /// <summary>
+    /// Disables given objective int given duration
+    /// and removes DisableObjective from objectiveLiveTimes using lifeTimeId
+    /// </summary>
+    /// <param name="objective"></param>
+    /// <param name="currentWarningLvl"></param>
+    /// <param name="duration"></param>
+    /// <param name="lifeTimeId"></param>
+    /// <returns></returns>
     private IEnumerator DisableObjective(Objective objective,WarningLevel currentWarningLvl, float duration, int lifeTimeId) {
         //print("ghkdgsonfg");
         float time = 0;
-        int lightOn = 1;        
+        int lightOn = 1;
+
+        if (duration == 0) {
+           
+        }
+        else
+        {
 
         while (time < duration) {
 
@@ -393,10 +410,11 @@ public class ObjectiveManager : MonoBehaviour {
             //time++;
             yield return null;
         }
+        }
 
         RemoveObjective(objective);
         DisableWarningLight(objective);
-        objectiveLifeTimes.RemoveAt(lifeTimeId);
+        //objectiveLifeTimes.RemoveAt(lifeTimeId);
 
         print("<color=blue>time over</color>");
         print("<color=yellow>time: </color>"+ time);

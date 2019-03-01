@@ -55,7 +55,7 @@ public class HeatManager : MonoBehaviour {
     /// </summary>
     /// <param name="seconds"></param>
     /// <returns></returns>
-    public IEnumerator StopHeating(Objective objective) {
+    public IEnumerator StopHeating(Objective objective, float duration) {
 
         for (int i = 0; i < stats.warningLevels.Count; i++) {
             if (stats.warningLevels[i].level == objective.warningLevel) {
@@ -63,7 +63,7 @@ public class HeatManager : MonoBehaviour {
             }
         }
 
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(duration);
         heatMultiplier = 5;
         
     }
