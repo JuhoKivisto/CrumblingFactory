@@ -60,14 +60,14 @@ public class ParticleSystemManager : MonoBehaviour {
 
                 ParticleSystem tempChild = childGameObject.GetComponent<ParticleSystem>();
 
-                Quaternion childQuaternion = new Quaternion();
+                //Quaternion childQuaternion = new Quaternion();
 
-                if (childGameObject.GetComponent<ChangeDirection>().canChange) {        //this can change direction of particle
+                //if (childGameObject.GetComponent<ChangeDirection>().canChange) {        //this can change direction of particle
 
-                    childQuaternion = Quaternion.LookRotation(direction);
-                }
+                //    childQuaternion = Quaternion.LookRotation(direction);
+                //}
 
-                childGameObject.transform.rotation= childQuaternion;
+                //childGameObject.transform.rotation= childQuaternion;
 
                 var mainChild = tempChild.main;
 
