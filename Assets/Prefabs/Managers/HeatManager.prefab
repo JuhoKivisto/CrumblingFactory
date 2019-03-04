@@ -51,6 +51,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fd7de1463a67ec49b79172c465f36c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  HeatUI: {fileID: 0}
   stats: {fileID: 0}
   heat: 0
   heatLevels: 5
@@ -58,3 +59,4 @@ MonoBehaviour:
   heatLevelLenght: 0
   heatMultiplier: 5.16
   errorMultiplier: 0
+  working: 0

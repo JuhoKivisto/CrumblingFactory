@@ -64,8 +64,8 @@ public class TimeManager : MonoBehaviour {
             }
 
             timeText.text = "Time left: " + (minutes.ToString("00") + ":" + seconds.ToString("00"));
-            GameManager.instance.EventByTime();
-            GameManager.instance.EventByHeat();
+            //GameManager.instance.EventByTime();
+            //GameManager.instance.EventByHeat();
         }
 
 
@@ -77,7 +77,7 @@ public class TimeManager : MonoBehaviour {
     /// and creates time events
     /// </summary>
     public void StartTimer() {
-        GameManager.instance.CreateTimeEvents();
+        //GameManager.instance.CreateTimeEvents();
         StartCoroutine(RemainingTime());
         timerRunning = true;
     }

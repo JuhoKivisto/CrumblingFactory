@@ -25,6 +25,19 @@ public class Objective {
         warningLight = wLight;
         controlPanelId = cPId;
         done = false;
+        lifeTimeId = -1;
+        warningLevel = -1;
+
+    }
+    public Objective(int cPId, GameObject intact) {
+
+        interactable = intact;        
+        controlPanelId = cPId;
+        done = false;
+
+    }
+
+    public Objective() {
 
     }
 }
@@ -45,18 +58,40 @@ public class ObjectiveManager : MonoBehaviour {
     public int numberOfPanelSwitch;
     public int currentObjectiveId;
     [ReadOnly]
-    public int howManyObjectives;
-    [ReadOnly]
     public int objectivesDone;
+
+    /// <summary>
+    /// How many objectives are created for current objective set
+    /// </summary>
+    [ReadOnly]
+    public int howManyObjectives;
+    /// <summary>
+    /// Keeps track on how many objectives is activated.
+    /// Just a variable that helps chainging warning levels
+    /// </summary>
     [ReadOnly]
     public int objectivesActivated = 0;
+    /// <summary>
+    /// Current warning level
+    /// </summary>
     [ReadOnly]
     public int currentWarningLevel = 3;
+    /// <summary>
+    /// Indicates the objective life time place on objectiveLifeTimes
+    /// </summary>
     public int lifeTimeId = 0;
 
+    /// <summary>
+    /// objectives that are currently activated
+    /// </summary>
     public List<Objective> objectiveList = new List<Objective>();
+    /// <summary>
+    /// All possible objectives that are on the all control panels
+    /// </summary>
     public List<Objective> allObjectivesList = new List<Objective>();
-
+    /// <summary>
+    /// Stores DisableObjective coroutines
+    /// </summary>
     public List<Coroutine> objectiveLifeTimes = new List<Coroutine>();
 
     System.Random random = new System.Random();
@@ -85,9 +120,11 @@ public class ObjectiveManager : MonoBehaviour {
     }
 
     void Start() {
+
+        //CheckForMissing();
+
         //CreateObjectives___OLD();
         StartCoroutine(FirstObjectiveSet());
-        TimeManager.instance.StartTimer();
 
     }
 
@@ -116,11 +153,14 @@ public class ObjectiveManager : MonoBehaviour {
             }
         }
 
+        if (howManyObjectives >= allObjectivesList.Count) {
+            howManyObjectives = allObjectivesList.Count;
+        }
+
         int createdObjectives = 0;
         while (createdObjectives != howManyObjectives && !tooManyObjectives) {
 
-            if (objectiveList.Count == allObjectivesList.Count) {
-                //RemoveObjectives();
+            if (objectiveList.Count == allObjectivesList.Count) {                
                 tooManyObjectives = true;
             }
             else {
@@ -150,16 +190,19 @@ public class ObjectiveManager : MonoBehaviour {
             }
 
             objectiveList.Add(allObjectivesList[randomIndex]);
-           
-            objectiveList[objectiveList.Count-1].warningLight.GetComponentInChildren<Light>().range = 0.12f;
-            objectiveList[objectiveList.Count-1].warningLight.GetComponentInChildren<Light>().intensity = 2.46f;
+
+            int currentId = objectiveList.Count - 1;
+
+            objectiveList[currentId].warningLight.GetComponentInChildren<Light>().range = 0.12f;
+            objectiveList[currentId].warningLight.GetComponentInChildren<Light>().intensity = 2.46f;
+
             if (debugMode) {
             print("switch");
 
             }
             
-            objectiveList[objectiveList.Count - 1].warningLevel = currentWarningLevel;
-            EnableWarningLight(objectiveList[objectiveList.Count - 1], stats.warningLevels[stats.warningLevels.Count - currentWarningLevel]);
+            objectiveList[currentId].warningLevel = currentWarningLevel;
+            EnableWarningLight(objectiveList[currentId], stats.warningLevels[stats.warningLevels.Count - currentWarningLevel]);
 
             createdObjectives++;
             objectivesActivated++;
@@ -168,10 +211,13 @@ public class ObjectiveManager : MonoBehaviour {
             print("activate");
             }
 
-            objectiveLifeTimes.Add(StartCoroutine(DisableObjective(objectiveList[objectiveList.Count - 1],
+            objectiveLifeTimes.Add(StartCoroutine(DisableObjective(objectiveList[currentId],
                 stats.warningLevels[stats.warningLevels.Count - currentWarningLevel], stats.objectiveLifeTime, lifeTimeId)));
-            objectiveList[objectiveList.Count - 1].lifeTimeId = lifeTimeId;
+            objectiveList[currentId].lifeTimeId = lifeTimeId;
             lifeTimeId++;
+
+            
+            StartCoroutine(SetObjectiveInfo(objectiveList[currentId]));
         }
 
         StartCoroutine(WaitNextSet()); 
@@ -209,6 +255,7 @@ public class ObjectiveManager : MonoBehaviour {
 
     public void NextObjectiveSet() {
 
+        #region old
         /*
         //current objective == how many objectives total in set 
         if (currentObjectiveId + 1 == howManyObjectives + 1) {
@@ -216,12 +263,12 @@ public class ObjectiveManager : MonoBehaviour {
             CreateObjectives();
         }
         */
+        #endregion
+
         // More objectives if heat is high enough
         if (nextSet) {
-            if (debugMode) {
+            if (debugMode) print("too long");
 
-            print("too long");
-            }
             CreateObjectives();
             nextSet = false;
         }
@@ -233,13 +280,19 @@ public class ObjectiveManager : MonoBehaviour {
         if (objectiveList.Contains(objective)) {
             print("objective DONE!!!");
             objcomp = false;
-            StartCoroutine(heatManager.StopHeating(objective));
-            DisableObjective(objective, stats.warningLevels[stats.warningLevels.Count - objective.warningLevel], 0, objective.lifeTimeId);
+            heatManager.ActiveChangeHeating(objective, stats.changeHeatingFor, true);
+            StopCoroutine(objectiveLifeTimes[objective.lifeTimeId]);
+            //objectiveLifeTimes.RemoveAt(objective.lifeTimeId);
+            StartCoroutine(DisableObjective(objective, stats.warningLevels[stats.warningLevels.Count - objective.warningLevel], 0, objective.lifeTimeId));
             /* decreaseHeat bool is true */
             
             //NextObjectiveSet();
         }
-        
+       
+    }
+    
+    public void FailureObjective(Objective objective) {
+        heatManager.ActiveChangeHeating(objective, stats.changeHeatingFor, false);
     }
 
     /// <summary>
@@ -307,8 +360,12 @@ public class ObjectiveManager : MonoBehaviour {
     private IEnumerator FirstObjectiveSet() {
         yield return new WaitForSeconds(stats.waitBeforeFirstSet);
         CreateObjectives();
+        //heatManager.working = true;
+        heatManager.StartHeatIncreace();
+        TimeManager.instance.StartTimer();
+
     }
-    
+
     private IEnumerator WaitNextSet() {
         print("Wait next set");
         yield return new WaitForSeconds(stats.waitBeforeNextSet);
@@ -349,16 +406,31 @@ public class ObjectiveManager : MonoBehaviour {
         material.SetColor("_Color", Color.gray);
     }
 
+    /// <summary>
+    /// Disables given objective int given duration
+    /// and removes DisableObjective from objectiveLiveTimes using lifeTimeId
+    /// </summary>
+    /// <param name="objective"></param>
+    /// <param name="currentWarningLvl"></param>
+    /// <param name="duration"></param>
+    /// <param name="lifeTimeId"></param>
+    /// <returns></returns>
     private IEnumerator DisableObjective(Objective objective,WarningLevel currentWarningLvl, float duration, int lifeTimeId) {
         //print("ghkdgsonfg");
         float time = 0;
-        int lightOn = 1;        
+        int lightOn = 1;
+
+        if (duration == 0) {
+           
+        }
+        else
+        {
 
         while (time < duration) {
 
             time += Time.deltaTime;
 
-           lightOn = (int) stats.heatCurve3.Evaluate(time / duration);
+           lightOn = (int) stats.alarmLigthBlinkIntensity.Evaluate(time / duration);
 
             switch (lightOn) {
 
@@ -373,13 +445,44 @@ public class ObjectiveManager : MonoBehaviour {
             //time++;
             yield return null;
         }
+        }
 
         RemoveObjective(objective);
         DisableWarningLight(objective);
-        objectiveLifeTimes.RemoveAt(lifeTimeId);
+        //objectiveLifeTimes.RemoveAt(lifeTimeId);
+        //FailureObjective(objective);
 
         print("<color=blue>time over</color>");
         print("<color=yellow>time: </color>"+ time);
 
+    }
+
+    private IEnumerator SetObjectiveInfo(Objective objective) {
+        print(objective.interactable);
+        objective.interactable.GetComponentInParent<InteractableTest>().objectiveInfo = objective;
+        yield return null;
+    }
+
+    private void CheckForMissing() {
+        if (stats == null) {
+            Debug.LogError("Script 'stats' has no reference, attach Stats script");
+            return;
+        }
+        if (heatManager == null) {
+            Debug.LogError("Script 'heatManager' has no reference, attach HeatManager script");
+            return;
+        }
+        if (gameManager == null) {
+            Debug.LogWarning("Script 'gameManager' has no reference, attach GameManager script");
+
+        }
+        if (allObjectivesList != null) {
+            for (int i = 0; i < allObjectivesList.Count; i++) {
+                if (allObjectivesList[i].interactable.GetComponentInParent<InteractableTest>() == null) {
+
+                Debug.LogWarning(string.Format("Gameobject '{0}' has no reference of Script 'InteractableTest', attach InteractableTest script reference to it",allObjectivesList[i]));
+                }
+            }
+        }
     }
 }

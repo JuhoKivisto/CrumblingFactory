@@ -5,7 +5,9 @@ using UnityEngine.UI;
 
 public class HeatManager : MonoBehaviour {
 
-    public Text heatText;
+    //public Text heatText;
+
+    public Slider HeatUI;
 
     public Stats stats;
 
@@ -13,19 +15,25 @@ public class HeatManager : MonoBehaviour {
     public int heatLevels;
     public int currentHeatLevel;
     public float heatLevelLenght;
-    [Range(-10f,10f)]
+    [Range(-10f, 10f)]
     public float heatMultiplier;
     public float errorMultiplier;
 
+    public bool working = false;
+
     private float maxHeat;
-    
+
     // Use this for initialization
-    void Start () {
+    void Start() {
+        if (HeatUI == null) {
+            Debug.LogWarning("Slider HeatUI has no reference, attach HeatUI Slider");
+            //return;
+        }
 
         maxHeat = stats.maxHeat;
         CalculateHeatLevelLenght();
-        StartCoroutine(IncreaseHeat());
-	}
+
+    }
 
     /// <summary>
     /// Calculates lenght of the heat level
@@ -36,14 +44,18 @@ public class HeatManager : MonoBehaviour {
     /// <summary>
     /// Incrases heat level when heat is high enough
     /// </summary>
-    public void ChangeHeatLevel () {
+    public void ChangeHeatLevel() {
 
         if (heat > heatLevelLenght * currentHeatLevel) {
             currentHeatLevel++;
         }
-        if(heat < heatLevelLenght * currentHeatLevel - 1) {
+        if (heat < heatLevelLenght * currentHeatLevel - 1) {
             currentHeatLevel--;
         }
+    }
+
+    public void ActiveChangeHeating(Objective objective, float duration, bool increacing) {        
+        StartCoroutine(ChangeHeat(objective, duration, increacing));
     }
 
     /// <summary>
@@ -51,19 +63,32 @@ public class HeatManager : MonoBehaviour {
     /// </summary>
     /// <param name="seconds"></param>
     /// <returns></returns>
-    public IEnumerator StopHeating(Objective objective) {
+    private IEnumerator ChangeHeat(Objective objective, float duration, bool increacing) {
+        float currentHeatMultiplier = heatMultiplier;
+        print("heat");
 
-        for (int i = 0; i < stats.warningLevels.Count; i++) {
-            if (stats.warningLevels[i].level == objective.warningLevel) {
-                heatMultiplier = -stats.warningLevels[i].heatMultiplier;
+        if (!increacing) {
+
+            for (int i = 0; i < stats.warningLevels.Count; i++) {
+                if (stats.warningLevels[i].level == objective.warningLevel) {
+                    heatMultiplier = -stats.warningLevels[i].heatMultiplier;
+                }
             }
         }
+        else {
+            heatMultiplier = stats.IncreaceAtFailure;
+        }
 
-        yield return new WaitForSeconds(2f);
-        heatMultiplier = 5;
-        
+        yield return new WaitForSeconds(duration);
+        heatMultiplier = currentHeatMultiplier;
+
     }
-    
+
+    public void StartHeatIncreace() {
+        print("Start Heating");
+        StartCoroutine(IncreaseHeat());
+    }
+
     /// <summary>
     /// Increases heat for each frame based on animation curve
     /// heat increase value is taken from curves y-axis and multiplied with time between previous and current frame and added additionally errors that player makes
@@ -71,14 +96,13 @@ public class HeatManager : MonoBehaviour {
     /// </summary>
     /// <returns></returns>
     private IEnumerator IncreaseHeat() {
-        
+
         while (heat < maxHeat && heat > -1) {
 
             if (true) {
-
-                heat += stats.heatCurve2.Evaluate(heat / maxHeat) * Time.deltaTime * heatMultiplier + (GameManager.instance.errorCount * errorMultiplier);
+                heat += stats.heatCurve2.Evaluate(heat / maxHeat) * Time.deltaTime * heatMultiplier/* + (GameManager.instance.errorCount * errorMultiplier)*/;
                 yield return null;
-                heatText.text = heat.ToString();
+                //HeatUI.value = heat;
                 ChangeHeatLevel();
             }
         }

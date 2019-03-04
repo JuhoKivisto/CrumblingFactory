@@ -55,15 +55,285 @@ MonoBehaviour:
   - eventObject: {fileID: 1714977848766888, guid: 4c7b65c5bb7e0764db453beed81f1eb0,
       type: 2}
     heatOfTheEvent: 50
+    happened: 0
+  - eventObject: {fileID: 0}
+    heatOfTheEvent: 70
+    happened: 0
   - eventObject: {fileID: 0}
     heatOfTheEvent: 0
+    happened: 0
   - eventObject: {fileID: 0}
     heatOfTheEvent: 0
-  - eventObject: {fileID: 0}
-    heatOfTheEvent: 0
+    happened: 0
   timeDivider: 1
   heatIncreaser: 10
+  heatLevels:
+  - 10
+  - 20
+  - 30
+  - 40
+  - 50
+  - 60
+  - 70
+  - 80
+  - 90
+  - 10
+  decreaseHeatOnObjectiveSetComplete: 10
+  decreaseHeatOnObjectiveComplete: 2
+  waitTimeOnObjectiveComplete: 1
+  waitTimeOnObjectiveSetComplete: 3
+  maxHeat: 100
+  decreaseHeat: 0
+  waitTime: 0
   gameLenght: 120
+  heatCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  heatCurve2:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1.0019531
+      inSlope: -6.6771545
+      outSlope: -6.6771545
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.0672495
+    - serializedVersion: 3
+      time: 0.30329692
+      value: 0.5037161
+      inSlope: 0.59504855
+      outSlope: 0.59504855
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.04792715
+    - serializedVersion: 3
+      time: 0.64360523
+      value: 0.623285
+      inSlope: 0.44414872
+      outSlope: 0.44414872
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.066531554
+      outWeight: 0.0923827
+    - serializedVersion: 3
+      time: 0.9830012
+      value: 0.70523715
+      inSlope: 0.44484687
+      outSlope: 0.44484687
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.092701085
+      outWeight: 0.48683637
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  heatCurve3:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: -2
+      outSlope: -2
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.5
+      value: 0
+      inSlope: Infinity
+      outSlope: Infinity
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.51
+      value: 1
+      inSlope: Infinity
+      outSlope: Infinity
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.74886316
+      value: 1
+      inSlope: Infinity
+      outSlope: Infinity
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.75
+      value: 0
+      inSlope: Infinity
+      outSlope: Infinity
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.76
+      value: 1
+      inSlope: Infinity
+      outSlope: Infinity
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.89851093
+      value: 1
+      inSlope: Infinity
+      outSlope: Infinity
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.9
+      value: 0
+      inSlope: Infinity
+      outSlope: Infinity
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.91
+      value: 1
+      inSlope: Infinity
+      outSlope: Infinity
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.9471272
+      value: 1
+      inSlope: Infinity
+      outSlope: Infinity
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.95
+      value: 0
+      inSlope: Infinity
+      outSlope: Infinity
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.96
+      value: 1
+      inSlope: Infinity
+      outSlope: Infinity
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.97
+      value: 0
+      inSlope: Infinity
+      outSlope: Infinity
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.9759617
+      value: 0
+      inSlope: Infinity
+      outSlope: Infinity
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.98
+      value: 1
+      inSlope: Infinity
+      outSlope: Infinity
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.99
+      value: 0
+      inSlope: Infinity
+      outSlope: Infinity
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   timeEventRandomLow: 15
   timeEventRandomHigh: 30
   errorThresholds: 020000000400000006000000
+  maxObjectives: 5
+  objectiveLifeTime: 5
+  waitBeforeFirstSet: 4
+  waitBeforeNextSet: 5
+  warningLevels:
+  - level: 3
+    heatMultiplier: 100
+    color: {r: 1, g: 0, b: 0, a: 0}
+  - level: 2
+    heatMultiplier: 50
+    color: {r: 1, g: 0.4392157, b: 0, a: 0}
+  - level: 1
+    heatMultiplier: 25
+    color: {r: 1, g: 0.9424448, b: 0, a: 0}

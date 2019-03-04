@@ -72,25 +72,28 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    #region Event By Time (NOT USET)
     /// <summary>
     /// After certain amount of time witch is random, some events will hapen
     /// </summary>
-    public void EventByTime() {
-              
-        /* currentTime == eventId  */
-        if (timeEventId == timeEvents.Length - 1) {
-            timeEventId = timeEvents.Length - 1;
-        }
+    //public void EventByTime() {
 
-        else if (TimeManager.instance.time == timeEvents[timeEventId] && timeEventId < timeEvents.Length) {
-            print(stats.gameLenght - TimeManager.instance.time);
-            //print(timeEventId);
-            timeEventId++;
-        }
-        if (TimeManager.instance.time == stats.gameLenght) {
-            // factory explodes
-        }
-    }
+    //    /* currentTime == eventId  */
+    //    if (timeEventId == timeEvents.Length - 1) {
+    //        timeEventId = timeEvents.Length - 1;
+    //    }
+
+    //    else if (TimeManager.instance.time == timeEvents[timeEventId] && timeEventId < timeEvents.Length) {
+    //        print(stats.gameLenght - TimeManager.instance.time);
+    //        //print(timeEventId);
+    //        timeEventId++;
+    //    }
+    //    if (TimeManager.instance.time == stats.gameLenght) {
+    //        // factory explodes
+    //    }
+    //}
+
+#endregion
 
     /// <summary>
     /// If player does too many errors
@@ -116,11 +119,11 @@ public class GameManager : MonoBehaviour {
     public void EventByHeat() {
         if (false) {
             // heatMeter > stats.criticalTemporatures[0].heatOfTheEvent && heatMeter < stats.criticalTemporatures[1].heatOfTheEvent && stats.criticalTemporatures[0].happened
-            stats.criticalTemporatures[0].happened = true;
+            //stats.criticalTemporatures[0].happened = true;
             print("<color = blue> kivikasa </color>");
             Vector3 spwnpoint = new Vector3(player.transform.position.x, 60, player.transform.position.z);
 
-            GameObject tempGameO = GameObject.Instantiate(stats.criticalTemporatures[0].eventObject,spwnpoint, Quaternion.identity, null);
+            //GameObject tempGameO = GameObject.Instantiate(stats.criticalTemporatures[0].eventObject,spwnpoint, Quaternion.identity, null);
             //tempGameO.GetComponentInChildren<Rigidbody>().AddForce(Vector3.up * 1000f);
             // minor explosions
             // factory shaking 
@@ -131,14 +134,14 @@ public class GameManager : MonoBehaviour {
     /// Creates times for time based events
     /// </summary>
     public void CreateTimeEvents() {
-        System.Random rnd = new System.Random();
+        //System.Random rnd = new System.Random();
 
-        int indexDecreaser = 0;
-        for (int i = 0; i < timeEvents.Length; i++) {
-            timeEvents[i] = rnd.Next(stats.timeEventRandomLow + timeEvents[i-indexDecreaser],
-                stats.timeEventRandomHigh + timeEvents[i-indexDecreaser]);
-            indexDecreaser = 1;
-        }
+        //int indexDecreaser = 0;
+        //for (int i = 0; i < timeEvents.Length; i++) {
+        //    timeEvents[i] = rnd.Next(stats.timeEventRandomLow + timeEvents[i-indexDecreaser],
+        //        stats.timeEventRandomHigh + timeEvents[i-indexDecreaser]);
+        //    indexDecreaser = 1;
+        //}
     }       
     
     IEnumerator WaitList() 

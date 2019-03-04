@@ -6,11 +6,28 @@ public class InteractableTest : MonoBehaviour {
 
     public GameObject interactable;
     public GameObject alarmLigtht;
+    public ControlPanel controlPanel;
+
+    public Objective objectiveInfo;    
 
     // Use this for initialization
     void Start() {
 
-        ObjectiveManager.instance.PopulateList(new Objective(GetComponentInParent<ControlPanel>().id, interactable, alarmLigtht));
+        if (interactable == null) {
+            Debug.LogError("Gameobject interactable has no reference, attach interactable");
+            return;
+        }
+        if (alarmLigtht == null) {
+            Debug.LogError("Gameobject alarmLigth has no reference, attach alarmLight");
+            return;
+        }
+        if (controlPanel == null) {
+            Debug.LogError("Script controlPanel has no reference, attach controlPanel script");
+            return;
+        }
+
+        objectiveInfo = new Objective(controlPanel.id, interactable, alarmLigtht);
+        ObjectiveManager.instance.PopulateList(objectiveInfo);
 
     }
 
