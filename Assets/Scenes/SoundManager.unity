@@ -253,13 +253,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7c88abfc3148fe4ba65461d991caedc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  audioPrefab: {fileID: 1046264391456768, guid: 97cae1206ba2faa46a2aa9aa199bd6f9,
-    type: 2}
-  FireAlarmSound: {fileID: 8300000, guid: 95859e2c5ea29624a817cb73e8c2c56f, type: 3}
-  BackgroundMusic: {fileID: 8300000, guid: e14a3d7b460e3a0438010fba40bd9229, type: 3}
-  AudioSourceList:
-  - {fileID: 1847347622071772, guid: 0e76fb7463868734f8d260673b2e669a, type: 2}
-  - {fileID: 1766038120725418, guid: d216ca72fa28058449c492007dced497, type: 2}
+  testSound: {fileID: 1847347622071772, guid: 0e76fb7463868734f8d260673b2e669a, type: 2}
 --- !u!4 &588092377
 Transform:
   m_ObjectHideFlags: 0

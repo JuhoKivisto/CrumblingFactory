@@ -9,18 +9,14 @@ public class collideObject : MonoBehaviour {
 
 
     private void Update() {
-        if (Input.GetKeyDown(KeyCode.Space)) {
-            if(test == null)                //avoid to be called twice
-                test = SoundManager.instance.audioClipToPlay(SoundManager.instance.FireAlarmSound, true, 1, 0, this.transform, Vector3.zero);
-        }
-
-        else if (Input.GetKeyDown(KeyCode.S)) {
+        
+        if (Input.GetKeyDown(KeyCode.S)) {
             SoundManager.instance.stopAudio(test);
         }
 
         if (Input.GetKeyDown(KeyCode.A)) {
             if (test == null) {
-                test = SoundManager.instance.audioSourceToPlay(SoundManager.instance.AudioSourceList[1], 0, null, Vector3.zero);
+                test = SoundManager.instance.audioSourceToPlay(SoundManager.instance.testSound, 0, true, 1f, null, Vector3.zero);
             }
         }
         

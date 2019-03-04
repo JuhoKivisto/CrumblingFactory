@@ -22,10 +22,8 @@ public class ParticleSystemManager : MonoBehaviour {
         if (direction == Vector3.zero) {                                //check that the direction is not zero
             direction = Vector3.up;                                     //default direction is up
         }
-
-        if (particleSys.GetComponent<ChangeDirection>().canChange) {        //this changes direction of particle      
-            changeDirection = Quaternion.LookRotation(direction);
-        }
+        changeDirection = Quaternion.LookRotation(direction);
+        
 
         GameObject clone = Instantiate(particleSys, position, changeDirection);
 
@@ -59,15 +57,6 @@ public class ParticleSystemManager : MonoBehaviour {
                 GameObject childGameObject = child.gameObject;
 
                 ParticleSystem tempChild = childGameObject.GetComponent<ParticleSystem>();
-
-                //Quaternion childQuaternion = new Quaternion();
-
-                //if (childGameObject.GetComponent<ChangeDirection>().canChange) {        //this can change direction of particle
-
-                //    childQuaternion = Quaternion.LookRotation(direction);
-                //}
-
-                //childGameObject.transform.rotation= childQuaternion;
 
                 var mainChild = tempChild.main;
 

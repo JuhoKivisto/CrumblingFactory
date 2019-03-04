@@ -5,14 +5,9 @@ using UnityEngine;
 public class SoundManager : MonoBehaviour {
     public static SoundManager instance;
 
-    [SerializeField] private GameObject audioPrefab;
-
-    [Header("Audio Clip Names")]
-    public AudioClip FireAlarmSound;
-    public AudioClip BackgroundMusic;
 
     [Header("Audio Sources")]
-    public List<GameObject> AudioSourceList;
+    public GameObject testSound;
 
 
     private void Awake() {
@@ -21,7 +16,8 @@ public class SoundManager : MonoBehaviour {
 
 
     //this method is used when there are too many settings on audio source and audio source settings are done at inspector
-    public AudioSource audioSourceToPlay(GameObject audioSource, float timeToStop, Transform parentTransform, Vector3 newPosition) {   
+    //when call this method, audio source needs to be checked null or not
+    public AudioSource audioSourceToPlay(GameObject audioSource, float timeToStop, bool loop, float volume, Transform parentTransform, Vector3 newPosition) {   
 
         GameObject audioObject = (GameObject)Instantiate(audioSource, newPosition, new Quaternion());
         AudioSource temp = audioObject.GetComponent<AudioSource>();
@@ -29,7 +25,8 @@ public class SoundManager : MonoBehaviour {
         if(parentTransform != null) {
             audioObject.transform.SetParent(parentTransform);
         }
-
+        temp.loop = loop;
+        temp.volume = volume;
         temp.Play();
 
         if (timeToStop > 0)                                     //if time = 0, do not stop audio
@@ -41,31 +38,8 @@ public class SoundManager : MonoBehaviour {
     }
 
 
-    //this method is used when there isn't many settings on audio source
-    public AudioSource audioClipToPlay(AudioClip clipName, bool isLoop, float volume, float timeToStop, Transform parentTransform, Vector3 newPosition) { 
-
-        GameObject audioObject = (GameObject)Instantiate(audioPrefab, newPosition, new Quaternion());
-
-        if (parentTransform != null) {                                     //attach to parent and set local position
-            audioObject.transform.SetParent(parentTransform);
-        }
-
-        AudioSource audio = audioObject.GetComponent<AudioSource>();
-        
-        audio.clip = clipName;
-        audio.volume = volume;
-        audio.loop = (isLoop) ? true : false;
-        audio.Play();
-
-        if (timeToStop > 0)                                     //if time = 0, do not stop audio
-            StartCoroutine(waitForSeconds(audio, timeToStop));
-
-        StartCoroutine(DestroyWhenStop(audio));                 //destroy game object
-
-        return audio;
-    }
-
     //stop audio
+    //when call this method, audio source needs to be checked null or not
     public void stopAudio(AudioSource audio) {      
         if(audio != null) {
             audio.Stop();
