@@ -25,22 +25,26 @@ public class LaserPointer : MonoBehaviour {
 
     // Variables used to calculate stuff in the code
     private int amount;
-    public float cooldown;
-    public float angle;
-    public float length;
+    public float maxCooldown;
+    public float maxDistance;
+    private float cooldown;
+    private float angle;
+    private float length;
     private float angleCount;
     private float distanceFromGround;
     private float cooldownTime;
+    private float magnitude;
 
     // Vector3 positions used for calculations
     private Vector3[] positions = new Vector3[100];    
     private Vector3 startPoint;
-    public Vector3 teleportReticleOffset;
+    private Vector3 teleportReticleOffset;
     private Vector3 newDir;
 
     public LineRenderer lineRenderer;
     RaycastHit hit;
-    public Image cooldownSprite;
+    public Image onCooldownSprite;
+    private Image cooldownSprite; // Testing not using a public variable for ease of use
 
     // Reticle objects
     public GameObject teleportReticlePrefab;
@@ -54,6 +58,7 @@ public class LaserPointer : MonoBehaviour {
     // Teleportation checks
     private bool shouldTeleport;
     private bool onCooldown;
+    public bool areStunned; // This variable should be set to true if you get hit by a Crowd Control, puts you on a 4 second cooldown
 
 
     private SteamVR_Controller.Device Controller // Gets the controller object
@@ -89,13 +94,41 @@ public class LaserPointer : MonoBehaviour {
         difference.y = 0; // keeps you in the correct area on y-axis
         cameraRigTransform.position = reticle.transform.position; // teleports Camera Rig to the reticle
         headTransform.position = reticle.transform.position;
+
+        if (magnitude > (maxDistance / 2))
+        {
+            cooldown = maxCooldown;
+        } else if (magnitude > (maxDistance / 3))
+        {
+            cooldown = maxCooldown / 2;
+        } else
+        {
+            cooldown = maxCooldown / 4;
+        }
+
         onCooldown = true; // Puts the teleport on cooldown
         cooldownTime = cooldown + Time.time;
         cooldownSprite.fillAmount = 1.0f;
     }
 
+    private void Stunned()
+    {
+        onCooldown = true;
+        cooldown = 4;
+        cooldownTime = cooldown + Time.time;
+        cooldownSprite.fillAmount = 1.0f;
+        areStunned = false;
+    }
+
     // Use this for initialization
     void Start() {
+
+        cooldownSprite = teleportReticlePrefab.transform.GetChild(1).GetComponent<Image>();
+
+        // Sets the tested values
+        angle = 2f;
+        length = 0.1f;
+        teleportReticleOffset.y = 0.01f;
 
         // Set the used button for teleportation
         if (buttonToUse == EbuttonToUse.Touchpad)
@@ -127,9 +160,16 @@ public class LaserPointer : MonoBehaviour {
         {
             cooldownSprite.fillAmount -= 1.0f / cooldown * Time.deltaTime;
         }
+        
+        if (areStunned == true)
+        {
+            Debug.Log("Stunned!");
+            Stunned();
+        }
 
         if (Controller.GetPress(button)) // checks for a button press
         {
+            Debug.Log("Got a button press");
             angleCount = angle; // Variable used to calculate that the curves angle will never go much above 90
 
             lineRenderer.widthMultiplier = 0.1f; // Sets our line renderers width to 0.1
@@ -142,19 +182,37 @@ public class LaserPointer : MonoBehaviour {
             {
                 if (Physics.Raycast(startPoint, newDir, out hit, length))
                 {
-                    if (hit.collider.tag == "Ground") // If the ray hits ground (teleportable area), changes the material to green unlit color & draws the laser & enables the reticle & enables teleportation
+                    Debug.Log("Hit something");
+
+                    if (hit.collider.tag == "Ground") // Checks if the hit collided with a gameObject having a tag "Ground" assigned to them
                     {
-                        positions[i] = hit.point; 
-                        lineRenderer.material = canTeleportMat;
-                        amount = i;
-                        ShowCurveLaser();
-                        reticle.SetActive(true);
-                        teleportReticleTransform.position = hit.point + teleportReticleOffset;
-                        shouldTeleport = true;
+                        magnitude = Vector3.Magnitude(hit.point - trackedObj.transform.position); // Calculates the distance between the hit and the controller
+
+                        if (magnitude < maxDistance) // Checks if the hit is within max distance. If so, draws the green laser & enables reticle & enables teleportation
+                        {
+                            Debug.Log("Succesful hit within the maxDistance, ready to teleport");
+                            positions[i] = hit.point;
+                            lineRenderer.material = canTeleportMat;
+                            amount = i;
+                            ShowCurveLaser();
+                            reticle.SetActive(true);
+                            teleportReticleTransform.position = hit.point + teleportReticleOffset;
+                            shouldTeleport = true;
+                        } else // If the ray hit distance is higher than the allowed max distance, changes the material to red unlit color & draws the laser
+                        {
+                            Debug.Log("Went over the max distance");
+                            positions[i] = hit.point;
+                            lineRenderer.material = canNotTeleportMat;
+                            amount = i;
+                            ShowCurveLaser();
+                            reticle.SetActive(false);
+                            shouldTeleport = false;
+                        }
                         break;
                     }
                     else // If the ray hits unteleportable area, changes the material to red unlit color & draws the laser
                     {
+                        Debug.Log("Hit something that doesn't have the Ground tag");
                         positions[i] = hit.point;
                         lineRenderer.material = canNotTeleportMat;
                         amount = i;
@@ -166,6 +224,7 @@ public class LaserPointer : MonoBehaviour {
                 }
                 else // If the ray doesnt hit, does calculations to find out the end point of the ray and new angle for the next ray
                 {
+                    Debug.Log("No hit");
                     DisableLaser();
                     reticle.SetActive(false);
                     shouldTeleport = false;
@@ -182,12 +241,14 @@ public class LaserPointer : MonoBehaviour {
         }
         else // disables laser and reticle if the trigger isn't pressed
         {
+            Debug.Log("Button isn't pressed");
             reticle.SetActive(false);
             DisableLaser();
         } 
 
         if (Controller.GetPressUp(button) && shouldTeleport && !onCooldown) // Teleports when the trigger is released if shouldTeleport bool is true and the teleport isn't on cooldown
         {
+            Debug.Log("Activated Teleport on GetPressUp");
             Teleport();
         }
     }
