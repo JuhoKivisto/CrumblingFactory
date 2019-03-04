@@ -8,7 +8,7 @@ public class SoundManager : MonoBehaviour {
 
     [Header("Audio Sources")]
     public GameObject testSound;
-    public GameManager secondSound;
+    public GameObject secondSound;
 
     private void Awake() {
         instance = this;
