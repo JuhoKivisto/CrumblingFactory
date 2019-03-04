@@ -18,6 +18,9 @@ public class SoundManager : MonoBehaviour {
     //this method needs a prefab which have an audio source
     //when call this method, audio source needs to be checked null or not to avoid having two same references of audio source
     public AudioSource audioSourceToPlay(GameObject audioSource, float timeToStop, bool loop, float volume, Transform parentTransform, Vector3 newPosition) {   
+        if(audioSource == null) {
+            Debug.LogError("Null audioSource");
+        }
 
         GameObject audioObject = (GameObject)Instantiate(audioSource, newPosition, new Quaternion());
         AudioSource temp = audioObject.GetComponent<AudioSource>();
