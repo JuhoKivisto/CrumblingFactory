@@ -52,6 +52,8 @@ public class InteractableController : MonoBehaviour {
 
     public float previousDAngle;
 
+    public float leverHeight;
+
     #endregion
 
     public string tag;
@@ -160,7 +162,8 @@ public class InteractableController : MonoBehaviour {
             Debug.DrawRay(spring.transform.TransformPoint(spring.anchor), Vector3.up, Color.red);
             Debug.DrawRay(spring.transform.TransformPoint(spring.connectedAnchor), Vector3.up, Color.red);
 
-            spring.anchor = transform.InverseTransformPoint(hand.GetComponent<SteamVR_TrackedObject>().transform.position);
+            //spring.anchor = transform.InverseTransformPoint(hand.GetComponent<SteamVR_TrackedObject>().transform.position);
+            spring.connectedAnchor = Vector3.up * leverHeight;
 
             print(Mathf.Abs( Mathf.DeltaAngle(hinge.angle, startAngle)));
 
@@ -171,12 +174,12 @@ public class InteractableController : MonoBehaviour {
                 startAngle = hinge.angle;
             }
 
-            //else if (Mathf.Abs(Mathf.DeltaAngle(hinge.angle, startAngle)) > previousDAngle)
-            //{
-            //    print("++ interval");
-            //    leverHapticPulseInterval += 0.01f;
-            //    startAngle = hinge.angle;
-            //}
+            else if (Mathf.Abs(Mathf.DeltaAngle(hinge.angle, startAngle)) > previousDAngle)
+            {
+                print("++ interval");
+                leverHapticPulseInterval += 0.01f;
+                startAngle = hinge.angle;
+            }
             else
             {
 
