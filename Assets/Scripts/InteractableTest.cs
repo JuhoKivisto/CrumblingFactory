@@ -8,23 +8,27 @@ public class InteractableTest : MonoBehaviour {
     public GameObject alarmLigtht;
     public ControlPanel controlPanel;
 
-    public Objective objectiveInfo;    
+    public Objective objectiveInfo;
 
     // Use this for initialization
     void Start() {
 
-        if (interactable == null) {
-            Debug.LogError("Gameobject interactable has no reference, attach interactable");
-            return;
-        }
-        if (alarmLigtht == null) {
-            Debug.LogError("Gameobject alarmLigth has no reference, attach alarmLight");
-            return;
-        }
-        if (controlPanel == null) {
-            Debug.LogError("Script controlPanel has no reference, attach controlPanel script");
-            return;
-        }
+        //if (interactable == null) {
+        //    Debug.LogError("Gameobject interactable has no reference, attach interactable");
+        //    return;
+        //}
+        //if (alarmLigtht == null) {
+        //    Debug.LogError("Gameobject alarmLigth has no reference, attach alarmLight");
+        //    return;
+        //}
+        //if (controlPanel == null) {
+        //    Debug.LogError("Script controlPanel has no reference, attach controlPanel script");
+        //    return;
+        //}
+
+
+        if (CheckForMissing()) return;
+
 
         objectiveInfo = new Objective(controlPanel.id, interactable, alarmLigtht);
         ObjectiveManager.instance.PopulateList(objectiveInfo);
@@ -33,6 +37,31 @@ public class InteractableTest : MonoBehaviour {
 
     void Update() {
         if (Input.GetKeyDown(KeyCode.Space) && ObjectiveManager.instance.objectiveList[ObjectiveManager.instance.currentObjectiveId].interactable == gameObject) {
+        }
+    }
+
+    bool CheckForMissing() {
+
+        bool missing = false;
+
+        if (interactable == null) {
+            Debug.LogError(string.Format("Gameobject '{0}' has no reference of GameObject 'interactable', attach 'Interactable' GameObject reference to it", transform.GetChild(0).name), gameObject);
+            missing = true;
+        }
+        if (alarmLigtht == null) {
+            Debug.LogError(string.Format("Gameobject '{0}' has no reference of GameObject 'alarmLight', attach 'AlarmLight' GameObject reference to it", transform.GetChild(1).name), gameObject);
+            missing = true;
+        }
+        if (controlPanel == null) {
+            Debug.LogError(string.Format("Gameobject '{0}' has no reference of Script 'ControlPanel', attach 'Panel[{1}]' GameObject reference to it",
+                gameObject.name, GetComponentInParent<ControlPanel>().id), gameObject);
+            missing = true;
+        }
+        if (missing) {
+            return missing;
+        }
+        else {
+            return missing;
         }
     }
 }

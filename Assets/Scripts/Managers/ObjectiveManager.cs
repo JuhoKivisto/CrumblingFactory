@@ -108,6 +108,11 @@ public class ObjectiveManager : MonoBehaviour {
 
     private Color color;
 
+    private void OnEnable() {
+        
+        CheckForMissing();
+    }
+
     void Awake() {
 
         if (instance == null) {
@@ -117,11 +122,11 @@ public class ObjectiveManager : MonoBehaviour {
         else if (instance != this) {
             Destroy(gameObject);
         }
+
     }
 
     void Start() {
 
-        //CheckForMissing();
 
         //CreateObjectives___OLD();
         StartCoroutine(FirstObjectiveSet());
@@ -153,7 +158,8 @@ public class ObjectiveManager : MonoBehaviour {
             }
         }
 
-        if (howManyObjectives >= allObjectivesList.Count) {
+        /* If howManyObjectives is greater than all objectives count and smaller than -1 then set how many objectives to allObjectives count */
+        if (howManyObjectives >= allObjectivesList.Count || howManyObjectives <= -1) {
             howManyObjectives = allObjectivesList.Count;
         }
 
@@ -476,13 +482,6 @@ public class ObjectiveManager : MonoBehaviour {
             Debug.LogWarning("Script 'gameManager' has no reference, attach GameManager script");
 
         }
-        if (allObjectivesList != null) {
-            for (int i = 0; i < allObjectivesList.Count; i++) {
-                if (allObjectivesList[i].interactable.GetComponentInParent<InteractableTest>() == null) {
-
-                Debug.LogWarning(string.Format("Gameobject '{0}' has no reference of Script 'InteractableTest', attach InteractableTest script reference to it",allObjectivesList[i]));
-                }
-            }
-        }
+        
     }
 }
