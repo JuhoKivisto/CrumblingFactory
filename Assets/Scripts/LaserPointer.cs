@@ -43,8 +43,7 @@ public class LaserPointer : MonoBehaviour {
 
     public LineRenderer lineRenderer;
     RaycastHit hit;
-    public Image onCooldownSprite;
-    private Image cooldownSprite; // Testing not using a public variable for ease of use
+    private Image cooldownSprite; 
 
     // Reticle objects
     public GameObject teleportReticlePrefab;
