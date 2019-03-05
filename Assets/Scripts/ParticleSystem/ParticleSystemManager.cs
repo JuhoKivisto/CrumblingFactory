@@ -14,7 +14,7 @@ public class ParticleSystemManager : MonoBehaviour {
         instance = this;
     }
 
-    public ParticleSystem test(GameObject particleSys, string stopAction, Vector3 position, Vector3 direction) {
+    public ParticleSystem test(GameObject particleSys, ParticleSystemStopAction stopAction, Vector3 position, Vector3 direction) {
 
         Quaternion changeDirection = new Quaternion();
 
@@ -29,25 +29,9 @@ public class ParticleSystemManager : MonoBehaviour {
 
         ParticleSystem temp = clone.GetComponent<ParticleSystem>();
 
-        stopAction = stopAction.ToLower();                              //to avoid any spelling mistake
-
         var main = temp.main;
 
-        switch (stopAction) {
-            case "disable":
-                main.stopAction = ParticleSystemStopAction.Disable;
-                break;
-            case "destroy":
-                main.stopAction = ParticleSystemStopAction.Destroy;
-                break;
-            case "callback":
-                main.stopAction = ParticleSystemStopAction.Callback;
-                break;
-            default:
-                main.stopAction = ParticleSystemStopAction.None;
-                break;
-        }
-
+        main.stopAction = stopAction;
 
         temp.Play();
 
@@ -60,20 +44,7 @@ public class ParticleSystemManager : MonoBehaviour {
 
                 var mainChild = tempChild.main;
 
-                switch (stopAction) {
-                    case "disable":
-                        mainChild.stopAction = ParticleSystemStopAction.Disable;
-                        break;
-                    case "destroy":
-                        mainChild.stopAction = ParticleSystemStopAction.Destroy;
-                        break;
-                    case "callback":
-                        mainChild.stopAction = ParticleSystemStopAction.Callback;
-                        break;
-                    default:
-                        mainChild.stopAction = ParticleSystemStopAction.None;
-                        break;
-                }
+                mainChild.stopAction = stopAction;
 
                 tempChild.Play();
             }
@@ -91,7 +62,6 @@ public class ParticleSystemManager : MonoBehaviour {
                 childTemp.Stop();
             }
         }
-
         particleSystem.Stop();
     }
 }
