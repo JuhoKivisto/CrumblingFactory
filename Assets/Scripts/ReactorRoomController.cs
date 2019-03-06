@@ -6,6 +6,8 @@ public class ReactorRoomController : MonoBehaviour {
 
     public Stats stats;
 
+    public Animator doorAnimator;
+
     public bool isReactorOn;
 
     // Use this for initialization
@@ -19,7 +21,7 @@ public class ReactorRoomController : MonoBehaviour {
     }
 
     public void OpenReactorRoomDoors() {
-
+        doorAnimator.SetTrigger("Open");
     }
 
     public void ShutDownTheReactor() {

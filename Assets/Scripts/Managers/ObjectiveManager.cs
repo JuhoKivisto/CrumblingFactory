@@ -143,7 +143,8 @@ public class ObjectiveManager : MonoBehaviour {
         NextObjectiveSet();
 
         if (objcomp) {
-            CompleteReactorShutDown();
+            //CompleteReactorShutDown();
+            reactorRoomController.OpenReactorRoomDoors();
         }
     }
 

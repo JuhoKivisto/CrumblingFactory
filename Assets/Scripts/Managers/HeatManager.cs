@@ -56,7 +56,7 @@ public class HeatManager : MonoBehaviour {
     void Start() {
         if (HeatUI == null) {
             Debug.LogWarning("Slider HeatUI has no reference, attach HeatUI Slider");
-            //return;
+            return;
         }
 
         maxHeat = stats.maxHeat;
@@ -154,7 +154,7 @@ public class HeatManager : MonoBehaviour {
             
                 Heat += stats.heatCurve2.Evaluate(Heat / maxHeat) * Time.deltaTime * heatMultiplier/* + (GameManager.instance.errorCount * errorMultiplier)*/;
                 yield return null;
-                //HeatUI.value = heat;
+                HeatUI.value = heat;
                 ChangeHeatLevel();            
         }
     }
