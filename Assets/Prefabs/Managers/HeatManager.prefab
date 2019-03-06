@@ -53,10 +53,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HeatUI: {fileID: 0}
   stats: {fileID: 0}
-  heat: 0
+  heat: 40
   heatLevels: 5
   currentHeatLevel: 0
   heatLevelLenght: 0
   heatMultiplier: 5.16
   errorMultiplier: 0
   working: 0
+  reactorRoomController: {fileID: 0}

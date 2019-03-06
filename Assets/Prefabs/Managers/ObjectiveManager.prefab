@@ -56,8 +56,10 @@ MonoBehaviour:
   tooManyObjectives: 0
   numberOfPanelSwitch: 0
   currentObjectiveId: 0
-  howManyObjectives: 0
   objectivesDone: 0
+  ObjectivesForReactor: 0
+  isReactorRoomOpen: 0
+  howManyObjectives: 0
   objectivesActivated: 0
   currentWarningLevel: 3
   lifeTimeId: 0
@@ -66,3 +68,4 @@ MonoBehaviour:
   gameManager: {fileID: 0}
   stats: {fileID: 0}
   heatManager: {fileID: 0}
+  reactorRoomController: {fileID: 0}
