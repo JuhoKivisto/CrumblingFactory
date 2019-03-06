@@ -11,21 +11,7 @@ public class InteractableTest : MonoBehaviour {
     public Objective objectiveInfo;
 
     // Use this for initialization
-    void Start() {
-
-        //if (interactable == null) {
-        //    Debug.LogError("Gameobject interactable has no reference, attach interactable");
-        //    return;
-        //}
-        //if (alarmLigtht == null) {
-        //    Debug.LogError("Gameobject alarmLigth has no reference, attach alarmLight");
-        //    return;
-        //}
-        //if (controlPanel == null) {
-        //    Debug.LogError("Script controlPanel has no reference, attach controlPanel script");
-        //    return;
-        //}
-
+    void Start() {        
 
         if (CheckForMissing()) return;
 

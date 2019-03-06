@@ -50,6 +50,7 @@ public class Stats : MonoBehaviour {
     public float maxHeat;
     [Range(0f,1f)]
     public float changeHeatingFor;
+    public float HeatAfterShutdown;
 
     public bool decreaseHeat;
     public bool waitTime;
