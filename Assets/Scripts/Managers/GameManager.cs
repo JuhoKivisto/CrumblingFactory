@@ -119,11 +119,11 @@ public class GameManager : MonoBehaviour {
     public void EventByHeat() {
         if (false) {
             // heatMeter > stats.criticalTemporatures[0].heatOfTheEvent && heatMeter < stats.criticalTemporatures[1].heatOfTheEvent && stats.criticalTemporatures[0].happened
-            stats.criticalTemporatures[0].happened = true;
+            //stats.criticalTemporatures[0].happened = true;
             print("<color = blue> kivikasa </color>");
             Vector3 spwnpoint = new Vector3(player.transform.position.x, 60, player.transform.position.z);
 
-            GameObject tempGameO = GameObject.Instantiate(stats.criticalTemporatures[0].eventObject,spwnpoint, Quaternion.identity, null);
+            //GameObject tempGameO = GameObject.Instantiate(stats.criticalTemporatures[0].eventObject,spwnpoint, Quaternion.identity, null);
             //tempGameO.GetComponentInChildren<Rigidbody>().AddForce(Vector3.up * 1000f);
             // minor explosions
             // factory shaking 

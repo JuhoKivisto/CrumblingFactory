@@ -77,7 +77,7 @@ public class TimeManager : MonoBehaviour {
     /// and creates time events
     /// </summary>
     public void StartTimer() {
-        GameManager.instance.CreateTimeEvents();
+        //GameManager.instance.CreateTimeEvents();
         StartCoroutine(RemainingTime());
         timerRunning = true;
     }

@@ -51,38 +51,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12838c6c7c7f8ae4092378a8079ba447, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  criticalTemporatures:
-  - eventObject: {fileID: 1714977848766888, guid: 4c7b65c5bb7e0764db453beed81f1eb0,
-      type: 2}
-    heatOfTheEvent: 50
-    happened: 0
-  - eventObject: {fileID: 0}
-    heatOfTheEvent: 70
-    happened: 0
-  - eventObject: {fileID: 0}
-    heatOfTheEvent: 0
-    happened: 0
-  - eventObject: {fileID: 0}
-    heatOfTheEvent: 0
-    happened: 0
-  timeDivider: 1
-  heatIncreaser: 10
-  heatLevels:
-  - 10
-  - 20
-  - 30
-  - 40
-  - 50
-  - 60
-  - 70
-  - 80
-  - 90
-  - 10
-  decreaseHeatOnObjectiveSetComplete: 10
-  decreaseHeatOnObjectiveComplete: 2
-  waitTimeOnObjectiveComplete: 1
-  waitTimeOnObjectiveSetComplete: 3
   maxHeat: 100
+  changeHeatingFor: 0.1
+  HeatAfterShutdown: 25
   decreaseHeat: 0
   waitTime: 0
   gameLenght: 120
@@ -161,7 +132,15 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  heatCurve3:
+  timeEventRandomLow: 15
+  timeEventRandomHigh: 30
+  errorThresholds: 020000000400000006000000
+  maxObjectives: 5
+  objectiveLifeTime: 5
+  waitBeforeFirstSet: 4
+  waitBeforeNextSet: 5
+  IncreaceAtFailure: 15
+  alarmLigthBlinkIntensity:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
@@ -320,13 +299,6 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  timeEventRandomLow: 15
-  timeEventRandomHigh: 30
-  errorThresholds: 020000000400000006000000
-  maxObjectives: 5
-  objectiveLifeTime: 5
-  waitBeforeFirstSet: 4
-  waitBeforeNextSet: 5
   warningLevels:
   - level: 3
     heatMultiplier: 100

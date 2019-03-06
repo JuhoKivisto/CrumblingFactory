@@ -33,17 +33,24 @@ public class Stats : MonoBehaviour {
     public static Stats instance = null;
 
     [Header("----------HEAT-----------")]
+    #region old
+    /*
     //[Range(50,100)]
     public EnvironmentalEvent[] criticalTemporatures;
     public int timeDivider;
-    public float heatIncreaser;
     public float[] heatLevels;
+    public float heatIncreaser;
     public float decreaseHeatOnObjectiveSetComplete;
     public float decreaseHeatOnObjectiveComplete;
     public float waitTimeOnObjectiveComplete;
     public float waitTimeOnObjectiveSetComplete;
+    */
+    #endregion
     [Space]
     public float maxHeat;
+    [Range(0f,1f)]
+    public float changeHeatingFor;
+    public float HeatAfterShutdown;
 
     public bool decreaseHeat;
     public bool waitTime;
@@ -56,7 +63,6 @@ public class Stats : MonoBehaviour {
     public float gameLenght;
     public AnimationCurve heatCurve;
     public AnimationCurve heatCurve2;
-    public AnimationCurve heatCurve3;
     [Tooltip("Time events are created from random number between timeEventRandomLow + previous time event and timeEventRandomHigh + previous time event")]
     public int timeEventRandomLow;
     public int timeEventRandomHigh;
@@ -70,11 +76,19 @@ public class Stats : MonoBehaviour {
     [Space]
 
     [Header("----------OBJECTTIVE----------")]
+    [Range(0, 10)]
     public int maxObjectives;
 
+    [Range(0f,10f)]
     public float objectiveLifeTime;
+    [Range(0f, 10f)]
     public float waitBeforeFirstSet;
-    public float waitBeforeNextSet;    
+    [Range(0f, 10f)]
+    public float waitBeforeNextSet;
+
+    public float IncreaceAtFailure;
+    
+    public AnimationCurve alarmLigthBlinkIntensity;
 
     public List<WarningLevel> warningLevels;
 
