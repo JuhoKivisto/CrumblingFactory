@@ -17,6 +17,7 @@ public class sprite_loader : MonoBehaviour {
         ImageName.Add("2");
         ImageName.Add("3");
         ImageName.Add("4");
+        ImageName.Add("5");
 
         Debug.Log(ImageName.Count);
     }

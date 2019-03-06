@@ -21,9 +21,7 @@ public class light : MonoBehaviour
     private void Start()
     {
       starttime = Time.time;
-        slidervalue.onValueChanged.AddListener(delegate { change(); });
-       
-     
+        change();
 
     }
 
