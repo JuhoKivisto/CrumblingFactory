@@ -19,16 +19,16 @@ public class callParticleSystem : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.Space)) {
 
             if(test == null)
-                test = ParticleSystemManager.instance.test(ParticleSystemManager.instance.particleSystemPrefab, "destroy", Vector3.zero, Vector3.up);
+                test = ParticleSystemManager.instance.test(ParticleSystemManager.instance.particleSystemPrefab, ParticleSystemStopAction.None, Vector3.zero, Vector3.up);
 
             //test.Stop();
         }
         if (Input.GetKeyDown(KeyCode.A)) {
-            particle2 = ParticleSystemManager.instance.test(ParticleSystemManager.instance.particleSystemPrefab, "none", new Vector3(10, 0, 0), Vector3.down);
+            particle2 = ParticleSystemManager.instance.test(ParticleSystemManager.instance.particleSystemPrefab, ParticleSystemStopAction.None, new Vector3(10, 0, 0), Vector3.down);
 
         }
         if (Input.GetKeyDown(KeyCode.B)) {
-            particle3 = ParticleSystemManager.instance.test(ParticleSystemManager.instance.particleSystemPrefab, "none", new Vector3(20, -10, 0), Vector3.right);
+            particle3 = ParticleSystemManager.instance.test(ParticleSystemManager.instance.particleSystemPrefab, ParticleSystemStopAction.None, new Vector3(20, -10, 0), Vector3.right);
         }
 
         if (Input.GetKeyDown(KeyCode.S)) {
