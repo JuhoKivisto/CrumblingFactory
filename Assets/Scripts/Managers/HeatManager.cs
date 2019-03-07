@@ -104,7 +104,7 @@ public class HeatManager : MonoBehaviour {
         float currentHeatMultiplier = heatMultiplier;
         print("heat");
 
-        if (!increacing && reactorRoomController.isReactorOn) {
+        if (!increacing) {
 
             for (int i = 0; i < stats.warningLevels.Count; i++) {
                 if (stats.warningLevels[i].level == objective.warningLevel) {

@@ -125,7 +125,7 @@ public class LaserPointer : MonoBehaviour {
         cooldownSprite = teleportReticlePrefab.transform.GetChild(1).GetComponent<Image>();
 
         // Sets the tested values
-        angle = 2f;
+        angle = 0.5f;
         length = 0.1f;
         teleportReticleOffset.y = 0.01f;
 
@@ -236,7 +236,7 @@ public class LaserPointer : MonoBehaviour {
                         newDir = Quaternion.AngleAxis(angle, laserAxis) * newDir; // Calculates a new angle for the next ray
                     }
                 }
-            }
+            } 
         }
         else // disables laser and reticle if the trigger isn't pressed
         {

@@ -166,12 +166,16 @@ public class ObjectiveManager : MonoBehaviour {
         }
 
         /* If howManyObjectives is greater than all objectives count and smaller than -1 then set how many objectives to allObjectives count */
-        if (howManyObjectives >= allObjectivesList.Count || howManyObjectives <= -1) {
-            howManyObjectives = allObjectivesList.Count;
+        if (objectiveList.Count + howManyObjectives > allObjectivesList.Count || howManyObjectives <= -1) {
+            howManyObjectives = 0;
         }
+        //if (howManyObjectives > objectiveList.Count)
+        //{
+        //    howManyObjectives = 0;
+        //}
 
         int createdObjectives = 0;
-        while (createdObjectives != howManyObjectives && !tooManyObjectives) {
+        while (createdObjectives != howManyObjectives && !tooManyObjectives && howManyObjectives != 0) {
 
             if (objectiveList.Count == allObjectivesList.Count) {
                 tooManyObjectives = true;
@@ -289,11 +293,13 @@ public class ObjectiveManager : MonoBehaviour {
 
     public void CompleteObjective(Objective objective) {
 
+
         /* Objective that player is acting with is on objective list*/
         if (objectiveList.Contains(objective)) {
+            
             print("objective DONE!!!");
             objcomp = false;
-            heatManager.ActiveChangeHeating(objective, stats.changeHeatingFor, true);
+            heatManager.ActiveChangeHeating(objective, stats.changeHeatingFor, false);
             StopCoroutine(objectiveLifeTimes[objective.lifeTimeId]);
             //objectiveLifeTimes.RemoveAt(objective.lifeTimeId);
             StartCoroutine(DisableObjective(objective, stats.warningLevels[stats.warningLevels.Count - objective.warningLevel], 0, objective.lifeTimeId));
@@ -301,12 +307,18 @@ public class ObjectiveManager : MonoBehaviour {
             if (CheckForReactorRoomOpening() && !isReactorRoomOpen) {
                 reactorRoomController.OpenReactorRoomDoors();
             }
+            
+        }
+        else
+        {
+            heatManager.ActiveChangeHeating(objective, stats.changeHeatingFor, true);
+
         }
 
     }
 
     public void FailureObjective(Objective objective) {
-        heatManager.ActiveChangeHeating(objective, stats.changeHeatingFor, false);
+        heatManager.ActiveChangeHeating(objective, stats.changeHeatingFor, true);
     }
 
     public void CompleteReactorShutDown() {

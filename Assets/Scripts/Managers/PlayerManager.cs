@@ -10,6 +10,8 @@ public class PlayerManager : MonoBehaviour {
 
     public PlayerStatus playerStatus;
 
+    public bool showDebug;
+
     void Awake() {
 
         if (instance == null) {
@@ -21,12 +23,12 @@ public class PlayerManager : MonoBehaviour {
         }
     }
 
-    private void OnCollisionEnter(Collision collision) {
+    /*private void OnCollisionEnter(Collision collision) {
         print(collision.gameObject.GetComponent<Rigidbody>().velocity.y);
         if (Mathf.Abs(collision.gameObject.GetComponent<Rigidbody>().velocity.y) > 2) {
             print("hit");
             health -= 50;
         }
-    }
+    }*/
 }
 
