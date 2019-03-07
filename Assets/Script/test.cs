@@ -21,6 +21,6 @@ public class test : MonoBehaviour {
        
         rb.AddForce(this.transform.forward*translation*50);
        
-       meter.Heatmeter(rb.velocity.magnitude, 0, 100);
+   meter.Heatmeter(rb.velocity.magnitude, 0, 100);
     }
 }
