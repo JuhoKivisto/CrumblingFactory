@@ -60,10 +60,23 @@ public class InteractableController : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+
+        switch (interactableType) {
+            case InteractableType.None:
+                break;
+            case InteractableType.Button:
+                break;
+            case InteractableType.Lever:
         hinge = GetComponent<HingeJoint>();
 
         startAngle = hinge.limits.min;
         endAngle = hinge.limits.max;
+                break;
+            case InteractableType.Valve:
+                break;
+            default:
+                break;
+        }
 	}
 	
 	// Update is called once per frame
