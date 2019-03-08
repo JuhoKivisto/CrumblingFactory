@@ -52,28 +52,18 @@ public class InteractableController : MonoBehaviour {
 
     public float previousDAngle;
 
+    public float leverHeight;
+
     #endregion
 
     public string tag;
 
     // Use this for initialization
     void Start () {
-
-        switch (interactableType) {
-            case InteractableType.None:
-                break;
-            case InteractableType.Button:
-                break;
-            case InteractableType.Lever:
         hinge = GetComponent<HingeJoint>();
+
         startAngle = hinge.limits.min;
         endAngle = hinge.limits.max;
-                break;
-            case InteractableType.Valve:
-                break;
-            default:
-                break;
-        }
 	}
 	
 	// Update is called once per frame
@@ -172,7 +162,8 @@ public class InteractableController : MonoBehaviour {
             Debug.DrawRay(spring.transform.TransformPoint(spring.anchor), Vector3.up, Color.red);
             Debug.DrawRay(spring.transform.TransformPoint(spring.connectedAnchor), Vector3.up, Color.red);
 
-            spring.anchor = transform.InverseTransformPoint(hand.GetComponent<SteamVR_TrackedObject>().transform.position);
+            //spring.anchor = transform.InverseTransformPoint(hand.GetComponent<SteamVR_TrackedObject>().transform.position);
+            spring.connectedAnchor = Vector3.up * leverHeight;
 
             print(Mathf.Abs( Mathf.DeltaAngle(hinge.angle, startAngle)));
 
@@ -183,12 +174,12 @@ public class InteractableController : MonoBehaviour {
                 startAngle = hinge.angle;
             }
 
-            //else if (Mathf.Abs(Mathf.DeltaAngle(hinge.angle, startAngle)) > previousDAngle)
-            //{
-            //    print("++ interval");
-            //    leverHapticPulseInterval += 0.01f;
-            //    startAngle = hinge.angle;
-            //}
+            else if (Mathf.Abs(Mathf.DeltaAngle(hinge.angle, startAngle)) > previousDAngle)
+            {
+                print("++ interval");
+                leverHapticPulseInterval += 0.01f;
+                startAngle = hinge.angle;
+            }
             else
             {
 
