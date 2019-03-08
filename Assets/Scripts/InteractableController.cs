@@ -106,6 +106,7 @@ public class InteractableController : MonoBehaviour {
                     active = false;
                     StartCoroutine(OnButtonInteraction());
                     ObjectiveManager.instance.CompleteObjective(button.GetComponentInParent<InteractableTest>().objectiveInfo);
+
                 }
                 if (!active && other == triggerUp.GetComponent<Collider>() && other.tag == tag) {
                     active = true;
@@ -169,6 +170,12 @@ public class InteractableController : MonoBehaviour {
         float startTime = 0;
 
         while (hand.GetComponent<SteamVR_TrackedController>().triggerPressed) {
+
+            if (hinge.angle == hinge.limits.max)
+            {
+                hinge.useMotor = true;
+                ObjectiveManager.instance.CompleteReactorShutDown();
+            }
 
             //Debug.DrawRay(transform.TransformPoint(spring.anchor), transform.TransformPoint(spring.connectedAnchor), Color.red);
             //Debug.DrawRay(spring.anchor, spring.connectedAnchor, Color.red);

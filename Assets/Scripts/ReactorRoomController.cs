@@ -25,8 +25,9 @@ public class ReactorRoomController : MonoBehaviour {
     }
 
     public void ShutDownTheReactor() {
-        isReactorOn = true;
+        isReactorOn = false;
         HeatManager.instance.ActiveReactorShutdown(10f, 0.1f);
+
 
     }
 
