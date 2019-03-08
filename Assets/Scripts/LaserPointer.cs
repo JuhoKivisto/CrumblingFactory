@@ -64,6 +64,7 @@ public class LaserPointer : MonoBehaviour {
     private bool onCooldown;
     public bool areStunned; // This variable should be set to true if you get hit by a Crowd Control, puts you on a 4 second cooldown
 
+    public Image cooldownOnController;
 
     public bool showDebug = false;
 
@@ -116,6 +117,7 @@ public class LaserPointer : MonoBehaviour {
         onCooldown = true; // Puts the teleport on cooldown
         cooldownTime = cooldown + Time.time;
         cooldownSprite.fillAmount = 1.0f;
+        cooldownOnController.fillAmount = 1.0f;
     }
 
     private void Stunned() // sets movement on a 4 second cooldown after being stunned
@@ -124,6 +126,7 @@ public class LaserPointer : MonoBehaviour {
         cooldown = 4;
         cooldownTime = cooldown + Time.time;
         cooldownSprite.fillAmount = 1.0f;
+        cooldownOnController.fillAmount = 1.0f;
         areStunned = false;
     }
 
@@ -170,6 +173,7 @@ public class LaserPointer : MonoBehaviour {
         // Visualization of cooldown
         if (cooldownSprite.fillAmount > 0f)
         {
+            cooldownOnController.fillAmount -= 1.0f / cooldown * Time.deltaTime;
             cooldownSprite.fillAmount -= 1.0f / cooldown * Time.deltaTime;
         }
         
