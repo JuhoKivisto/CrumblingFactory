@@ -296,8 +296,12 @@ public class ObjectiveManager : MonoBehaviour {
 
         /* Objective that player is acting with is on objective list*/
         if (objectiveList.Contains(objective)) {
-            
+
+            if (debugMode)
+            {
+
             print("objective DONE!!!");
+            }
             objcomp = false;
             heatManager.ActiveChangeHeating(objective, stats.changeHeatingFor, false);
             StopCoroutine(objectiveLifeTimes[objective.lifeTimeId]);
@@ -397,7 +401,11 @@ public class ObjectiveManager : MonoBehaviour {
     }
 
     private IEnumerator WaitNextSet() {
+        if (debugMode)
+        {
         print("Wait next set");
+
+        }
         yield return new WaitForSeconds(stats.waitBeforeNextSet);
         //yield return null;
         nextSet = true;
@@ -481,13 +489,21 @@ public class ObjectiveManager : MonoBehaviour {
         //objectiveLifeTimes.RemoveAt(lifeTimeId);
         //FailureObjective(objective);
 
+        if (debugMode)
+        {
+
         print("<color=blue>time over</color>");
         print("<color=yellow>time: </color>" + time);
+        }
 
     }
 
     private IEnumerator SetObjectiveInfo(Objective objective) {
+        if (debugMode)
+        {
         print(objective.interactable);
+
+        }
         objective.interactable.GetComponentInParent<InteractableTest>().objectiveInfo = objective;
         yield return null;
     }
