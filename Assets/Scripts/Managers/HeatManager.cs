@@ -9,7 +9,7 @@ public class HeatManager : MonoBehaviour {
 
     //public Text heatText;
 
-    public Slider HeatUI;
+    public Slider[] HeatUI;
 
     public Stats stats;
     [SerializeField]
@@ -154,7 +154,11 @@ public class HeatManager : MonoBehaviour {
             
                 Heat += stats.heatCurve2.Evaluate(Heat / maxHeat) * Time.deltaTime * heatMultiplier/* + (GameManager.instance.errorCount * errorMultiplier)*/;
                 yield return null;
-                HeatUI.value = heat;
+
+            foreach (var item in HeatUI) {
+                item.value = heat;
+
+            }
                 ChangeHeatLevel();            
         }
     }
