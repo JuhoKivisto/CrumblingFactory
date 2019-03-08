@@ -130,10 +130,12 @@ public class LaserPointer : MonoBehaviour {
     // Use this for initialization
     void Start() {
 
+        lineRenderer.widthMultiplier = 0.1f; // Sets our line renderers width to 0.1
+
         cooldownSprite = teleportReticlePrefab.transform.GetChild(1).GetComponent<Image>(); // Gets the cooldown sprite from the reticle prefab
 
         // Setting the tested "best" values for the curve calculation
-        angle = 2f;
+        angle = 0.5f;
         length = 0.1f;
 
         // Sets reticle offset
@@ -191,7 +193,6 @@ public class LaserPointer : MonoBehaviour {
 
             angleCount = angle; // Variable used to calculate that the curves angle will never go much above 90
 
-            lineRenderer.widthMultiplier = 0.1f; // Sets our line renderers width to 0.1
             newDir = transform.forward;
             startPoint = trackedObj.transform.position;
             positions[0] = startPoint;

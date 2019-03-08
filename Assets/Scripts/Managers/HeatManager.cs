@@ -157,6 +157,7 @@ public class HeatManager : MonoBehaviour {
 
             foreach (var item in HeatUI) {
                 item.value = heat;
+                //print("HUI");
 
             }
                 ChangeHeatLevel();            
