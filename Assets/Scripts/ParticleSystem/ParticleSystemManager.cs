@@ -6,13 +6,24 @@ public class ParticleSystemManager : MonoBehaviour {
 
     public static ParticleSystemManager instance;
 
+
+    [Header("Particle Name")]
+
     public GameObject particleSystemPrefab;
 
     public GameObject particle2;
 
+    [Header("Particle Position")]
+
+    public List<Vector3> ParticlePosition;
+    
+
     private void Awake() {
         instance = this;
     }
+    
+
+
 
     public ParticleSystem test(GameObject particleSys, ParticleSystemStopAction stopAction, Vector3 position, Vector3 direction) {
 
