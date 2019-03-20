@@ -168,7 +168,7 @@ public class LaserPointer : MonoBehaviour {
 
         if (Controller.GetPress(button)) // checks for a button press
         {
-            Debug.Log("Got a button press");
+            //Debug.Log("Got a button press");
             angleCount = angle; // Variable used to calculate that the curves angle will never go much above 90
 
             lineRenderer.widthMultiplier = 0.1f; // Sets our line renderers width to 0.1
@@ -181,7 +181,7 @@ public class LaserPointer : MonoBehaviour {
             {
                 if (Physics.Raycast(startPoint, newDir, out hit, length))
                 {
-                    Debug.Log("Hit something");
+                   // Debug.Log("Hit something");
 
                     if (hit.collider.tag == "Ground") // Checks if the hit collided with a gameObject having a tag "Ground" assigned to them
                     {
@@ -189,7 +189,7 @@ public class LaserPointer : MonoBehaviour {
 
                         if (magnitude < maxDistance) // Checks if the hit is within max distance. If so, draws the green laser & enables reticle & enables teleportation
                         {
-                            Debug.Log("Succesful hit within the maxDistance, ready to teleport");
+                           // Debug.Log("Succesful hit within the maxDistance, ready to teleport");
                             positions[i] = hit.point;
                             lineRenderer.material = canTeleportMat;
                             amount = i;
@@ -199,7 +199,7 @@ public class LaserPointer : MonoBehaviour {
                             shouldTeleport = true;
                         } else // If the ray hit distance is higher than the allowed max distance, changes the material to red unlit color & draws the laser
                         {
-                            Debug.Log("Went over the max distance");
+                           // Debug.Log("Went over the max distance");
                             positions[i] = hit.point;
                             lineRenderer.material = canNotTeleportMat;
                             amount = i;
@@ -211,7 +211,7 @@ public class LaserPointer : MonoBehaviour {
                     }
                     else // If the ray hits unteleportable area, changes the material to red unlit color & draws the laser
                     {
-                        Debug.Log("Hit something that doesn't have the Ground tag");
+                       // Debug.Log("Hit something that doesn't have the Ground tag");
                         positions[i] = hit.point;
                         lineRenderer.material = canNotTeleportMat;
                         amount = i;
@@ -223,7 +223,7 @@ public class LaserPointer : MonoBehaviour {
                 }
                 else // If the ray doesnt hit, does calculations to find out the end point of the ray and new angle for the next ray
                 {
-                    Debug.Log("No hit");
+                    //Debug.Log("No hit");
                     DisableLaser();
                     reticle.SetActive(false);
                     shouldTeleport = false;
@@ -240,14 +240,14 @@ public class LaserPointer : MonoBehaviour {
         }
         else // disables laser and reticle if the trigger isn't pressed
         {
-            Debug.Log("Button isn't pressed");
+            //Debug.Log("Button isn't pressed");
             reticle.SetActive(false);
             DisableLaser();
         } 
 
         if (Controller.GetPressUp(button) && shouldTeleport && !onCooldown) // Teleports when the trigger is released if shouldTeleport bool is true and the teleport isn't on cooldown
         {
-            Debug.Log("Activated Teleport on GetPressUp");
+           // Debug.Log("Activated Teleport on GetPressUp");
             Teleport();
         }
     }

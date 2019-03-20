@@ -20,7 +20,7 @@ public class JointTest : MonoBehaviour {
 
     public void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Lever")
+        if (other.tag == "Valve")
         {
 
         GetComponent<SpringJoint>().connectedBody = other.GetComponent<Rigidbody>();

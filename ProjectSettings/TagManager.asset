@@ -9,6 +9,7 @@ TagManager:
   - hand
   - Ground
   - Lever
+  - Valve
   layers:
   - Default
   - TransparentFX
