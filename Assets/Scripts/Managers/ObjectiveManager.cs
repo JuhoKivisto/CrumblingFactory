@@ -13,15 +13,18 @@ public class Objective {
 
     public int lifeTimeId;
 
+    public InteractableType interactableType;
+
     public bool done;
 
     /* 1 - 3 */
     [ReadOnly]
     public int warningLevel;
 
-    public Objective(int cPId, GameObject intact, GameObject wLight) {
+    public Objective(int cPId, GameObject intact, InteractableType intactType, GameObject wLight) {
 
         interactable = intact;
+        interactableType = intactType;
         warningLight = wLight;
         controlPanelId = cPId;
         done = false;
@@ -170,29 +173,8 @@ public class ObjectiveManager : MonoBehaviour {
         }
 
         int createdObjectives = 0;
-        while (createdObjectives != howManyObjectives && !tooManyObjectives) {
 
-            if (objectiveList.Count == allObjectivesList.Count) {
-                tooManyObjectives = true;
-            }
-            else {
-                tooManyObjectives = false;
-            }
-
-            switch (objectivesActivated) {
-
-                case 1:
-                    currentWarningLevel--;
-                    break;
-                case 3:
-                    currentWarningLevel--;
-                    break;
-                case 6:
-                    currentWarningLevel = 3;
-                    objectivesActivated = 0;
-                    break;
-
-            }
+        while (createdObjectives != howManyObjectives && !tooManyObjectives) {                        
 
             int randomIndex = random.Next(0, allObjectivesList.Count);
 
@@ -203,21 +185,16 @@ public class ObjectiveManager : MonoBehaviour {
 
             objectiveList.Add(allObjectivesList[randomIndex]);
 
+            /* Current objective id on the objectiveList */
             int currentId = objectiveList.Count - 1;
 
             objectiveList[currentId].warningLight.GetComponentInChildren<Light>().range = 0.12f;
             objectiveList[currentId].warningLight.GetComponentInChildren<Light>().intensity = 2.46f;
-
-            if (debugMode) {
-                print("switch");
-
-            }
-
-            objectiveList[currentId].warningLevel = currentWarningLevel;
+                        
             EnableWarningLight(objectiveList[currentId], stats.warningLevels[stats.warningLevels.Count - currentWarningLevel]);
 
             createdObjectives++;
-            objectivesActivated++;
+            
             if (debugMode) {
 
                 print("activate");
@@ -231,8 +208,6 @@ public class ObjectiveManager : MonoBehaviour {
 
             StartCoroutine(SetObjectiveInfo(objectiveList[currentId]));
         }
-
-        StartCoroutine(WaitNextSet());
     }
 
     private void RemoveObjective(Objective objective) {
@@ -261,6 +236,21 @@ public class ObjectiveManager : MonoBehaviour {
     }
 
     public void PopulateList(Objective objective) {
+
+        switch (objective.interactableType) {
+            case InteractableType.none:
+                Debug.Log(string.Format("{0} does not have interactable type selected", objective.interactable.name));
+                break;
+            case InteractableType.button:
+                /* XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX HERE XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX */
+                break;
+            case InteractableType.lever:
+                break;
+            case InteractableType.valve:
+                break;
+            default:
+                break;
+        }
 
         allObjectivesList.Add(objective);
     }
@@ -372,6 +362,90 @@ public class ObjectiveManager : MonoBehaviour {
         objectiveList[0].interactable.gameObject.transform.Translate(Vector3.up);
 
         TimeManager.instance.StartTimer();
+    }
+
+    private void CreateObjectivesInSequence() {
+        if (heatManager.currentHeatLevel == 0) {
+            howManyObjectives = 1;
+        }
+        else {
+
+            howManyObjectives = heatManager.currentHeatLevel;
+
+            if (howManyObjectives > stats.maxObjectives) {
+                howManyObjectives = stats.maxObjectives;
+            }
+        }
+
+        /* If howManyObjectives is greater than all objectives count and smaller than -1 then set how many objectives to allObjectives count */
+        if (howManyObjectives >= allObjectivesList.Count || howManyObjectives <= -1) {
+            howManyObjectives = allObjectivesList.Count;
+        }
+
+        int createdObjectives = 0;
+        while (createdObjectives != howManyObjectives && !tooManyObjectives) {
+
+            if (objectiveList.Count == allObjectivesList.Count) {
+                tooManyObjectives = true;
+            }
+            else {
+                tooManyObjectives = false;
+            }
+
+            switch (objectivesActivated) {
+
+                case 1:
+                    currentWarningLevel--;
+                    break;
+                case 3:
+                    currentWarningLevel--;
+                    break;
+                case 6:
+                    currentWarningLevel = 3;
+                    objectivesActivated = 0;
+                    break;
+
+            }
+
+            int randomIndex = random.Next(0, allObjectivesList.Count);
+
+            while (objectiveList.Contains(allObjectivesList[randomIndex])) {
+
+                randomIndex = random.Next(0, allObjectivesList.Count);
+            }
+
+            objectiveList.Add(allObjectivesList[randomIndex]);
+
+            int currentId = objectiveList.Count - 1;
+
+            objectiveList[currentId].warningLight.GetComponentInChildren<Light>().range = 0.12f;
+            objectiveList[currentId].warningLight.GetComponentInChildren<Light>().intensity = 2.46f;
+
+            if (debugMode) {
+                print("switch");
+
+            }
+
+            objectiveList[currentId].warningLevel = currentWarningLevel;
+            EnableWarningLight(objectiveList[currentId], stats.warningLevels[stats.warningLevels.Count - currentWarningLevel]);
+
+            createdObjectives++;
+            objectivesActivated++;
+            if (debugMode) {
+
+                print("activate");
+            }
+
+            objectiveLifeTimes.Add(StartCoroutine(DisableObjective(objectiveList[currentId],
+                stats.warningLevels[stats.warningLevels.Count - currentWarningLevel], stats.objectiveLifeTime, lifeTimeId)));
+            objectiveList[currentId].lifeTimeId = lifeTimeId;
+            lifeTimeId++;
+
+
+            StartCoroutine(SetObjectiveInfo(objectiveList[currentId]));
+        }
+
+        StartCoroutine(WaitNextSet());
     }
 
     private IEnumerator FirstObjectiveSet() {

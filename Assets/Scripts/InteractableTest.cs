@@ -2,12 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum InteractableType {
+    none,
+    button,
+    lever,
+    valve
+}
+
 public class InteractableTest : MonoBehaviour {
 
     public GameObject interactable;
     public GameObject alarmLigtht;
     public ControlPanel controlPanel;
 
+    public InteractableType interactableType;
     public Objective objectiveInfo;
 
     // Use this for initialization
@@ -16,7 +24,7 @@ public class InteractableTest : MonoBehaviour {
         if (CheckForMissing()) return;
 
 
-        objectiveInfo = new Objective(controlPanel.id, interactable, alarmLigtht);
+        objectiveInfo = new Objective(controlPanel.id, interactable, interactableType, alarmLigtht);
         ObjectiveManager.instance.PopulateList(objectiveInfo);
 
     }
