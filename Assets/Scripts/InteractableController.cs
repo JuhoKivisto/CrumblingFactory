@@ -39,9 +39,18 @@ public class InteractableController : MonoBehaviour
     [HideUnless("button")]
     public float buttonPulseTime;
     #endregion
+
     #region Lever
+    public enum LeverDirection
+    {
+        up,
+        down
+    }
     [Header("Lever")]
     [Space]
+
+    [HideUnless("lever")]
+    public LeverDirection leverDirection;
     [HideUnless("lever")]
     public float SpringBreakDistance;
     [HideUnless("lever")]
@@ -56,6 +65,7 @@ public class InteractableController : MonoBehaviour
     [HideUnless("lever")]
     public float leverHeight;
     public Text LeverAngle;
+    
 
     #endregion
     #region Valve
@@ -203,6 +213,7 @@ public class InteractableController : MonoBehaviour
     public IEnumerator OnInteraction()
     {
 
+
         interacting = true;
 
         print("lever interaction");
@@ -227,7 +238,7 @@ public class InteractableController : MonoBehaviour
         float angle = 0;
         float previosAngle;
         int rounds = 0;
-        int wholeRounds = 360;
+        //int wholeRounds = 360;
 
         spring.spring = springForce;
         spring.damper = springDamper;
@@ -284,40 +295,7 @@ public class InteractableController : MonoBehaviour
                             handController.EnableHapticFeedBack(0.5f);
 
                         }
-                        startTime = timer;
-                        previosAngle = angle;
-
-                    }
-
-                    if (hinge.angle < 0)
-                    {
-                        angle += Mathf.DeltaAngle(angle, (hinge.angle));
-
-                    }
-                    else
-                    {
-                        angle += Mathf.DeltaAngle(angle, Mathf.Abs(hinge.angle));
-
-                    }
-
-                    if (angle > 104)
-                    {
-                        DetachSpringJoint();
-                        //GetComponent<Rigidbody>().isKinematic = true;
-                        yield break;
-                    }
-
-                    LeverAngle.text = angle.ToString();
-
-                    break;
-                #endregion
-
-                #region Switch Valve
-                case InteractableType.Valve:
-
-                    if (timer - startTime > 0.1)
-                    {
-                        if (Mathf.Abs(angle) > Mathf.Abs(previosAngle + 10))
+                        else if(Mathf.Abs(angle) < Mathf.Abs(previosAngle - 1))
                         {
                             handController.EnableHapticFeedBack(0.5f);
 
@@ -338,14 +316,71 @@ public class InteractableController : MonoBehaviour
 
                     }
 
+                    switch (leverDirection)
+                    {
+                        case LeverDirection.up:
+                            if (angle < hinge.limits.min)
+                            {
+                                DetachSpringJoint();
+                                GetComponent<Rigidbody>().isKinematic = true;
+                                leverDirection = LeverDirection.down;
+                                yield break;
+                            }
+                            break;
+                        case LeverDirection.down:
+                            if (angle > hinge.limits.max)
+                            {
+                                DetachSpringJoint();
+                                GetComponent<Rigidbody>().isKinematic = true;
+                                leverDirection = LeverDirection.up;
+                                yield break;
+                            }
+                            break;                       
+                    }
+                    
+                    //LeverAngle.text = angle.ToString();
+                   
+                    break;
+                #endregion
 
-                    valveAngle.text = angle.ToString();
+                #region Switch Valve
+                case InteractableType.Valve:
 
-                    if (Mathf.Abs(angle) > wholeRounds)
+                    if (timer - startTime > 0.1)
+                    {
+                        if (Mathf.Abs(angle) > Mathf.Abs(previosAngle + 5))
+                        {
+                            handController.EnableHapticFeedBack(0.5f);
+
+                        }
+                        //else if (Mathf.Abs(angle) < Mathf.Abs(previosAngle - 10))
+                        //{
+                        //    handController.EnableHapticFeedBack(0.5f);
+                        //}
+                        startTime = timer;
+                        previosAngle = angle;
+
+                    }
+
+                    if (hinge.angle < 0)
+                    {
+                        angle += Mathf.DeltaAngle(angle, (hinge.angle));
+
+                    }
+                    else
+                    {
+                        angle += Mathf.DeltaAngle(angle, Mathf.Abs(hinge.angle));
+
+                    }
+
+
+                    //valveAngle.text = angle.ToString();
+
+                    if (Mathf.Abs(angle) > 360)
                     {
 
                         rounds++;
-                        valveRounds.text = rounds.ToString();
+                        //valveRounds.text = rounds.ToString();
                         if (rounds == 1)
                         {
                             GetComponent<Rigidbody>().isKinematic = true;
