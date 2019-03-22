@@ -94,6 +94,8 @@ public class ObjectiveManager : MonoBehaviour {
     /// </summary>
     public int lifeTimeId = 0;
 
+    public int currentInteractingPanel;
+
     /// <summary>
     /// objectives that are currently activated
     /// </summary>
@@ -143,7 +145,7 @@ public class ObjectiveManager : MonoBehaviour {
     }
 
     void Update() {
-        NextObjectiveSet();
+        //NextObjectiveSet();
 
         if (objcomp) {
             CompleteReactorShutDown();
@@ -178,7 +180,7 @@ public class ObjectiveManager : MonoBehaviour {
 
             int randomIndex = random.Next(0, allObjectivesList.Count);
 
-            while (objectiveList.Contains(allObjectivesList[randomIndex])) {
+            while (objectiveList.Contains(allObjectivesList[randomIndex]) && objectiveList.Contains(allObjectivesList[randomIndex])) {
 
                 randomIndex = random.Next(0, allObjectivesList.Count);
             }
@@ -190,7 +192,8 @@ public class ObjectiveManager : MonoBehaviour {
 
             objectiveList[currentId].warningLight.GetComponentInChildren<Light>().range = 0.12f;
             objectiveList[currentId].warningLight.GetComponentInChildren<Light>().intensity = 2.46f;
-                        
+
+            currentWarningLevel = objectiveList[currentId].warningLevel;
             EnableWarningLight(objectiveList[currentId], stats.warningLevels[stats.warningLevels.Count - currentWarningLevel]);
 
             createdObjectives++;
@@ -208,6 +211,7 @@ public class ObjectiveManager : MonoBehaviour {
 
             StartCoroutine(SetObjectiveInfo(objectiveList[currentId]));
         }
+        StartCoroutine(WaitNextSet());
     }
 
     private void RemoveObjective(Objective objective) {
@@ -239,17 +243,17 @@ public class ObjectiveManager : MonoBehaviour {
 
         switch (objective.interactableType) {
             case InteractableType.none:
-                Debug.Log(string.Format("{0} does not have interactable type selected", objective.interactable.name));
+                Debug.LogError(string.Format("{0} does not have interactable type selected", objective.interactable.name));
                 break;
             case InteractableType.button:
-                /* XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX HERE XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX */
+                objective.warningLevel = stats.warningLevels[2].level;
                 break;
             case InteractableType.lever:
+                objective.warningLevel = stats.warningLevels[1].level;
                 break;
             case InteractableType.valve:
-                break;
-            default:
-                break;
+                objective.warningLevel = stats.warningLevels[0].level;
+                break;            
         }
 
         allObjectivesList.Add(objective);
@@ -267,11 +271,11 @@ public class ObjectiveManager : MonoBehaviour {
         */
         #endregion
 
+            CreateObjectives();
         // More objectives if heat is high enough
         if (nextSet) {
             if (debugMode) print("too long");
 
-            CreateObjectives();
             nextSet = false;
         }
     }
@@ -287,6 +291,8 @@ public class ObjectiveManager : MonoBehaviour {
             //objectiveLifeTimes.RemoveAt(objective.lifeTimeId);
             StartCoroutine(DisableObjective(objective, stats.warningLevels[stats.warningLevels.Count - objective.warningLevel], 0, objective.lifeTimeId));
             objectivesDone++;
+            currentInteractingPanel = objective.controlPanelId;
+
             if (CheckForReactorRoomOpening() && !isReactorRoomOpen) {
                 reactorRoomController.OpenReactorRoomDoors();
             }
@@ -461,7 +467,7 @@ public class ObjectiveManager : MonoBehaviour {
         print("Wait next set");
         yield return new WaitForSeconds(stats.waitBeforeNextSet);
         //yield return null;
-        nextSet = true;
+        NextObjectiveSet();
         //RemoveObjectives();
 
     }
