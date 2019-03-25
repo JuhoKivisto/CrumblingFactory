@@ -9,7 +9,7 @@ public enum InteractableType {
     valve
 }
 
-public class InteractableTest : MonoBehaviour {
+public class Interactable : MonoBehaviour {
 
     public GameObject interactable;
     public GameObject alarmLigtht;

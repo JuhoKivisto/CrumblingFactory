@@ -555,7 +555,7 @@ public class ObjectiveManager : MonoBehaviour {
 
     private IEnumerator SetObjectiveInfo(Objective objective) {
         print(objective.interactable);
-        objective.interactable.GetComponentInParent<InteractableTest>().objectiveInfo = objective;
+        objective.interactable.GetComponentInParent<Interactable>().objectiveInfo = objective;
         yield return null;
     }
 
