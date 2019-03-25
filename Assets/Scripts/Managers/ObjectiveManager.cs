@@ -180,7 +180,7 @@ public class ObjectiveManager : MonoBehaviour {
 
             int randomIndex = random.Next(0, allObjectivesList.Count);
 
-            while (objectiveList.Contains(allObjectivesList[randomIndex]) && objectiveList.Contains(allObjectivesList[randomIndex])) {
+            while (objectiveList.Contains(allObjectivesList[randomIndex]) || allObjectivesList[randomIndex].controlPanelId == currentInteractingPanel) {
 
                 randomIndex = random.Next(0, allObjectivesList.Count);
             }
