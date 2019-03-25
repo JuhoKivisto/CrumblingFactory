@@ -8,6 +8,11 @@ public class InteractableController : MonoBehaviour
 
     public enum InteractableType { None, Button, Lever, Valve };
 
+    public enum LeverDirection
+    {
+        up,
+        down
+    }
     public InteractableType interactableType;
 
     private Controller handController;
@@ -40,15 +45,16 @@ public class InteractableController : MonoBehaviour
     public float buttonPulseTime;
     #endregion
 
+
     #region Lever
-    public enum LeverDirection
-    {
-        up,
-        down
-    }
+
+   
     [Header("Lever")]
     [Space]
-
+    [HideUnless("lever")]
+    public Vector3 upAnchor;
+    [HideUnless("lever")]
+    public Vector3 downAnchor;
     [HideUnless("lever")]
     public LeverDirection leverDirection;
     [HideUnless("lever")]
@@ -72,16 +78,16 @@ public class InteractableController : MonoBehaviour
     [Header("Valve")]
     [Space]
 
-    [Range(-10f, 10f)]
-    public float distanceX;
-
-    [Range(-10f, 10f)]
-    public float distanceZ;
-
+    [HideUnless("valve")]
     public Text valveAngle;
+    [HideUnless("valve")]
     public Text valveRounds;
 
+    [HideUnless("valve")]
     public GameObject valveObj;
+
+    [HideUnless("valve")]
+    public Vector3 valveAnchor;
     #endregion
 
     [Header("Lever and valve")]
@@ -91,6 +97,16 @@ public class InteractableController : MonoBehaviour
 
     [Range(0f, 100f)]
     public float springDamper;
+
+    [Range(-10f, 10f)]
+    public float distanceX;
+
+    [Range(-10f, 10f)]
+    public float distanceY;
+
+    [Range(-10f, 10f)]
+    public float distanceZ;
+
     public HingeJoint hinge;
     public bool interacting;
     public SpringJoint spring;
@@ -228,7 +244,7 @@ public class InteractableController : MonoBehaviour
         else
         {
             yield break;
-        }
+        }        
 
         print("Trigger pressed" + hand.GetComponent<SteamVR_TrackedController>().triggerPressed);
 
@@ -242,7 +258,26 @@ public class InteractableController : MonoBehaviour
 
         spring.spring = springForce;
         spring.damper = springDamper;
-        spring.connectedAnchor = new Vector3(distanceX, 0, distanceZ);
+        //spring.connectedAnchor = new Vector3(distanceX, distanceY, distanceZ);
+
+        switch (interactableType)
+        {
+            case InteractableType.Lever:
+                switch (leverDirection)
+                {
+                    case LeverDirection.up:
+                        spring.connectedAnchor = upAnchor;
+                        break;
+                    case LeverDirection.down:
+                        spring.connectedAnchor = downAnchor;
+                        break;                  
+                }
+                break;
+            case InteractableType.Valve:
+                spring.connectedAnchor = valveAnchor;
+                break;
+
+        }
 
         previosAngle = angle;
         while (hand.GetComponent<SteamVR_TrackedController>().triggerPressed)
@@ -265,9 +300,9 @@ public class InteractableController : MonoBehaviour
 
 
                     //spring.anchor = transform.InverseTransformPoint(hand.GetComponent<SteamVR_TrackedObject>().transform.position);
-                    spring.connectedAnchor = Vector3.up * leverHeight;
+                    //spring.connectedAnchor = Vector3.up * leverHeight;
 
-                    print(Mathf.Abs(Mathf.DeltaAngle(hinge.angle, startAngle)));
+                    //print(Mathf.Abs(Mathf.DeltaAngle(hinge.angle, startAngle)));
 
                     //if (Mathf.Abs(Mathf.DeltaAngle(hinge.angle, startAngle)) > pulseIncreaser)
                     //{
@@ -322,7 +357,7 @@ public class InteractableController : MonoBehaviour
                             if (angle < hinge.limits.min)
                             {
                                 DetachSpringJoint();
-                                GetComponent<Rigidbody>().isKinematic = true;
+                                GetComponent<Rigidbody>().isKinematic = true;                                
                                 leverDirection = LeverDirection.down;
                                 yield break;
                             }
@@ -331,7 +366,7 @@ public class InteractableController : MonoBehaviour
                             if (angle > hinge.limits.max)
                             {
                                 DetachSpringJoint();
-                                GetComponent<Rigidbody>().isKinematic = true;
+                                GetComponent<Rigidbody>().isKinematic = true;                                                    
                                 leverDirection = LeverDirection.up;
                                 yield break;
                             }
