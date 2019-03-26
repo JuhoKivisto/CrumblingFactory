@@ -4,7 +4,12 @@
 TagManager:
   serializedVersion: 2
   tags:
+  - button
+  - trigger
+  - hand
   - Ground
+  - Lever
+  - Valve
   layers:
   - Default
   - TransparentFX
