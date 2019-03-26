@@ -60,6 +60,7 @@ public class Stats : MonoBehaviour {
     [Space]
 
     [Header("----------TIME----------")]
+    [Space]
     public float gameLenght;
     public AnimationCurve heatCurve;
     public AnimationCurve heatCurve2;
@@ -70,12 +71,14 @@ public class Stats : MonoBehaviour {
     [Space]
 
     [Header("----------ERROR----------")]
+    [Space]
     [Range(2, 10)]
     public int[] errorThresholds;
 
     [Space]
 
     [Header("----------OBJECTTIVE----------")]
+    [Space]
     [Range(0, 10)]
     public int maxObjectives;
 

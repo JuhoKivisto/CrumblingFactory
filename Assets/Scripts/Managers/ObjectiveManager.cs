@@ -19,7 +19,7 @@ public class Objective {
 
     /* 1 - 3 */
     [ReadOnly]
-    public int warningLevel;
+    public WarningLevel warningLevel;
 
     public Objective(int cPId, GameObject intact, InteractableType intactType, GameObject wLight) {
 
@@ -28,8 +28,7 @@ public class Objective {
         warningLight = wLight;
         controlPanelId = cPId;
         done = false;
-        lifeTimeId = -1;
-        warningLevel = -1;
+        lifeTimeId = -1;        
 
     }
     public Objective(int cPId, GameObject intact) {
@@ -122,7 +121,11 @@ public class ObjectiveManager : MonoBehaviour {
 
     private Material material;
 
-    private Color color;   
+    private Color color;
+
+    public float warningLightRange;
+
+    public float warningLightIntensity;
 
     void Awake() {
 
@@ -194,11 +197,10 @@ public class ObjectiveManager : MonoBehaviour {
             /* Current objective id on the objectiveList */
             int currentId = objectiveList.Count - 1;
 
-            objectiveList[currentId].warningLight.GetComponentInChildren<Light>().range = 0.12f;
-            objectiveList[currentId].warningLight.GetComponentInChildren<Light>().intensity = 2.46f;
-
-            currentWarningLevel = objectiveList[currentId].warningLevel;
-            EnableWarningLight(objectiveList[currentId], stats.warningLevels[stats.warningLevels.Count - currentWarningLevel]);
+            //objectiveList[currentId].warningLight.GetComponentInChildren<Light>().range = 0.12f;
+            //objectiveList[currentId].warningLight.GetComponentInChildren<Light>().intensity = 2.46f;
+            
+            EnableWarningLight(objectiveList[currentId], objectiveList[currentId].warningLevel );
 
             createdObjectives++;
             
@@ -208,7 +210,7 @@ public class ObjectiveManager : MonoBehaviour {
             }
 
             objectiveLifeTimes.Add(StartCoroutine(DisableObjective(objectiveList[currentId],
-                stats.warningLevels[stats.warningLevels.Count - currentWarningLevel], stats.objectiveLifeTime, lifeTimeId)));
+                objectiveList[currentId].warningLevel, stats.objectiveLifeTime, lifeTimeId)));
             objectiveList[currentId].lifeTimeId = lifeTimeId;
             lifeTimeId++;
 
@@ -245,22 +247,28 @@ public class ObjectiveManager : MonoBehaviour {
 
     public void PopulateList(Objective objective) {
 
-        switch (objective.interactableType) {
+        InitObjective(objective);
+
+        allObjectivesList.Add(objective);
+    }
+
+    private void InitObjective(Objective objective)
+    {
+        switch (objective.interactableType)
+        {
             case InteractableType.none:
                 Debug.LogError(string.Format("{0} does not have interactable type selected", objective.interactable.name));
                 break;
             case InteractableType.button:
-                objective.warningLevel = stats.warningLevels[2].level;
+                objective.warningLevel = stats.warningLevels[2];
                 break;
             case InteractableType.lever:
-                objective.warningLevel = stats.warningLevels[1].level;
+                objective.warningLevel = stats.warningLevels[1];
                 break;
             case InteractableType.valve:
-                objective.warningLevel = stats.warningLevels[0].level;
-                break;            
+                objective.warningLevel = stats.warningLevels[0];
+                break;
         }
-
-        allObjectivesList.Add(objective);
     }
 
     public void NextObjectiveSet() {
@@ -290,12 +298,13 @@ public class ObjectiveManager : MonoBehaviour {
         if (objectiveList.Contains(objective)) {
             print("objective DONE!!!");
             objcomp = false;
-            heatManager.ActiveChangeHeating(objective, stats.changeHeatingFor, true);
+            heatManager.ActiveChangeHeating(objective, stats.changeHeatingFor, false);
             StopCoroutine(objectiveLifeTimes[objective.lifeTimeId]);
             //objectiveLifeTimes.RemoveAt(objective.lifeTimeId);
-            StartCoroutine(DisableObjective(objective, stats.warningLevels[stats.warningLevels.Count - objective.warningLevel], 0, objective.lifeTimeId));
+            objective.warningLevel = stats.warningLevels[3];
+            StartCoroutine(DisableObjective(objective, objective.warningLevel, 0, objective.lifeTimeId));
             objectivesDone++;
-            currentInteractingPanel = objective.controlPanelId;
+            //currentInteractingPanel = objective.controlPanelId;
 
             if (CheckForReactorRoomOpening() && !isReactorRoomOpen) {
                 reactorRoomController.OpenReactorRoomDoors();
@@ -305,7 +314,7 @@ public class ObjectiveManager : MonoBehaviour {
     }
 
     public void FailureObjective(Objective objective) {
-        heatManager.ActiveChangeHeating(objective, stats.changeHeatingFor, false);
+        heatManager.ActiveChangeHeating(objective, stats.changeHeatingFor, true);
     }
 
     public void CompleteReactorShutDown() {
@@ -436,7 +445,7 @@ public class ObjectiveManager : MonoBehaviour {
 
             }
 
-            objectiveList[currentId].warningLevel = currentWarningLevel;
+            //objectiveList[currentId].warningLevel = currentWarningLevel;
             EnableWarningLight(objectiveList[currentId], stats.warningLevels[stats.warningLevels.Count - currentWarningLevel]);
 
             createdObjectives++;
@@ -468,7 +477,10 @@ public class ObjectiveManager : MonoBehaviour {
     }
 
     private IEnumerator WaitNextSet() {
+        if (debugMode) {
+
         print("Wait next set");
+        }
         yield return new WaitForSeconds(stats.waitBeforeNextSet);
         //yield return null;
         NextObjectiveSet();
@@ -481,7 +493,8 @@ public class ObjectiveManager : MonoBehaviour {
         material = Instantiate(objective.warningLight.GetComponentInChildren<MeshRenderer>().material);
         objective.warningLight.GetComponentInChildren<MeshRenderer>().material = material;
 
-        objective.warningLight.GetComponentInChildren<Light>().intensity = 2.46f;
+        objective.warningLight.GetComponentInChildren<Light>().range = warningLightRange;
+        objective.warningLight.GetComponentInChildren<Light>().intensity = warningLightIntensity;        
         material.SetColor("_EmissionColor", warningLvl.color * 1);
 
         material.EnableKeyword("_EMISSION");
@@ -523,6 +536,8 @@ public class ObjectiveManager : MonoBehaviour {
 
         if (duration == 0) {
 
+            EnableWarningLight(objective, currentWarningLvl);
+            yield return new WaitForSeconds(0.2f);
         }
         else {
 
@@ -552,9 +567,12 @@ public class ObjectiveManager : MonoBehaviour {
         //objectiveLifeTimes.RemoveAt(lifeTimeId);
         //FailureObjective(objective);
 
+        if (debugMode) {
+
         print("<color=blue>time over</color>");
         print("<color=yellow>time: </color>" + time);
-
+        }
+        InitObjective(objective);
     }
 
     private IEnumerator SetObjectiveInfo(Objective objective) {

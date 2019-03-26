@@ -12,7 +12,7 @@ public enum InteractableType {
 public class Interactable : MonoBehaviour {
 
     public GameObject interactable;
-    public GameObject alarmLigtht;
+    public GameObject warningLight;
     public ControlPanel controlPanel;
 
     public InteractableType interactableType;
@@ -24,7 +24,7 @@ public class Interactable : MonoBehaviour {
         if (CheckForMissing()) return;
 
 
-        objectiveInfo = new Objective(controlPanel.id, interactable, interactableType, alarmLigtht);
+        objectiveInfo = new Objective(controlPanel.id, interactable, interactableType, warningLight);
         ObjectiveManager.instance.PopulateList(objectiveInfo);
 
     }
@@ -42,7 +42,7 @@ public class Interactable : MonoBehaviour {
             Debug.LogError(string.Format("Gameobject '{0}' has no reference of GameObject 'interactable', attach 'Interactable' GameObject reference to it", transform.GetChild(0).name), gameObject);
             missing = true;
         }
-        if (alarmLigtht == null) {
+        if (warningLight == null) {
             Debug.LogError(string.Format("Gameobject '{0}' has no reference of GameObject 'alarmLight', attach 'AlarmLight' GameObject reference to it", transform.GetChild(1).name), gameObject);
             missing = true;
         }

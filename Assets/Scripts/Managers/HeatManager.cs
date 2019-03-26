@@ -107,7 +107,7 @@ public class HeatManager : MonoBehaviour {
         if (!increacing) {
 
             for (int i = 0; i < stats.warningLevels.Count; i++) {
-                if (stats.warningLevels[i].level == objective.warningLevel) {
+                if (stats.warningLevels[i].level == objective.warningLevel.level) {
                     heatMultiplier = -stats.warningLevels[i].heatMultiplier;
                 }
             }
