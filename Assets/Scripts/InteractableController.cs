@@ -338,6 +338,7 @@ public class InteractableController : MonoBehaviour {
                                 DetachSpringJoint();
                                 GetComponent<Rigidbody>().isKinematic = true;
                                 leverDirection = LeverDirection.down;
+                                ObjectiveManager.instance.CompleteObjective(buttonObj.GetComponentInParent<Interactable>().objectiveInfo);
                                 yield break;
                             }
                             break;
@@ -346,6 +347,7 @@ public class InteractableController : MonoBehaviour {
                                 DetachSpringJoint();
                                 GetComponent<Rigidbody>().isKinematic = true;
                                 leverDirection = LeverDirection.up;
+                                ObjectiveManager.instance.CompleteObjective(buttonObj.GetComponentInParent<Interactable>().objectiveInfo);
                                 yield break;
                             }
                             break;
