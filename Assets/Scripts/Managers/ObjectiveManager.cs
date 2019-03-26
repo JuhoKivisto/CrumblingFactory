@@ -173,6 +173,10 @@ public class ObjectiveManager : MonoBehaviour {
         if (howManyObjectives >= allObjectivesList.Count || howManyObjectives <= -1) {
             howManyObjectives = allObjectivesList.Count;
         }
+        int spacesLeft = allObjectivesList.Count - objectiveList.Count;
+        if (howManyObjectives > spacesLeft) {
+            howManyObjectives = spacesLeft;
+        }
 
         int createdObjectives = 0;
 
