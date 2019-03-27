@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class InteractableController : MonoBehaviour
-{
+public class InteractableController : MonoBehaviour {
 
     public enum InteractableType { None, Button, Lever, Valve };
 
-    public enum LeverDirection
-    {
+    public enum LeverDirection {
         up,
         down
     }
@@ -24,8 +22,7 @@ public class InteractableController : MonoBehaviour
     #region Button
     [Header("Button")]
     [Space]
-    [HideUnless("button")]
-    public GameObject buttonObj;
+
     [HideUnless("button")]
     public GameObject triggerDown;
     [HideUnless("button")]
@@ -43,12 +40,16 @@ public class InteractableController : MonoBehaviour
     public float buttonHapticPulseInterval;
     [HideUnless("button")]
     public float buttonPulseTime;
+    [HideUnless("button")]
+    public float buttonUpForce;
+    [HideUnless("button")]
+    public float buttonDownForce;
     #endregion
 
 
     #region Lever
 
-   
+
     [Header("Lever")]
     [Space]
     [HideUnless("lever")]
@@ -71,7 +72,7 @@ public class InteractableController : MonoBehaviour
     [HideUnless("lever")]
     public float leverHeight;
     public Text LeverAngle;
-    
+
 
     #endregion
     #region Valve
@@ -82,9 +83,6 @@ public class InteractableController : MonoBehaviour
     public Text valveAngle;
     [HideUnless("valve")]
     public Text valveRounds;
-
-    [HideUnless("valve")]
-    public GameObject valveObj;
 
     [HideUnless("valve")]
     public Vector3 valveAnchor;
@@ -115,81 +113,61 @@ public class InteractableController : MonoBehaviour
     public string tag;
 
     [Range(0f, 0.5f)]
-    public float pulseIntervall;
+    public float pulseInterval;
     [Range(0f, 4f)]
     public float pulseStrengh;
     [Range(0f, 2f)]
     public float pulseTime;
 
-    // Use this for initialization
-    void Start()
-    {
-        hinge = GetComponent<HingeJoint>();
+    public GameObject interactable;
 
-        startAngle = hinge.limits.min;
-        endAngle = hinge.limits.max;
+    // Use this for initialization
+    void Start() {
+        switch (interactableType) {
+            case InteractableType.None:
+                break;
+            case InteractableType.Button:
+                break;
+
+            default:
+                hinge = GetComponent<HingeJoint>();
+
+                startAngle = hinge.limits.min;
+                endAngle = hinge.limits.max;
+                break;
+        }
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        if (interactableType == InteractableType.Button)
-        {
+    void Update() {
+        if (interactableType == InteractableType.Button) {
 
         }
     }
 
-    private void OnTriggerStay(Collider other)
-    {
+    private void OnTriggerStay(Collider other) {
 
-        if (GetComponent<Rigidbody>().isKinematic == false)
-        {
+        if (GetComponent<Rigidbody>().isKinematic == false) {
 
-            if (other.tag == "hand" && !interacting)
-            {
+            if ((other.tag == "hand" || other.tag == tag) && !interacting) {
                 //GetComponent<Collider>().enabled = false;
                 hand = other.gameObject;
                 handController = hand.GetComponent<Controller>();
 
-                switch (interactableType)
-                {
+                switch (interactableType) {
                     case InteractableType.None:
                         print(string.Format("<color=orange>No interactable type selected on {0}</color>", gameObject));
                         break;
-                    case InteractableType.Button:
 
-                        if (active && other == triggerDown.GetComponent<Collider>() && other.tag == tag)
-                        {
-                            print("Button down");
-                            buttonObj.GetComponent<Rigidbody>().AddForce(transform.up * 20);
-                            active = false;
-                            StartCoroutine(OnButtonInteraction());
-                            ObjectiveManager.instance.CompleteObjective(buttonObj.GetComponentInParent<InteractableTest>().objectiveInfo);
-                        }
-                        if (!active && other == triggerUp.GetComponent<Collider>() && other.tag == tag)
-                        {
-                            active = true;
-                            print("Button up");
-                        }
-                        if (other.tag == InteractableManager.instance.handTag && active)
-                        {
-                            print("Add force");
-                            buttonObj.GetComponent<Rigidbody>().AddForce(-transform.up * 50);
-                            //active = false;
-                        }
-
-                        break;
                     case InteractableType.Lever:
 
                         //print("switch");
 
 
-                        if (other.tag == "hand" && !interacting)
-                        {
+                        if (other.tag == "hand" && !interacting) {
                             //GetComponent<Collider>().enabled = false;
                             hand = other.gameObject;
-                            if (hand.GetComponent<SteamVR_TrackedController>().triggerPressed)
-                            {
+                            if (hand.GetComponent<SteamVR_TrackedController>().triggerPressed) {
 
                                 print("if " + other.gameObject);
                                 handController = hand.GetComponent<Controller>();
@@ -202,12 +180,10 @@ public class InteractableController : MonoBehaviour
                         break;
                     case InteractableType.Valve:
 
-                        if (other.tag == "hand" && !interacting && GetComponent<Rigidbody>().isKinematic == false)
-                        {
+                        if (other.tag == "hand" && !interacting && GetComponent<Rigidbody>().isKinematic == false) {
                             //GetComponent<Collider>().enabled = false;
                             hand = other.gameObject;
-                            if (hand.GetComponent<SteamVR_TrackedController>().triggerPressed)
-                            {
+                            if (hand.GetComponent<SteamVR_TrackedController>().triggerPressed) {
 
                                 print("if " + other.gameObject);
                                 handController = hand.GetComponent<Controller>();
@@ -223,11 +199,38 @@ public class InteractableController : MonoBehaviour
                 }
 
             }
-        }       
+        }
+
     }
 
-    public IEnumerator OnInteraction()
-    {
+    private void OnTriggerEnter(Collider other) {
+
+        switch (interactableType) {
+            case InteractableType.None:
+                print(string.Format("<color=orange>No interactable type selected on {0}</color>", gameObject));
+                break;
+            case InteractableType.Button:
+                if (active && other == triggerDown.GetComponent<Collider>() && other.tag == tag) {
+                    print("Button down");
+                    interactable.GetComponent<Rigidbody>().AddForce(transform.up * buttonUpForce);
+                    active = false;
+                    StartCoroutine(OnInteraction());
+                    //ObjectiveManager.instance.CompleteObjective(interactable.GetComponentInParent<Interactable>().objectiveInfo);
+                }
+                if (!active && other == triggerUp.GetComponent<Collider>() && other.tag == tag) {
+                    active = true;
+                    print("Button up");
+                }
+                if (other.tag == InteractableManager.instance.handTag && active) {
+                    print("Add force");
+                    interactable.GetComponent<Rigidbody>().AddForce(-transform.up * buttonDownForce);
+                    //active = false;
+                }
+                break;
+        }
+    }
+
+    public IEnumerator OnInteraction() {
 
 
         interacting = true;
@@ -236,15 +239,13 @@ public class InteractableController : MonoBehaviour
 
         spring = hand.GetComponent<SpringJoint>();
 
-        if (spring.connectedBody == null)
-        {
+        if (spring.connectedBody == null) {
             spring.connectedBody = GetComponent<Rigidbody>();
 
         }
-        else
-        {
+        else {
             yield break;
-        }        
+        }
 
         print("Trigger pressed" + hand.GetComponent<SteamVR_TrackedController>().triggerPressed);
 
@@ -260,17 +261,19 @@ public class InteractableController : MonoBehaviour
         spring.damper = springDamper;
         //spring.connectedAnchor = new Vector3(distanceX, distanceY, distanceZ);
 
-        switch (interactableType)
-        {
+        switch (interactableType) {
+            case InteractableType.Button:
+                handController.EnableHapticFeedBackLoop(buttonHapticPulseInterval, 4f, buttonPulseTime);
+                break;
+
             case InteractableType.Lever:
-                switch (leverDirection)
-                {
+                switch (leverDirection) {
                     case LeverDirection.up:
                         spring.connectedAnchor = upAnchor;
                         break;
                     case LeverDirection.down:
                         spring.connectedAnchor = downAnchor;
-                        break;                  
+                        break;
                 }
                 break;
             case InteractableType.Valve:
@@ -280,20 +283,16 @@ public class InteractableController : MonoBehaviour
         }
 
         previosAngle = angle;
-        while (hand.GetComponent<SteamVR_TrackedController>().triggerPressed)
-        {
+        while (hand.GetComponent<SteamVR_TrackedController>().triggerPressed) {
 
             Debug.DrawRay(spring.transform.TransformPoint(spring.anchor), Vector3.up, Color.red);
             Debug.DrawRay(spring.transform.TransformPoint(spring.connectedAnchor), Vector3.up, Color.red);
 
 
-            switch (interactableType)
-            {
+            switch (interactableType) {
                 case InteractableType.None:
                     break;
-                case InteractableType.Button:
-                    handController.EnableHapticFeedBackLoop(buttonHapticPulseInterval, 4f, buttonPulseTime);
-                    break;
+
                 #region Switch Lever
                 case InteractableType.Lever:
 
@@ -323,15 +322,12 @@ public class InteractableController : MonoBehaviour
 
                     //}
 
-                    if (timer - startTime > 0.1)
-                    {
-                        if (Mathf.Abs(angle) > Mathf.Abs(previosAngle + 1))
-                        {
+                    if (timer - startTime > 0.1) {
+                        if (Mathf.Abs(angle) > Mathf.Abs(previosAngle + 1)) {
                             handController.EnableHapticFeedBack(0.5f);
 
                         }
-                        else if(Mathf.Abs(angle) < Mathf.Abs(previosAngle - 1))
-                        {
+                        else if (Mathf.Abs(angle) < Mathf.Abs(previosAngle - 1)) {
                             handController.EnableHapticFeedBack(0.5f);
 
                         }
@@ -340,51 +336,46 @@ public class InteractableController : MonoBehaviour
 
                     }
 
-                    if (hinge.angle < 0)
-                    {
+                    if (hinge.angle < 0) {
                         angle += Mathf.DeltaAngle(angle, (hinge.angle));
 
                     }
-                    else
-                    {
+                    else {
                         angle += Mathf.DeltaAngle(angle, Mathf.Abs(hinge.angle));
 
                     }
 
-                    switch (leverDirection)
-                    {
+                    switch (leverDirection) {
                         case LeverDirection.up:
-                            if (angle < hinge.limits.min)
-                            {
-                                DetachSpringJoint();
-                                GetComponent<Rigidbody>().isKinematic = true;                                
+                            if (angle > hinge.limits.max) {
+                                GetComponent<Rigidbody>().isKinematic = true;
+                                //ObjectiveManager.instance.CompleteObjective(interactable.GetComponentInParent<Interactable>().objectiveInfo);
                                 leverDirection = LeverDirection.down;
+                                DetachSpringJoint();
                                 yield break;
                             }
                             break;
                         case LeverDirection.down:
-                            if (angle > hinge.limits.max)
-                            {
-                                DetachSpringJoint();
-                                GetComponent<Rigidbody>().isKinematic = true;                                                    
+                            if (angle < hinge.limits.min) {
+                                GetComponent<Rigidbody>().isKinematic = true;
+                                //ObjectiveManager.instance.CompleteObjective(interactable.GetComponentInParent<Interactable>().objectiveInfo);
                                 leverDirection = LeverDirection.up;
+                                DetachSpringJoint();
                                 yield break;
                             }
-                            break;                       
+                            break;
                     }
-                    
+
                     //LeverAngle.text = angle.ToString();
-                   
+
                     break;
                 #endregion
 
                 #region Switch Valve
                 case InteractableType.Valve:
 
-                    if (timer - startTime > 0.1)
-                    {
-                        if (Mathf.Abs(angle) > Mathf.Abs(previosAngle + 5))
-                        {
+                    if (timer - startTime > 0.1) {
+                        if (Mathf.Abs(angle) > Mathf.Abs(previosAngle + 5)) {
                             handController.EnableHapticFeedBack(0.5f);
 
                         }
@@ -397,13 +388,11 @@ public class InteractableController : MonoBehaviour
 
                     }
 
-                    if (hinge.angle < 0)
-                    {
+                    if (hinge.angle < 0) {
                         angle += Mathf.DeltaAngle(angle, (hinge.angle));
 
                     }
-                    else
-                    {
+                    else {
                         angle += Mathf.DeltaAngle(angle, Mathf.Abs(hinge.angle));
 
                     }
@@ -411,16 +400,14 @@ public class InteractableController : MonoBehaviour
 
                     //valveAngle.text = angle.ToString();
 
-                    if (Mathf.Abs(angle) > 360)
-                    {
+                    if (Mathf.Abs(angle) > 360) {
 
                         rounds++;
                         //valveRounds.text = rounds.ToString();
-                        if (rounds == 1)
-                        {
+                        if (rounds == 1) {
                             GetComponent<Rigidbody>().isKinematic = true;
+                            //ObjectiveManager.instance.CompleteObjective(interactable.GetComponentInParent<Interactable>().objectiveInfo);
                             DetachSpringJoint();
-                            ObjectiveManager.instance.CompleteObjective(valveObj.GetComponentInParent<InteractableTest>().objectiveInfo);
                             yield break;
                         }
                     }
@@ -442,34 +429,30 @@ public class InteractableController : MonoBehaviour
 
     }
 
-    public IEnumerator OnButtonInteraction()
-    {
-        interacting = true;
+    //public IEnumerator OnButtonInteraction() {
+    //    interacting = true;
 
 
-        float timer = 0;
-        float startTime = 0;
-        while (timer < buttonPulseTime)
-        {
-            print("Button pulse");
+    //    float timer = 0;
+    //    float startTime = 0;
+    //    while (timer < buttonPulseTime) {
+    //        print("Button pulse");
 
 
-            if (timer - startTime > buttonHapticPulseInterval)
-            {
-                handController.EnableHapticFeedBack();
-                startTime = timer;
+    //        if (timer - startTime > buttonHapticPulseInterval) {
+    //            handController.EnableHapticFeedBack();
+    //            startTime = timer;
 
-                //print("Haptic start " + startTime + " current " + timer);
-            }
+    //            //print("Haptic start " + startTime + " current " + timer);
+    //        }
 
-            timer += Time.deltaTime;
-            yield return null;
-        }
-    }
+    //        timer += Time.deltaTime;
+    //        yield return null;
+    //    }
+    //}
 
-    private void DetachSpringJoint()
-    {
-        handController.EnableHapticFeedBackLoop(pulseIntervall, pulseStrengh, pulseTime);
+    private void DetachSpringJoint() {
+        handController.EnableHapticFeedBackLoop(pulseInterval, pulseStrengh, pulseTime);
         hand.GetComponent<SpringJoint>().connectedBody = null;
         //GetComponent<Collider>().enabled = true;
         print("Enabled col");
@@ -478,8 +461,7 @@ public class InteractableController : MonoBehaviour
 
     }
 
-    private IEnumerator ReActive()
-    {
+    private IEnumerator ReActive() {
         yield return new WaitForSeconds(2.5f);
         GetComponent<Rigidbody>().isKinematic = false;
 

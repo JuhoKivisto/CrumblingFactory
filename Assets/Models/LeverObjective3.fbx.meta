@@ -1,32 +1,41 @@
 fileFormatVersion: 2
-guid: 7315323007dda9549a42d9b2e6a0d682
+guid: a8f6edca020a25f4eb3f31cb87d0f6d1
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
-    100000: Button4.001
-    100002: //RootNode
-    100004: LeverHolder.001
-    100006: WarningLight.002
-    100008: WarningLight.003
-    400000: Button4.001
-    400002: //RootNode
-    400004: LeverHolder.001
-    400006: WarningLight.002
-    400008: WarningLight.003
+    100000: Lever
+    100002: LeverHolder
+    100004: LeverObjective
+    100006: //RootNode
+    100008: WarningLight
+    100010: WarningLightHolder
+    400000: Lever
+    400002: LeverHolder
+    400004: LeverObjective
+    400006: //RootNode
+    400008: WarningLight
+    400010: WarningLightHolder
     2100000: No Name
     2100002: Material.006
-    2300000: Button4.001
-    2300002: LeverHolder.001
-    2300004: WarningLight.002
-    2300006: WarningLight.003
-    3300000: Button4.001
-    3300002: LeverHolder.001
-    3300004: WarningLight.002
-    3300006: WarningLight.003
-    4300000: LeverHolder.001
-    4300002: WarningLight.002
-    4300004: WarningLight.003
-    4300006: Button4.001
+    2300000: Lever
+    2300002: LeverHolder
+    2300004: LeverObjective
+    2300006: //RootNode
+    2300008: WarningLight
+    2300010: WarningLightHolder
+    3300000: Lever
+    3300002: LeverHolder
+    3300004: LeverObjective
+    3300006: //RootNode
+    3300008: WarningLight
+    3300010: WarningLightHolder
+    4300000: LeverObjectiveRotationHolder
+    4300002: LeverObjective
+    4300004: LeverHolder
+    4300006: Lever
+    4300008: WarningLightHolder
+    4300010: WarningLight
+    2186277476908879412: ImportLogs
   externalObjects: {}
   materials:
     importMaterials: 1

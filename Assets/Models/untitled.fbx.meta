@@ -1,91 +1,14 @@
 fileFormatVersion: 2
-guid: a28358a3bb588b84897f86d5dc3de5c5
+guid: 163d2db1839bb1046b4c9f6c8193439c
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
-    100000: Button
-    100002: Button2
-    100004: Button3
-    100006: Button4
-    100008: Button5
-    100010: Button6
-    100012: ButtonHolder5
-    100014: ButtonHolder6
-    100016: //RootNode
-    100018: Meter
-    100020: Meter2
-    100022: Switch
-    100024: SwitchButton
-    100026: Valve
-    100028: WarningLight
-    100030: WarningLight.001
-    400000: Button
-    400002: Button2
-    400004: Button3
-    400006: Button4
-    400008: Button5
-    400010: Button6
-    400012: ButtonHolder5
-    400014: ButtonHolder6
-    400016: //RootNode
-    400018: Meter
-    400020: Meter2
-    400022: Switch
-    400024: SwitchButton
-    400026: Valve
-    400028: WarningLight
-    400030: WarningLight.001
-    2100000: Material.001
-    2100002: No Name
-    2100004: Material.006
-    2300000: Button
-    2300002: Button2
-    2300004: Button3
-    2300006: Button4
-    2300008: Button5
-    2300010: Button6
-    2300012: ButtonHolder5
-    2300014: ButtonHolder6
-    2300016: //RootNode
-    2300018: Meter
-    2300020: Meter2
-    2300022: Switch
-    2300024: SwitchButton
-    2300026: Valve
-    2300028: WarningLight
-    2300030: WarningLight.001
-    3300000: Button
-    3300002: Button2
-    3300004: Button3
-    3300006: Button4
-    3300008: Button5
-    3300010: Button6
-    3300012: ButtonHolder5
-    3300014: ButtonHolder6
-    3300016: //RootNode
-    3300018: Meter
-    3300020: Meter2
-    3300022: Switch
-    3300024: SwitchButton
-    3300026: Valve
-    3300028: WarningLight
-    3300030: WarningLight.001
-    4300000: Control Panel
-    4300002: SwitchButton
-    4300004: Valve
-    4300006: Switch
-    4300008: Button3
-    4300010: Button2
-    4300012: Button
-    4300014: Meter2
-    4300016: Meter
-    4300018: WarningLight.001
-    4300020: WarningLight
-    4300022: Button4
-    4300024: Button5
-    4300026: Button6
-    4300028: ButtonHolder5
-    4300030: ButtonHolder6
+    100000: //RootNode
+    400000: //RootNode
+    2100000: Material
+    2300000: //RootNode
+    3300000: //RootNode
+    4300000: Cube
   externalObjects: {}
   materials:
     importMaterials: 1
@@ -120,6 +43,7 @@ ModelImporter:
     globalScale: 1
     meshCompression: 0
     addColliders: 0
+    useSRGBMaterialColor: 1
     importVisibility: 1
     importBlendShapes: 1
     importCameras: 1
@@ -144,6 +68,9 @@ ModelImporter:
     normalImportMode: 0
     tangentImportMode: 3
     normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
   importAnimation: 1
   copyAvatar: 0
   humanDescription:

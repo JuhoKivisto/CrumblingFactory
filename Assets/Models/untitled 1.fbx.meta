@@ -1,30 +1,14 @@
 fileFormatVersion: 2
-guid: 141ad32352d08c642acb0b18af96fdf5
+guid: bfd423956e122d245bd912a2c70b94af
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
-    100000: Valve
-    100002: //RootNode
-    100004: WarningLight.002
-    100006: WarningLightHolder.002
-    400000: Valve
-    400002: //RootNode
-    400004: WarningLight.002
-    400006: WarningLightHolder.002
-    2100000: No Name
-    2100002: Material.006
-    2300000: Valve
-    2300002: //RootNode
-    2300004: WarningLight.002
-    2300006: WarningLightHolder.002
-    3300000: Valve
-    3300002: //RootNode
-    3300004: WarningLight.002
-    3300006: WarningLightHolder.002
-    4300000: ValveObjective
-    4300002: WarningLightHolder.002
-    4300004: WarningLight.002
-    4300006: Valve
+    100000: //RootNode
+    400000: //RootNode
+    2100000: Material
+    2300000: //RootNode
+    3300000: //RootNode
+    4300000: Cube
   externalObjects: {}
   materials:
     importMaterials: 1
