@@ -11,7 +11,7 @@ public class ParticleSystemManager : MonoBehaviour {
 
     public GameObject particleSystemPrefab;
 
-    public GameObject particle2;
+    public GameObject Spark;
 
     [Header("Particle Position")]
 
@@ -25,7 +25,7 @@ public class ParticleSystemManager : MonoBehaviour {
 
 
 
-    public ParticleSystem test(GameObject particleSys, ParticleSystemStopAction stopAction, Vector3 position, Vector3 direction) {
+    public ParticleSystem PlayParticle(GameObject particleSys, ParticleSystemStopAction stopAction, Vector3 position, Vector3 direction) {
 
         Quaternion changeDirection = new Quaternion();
 
