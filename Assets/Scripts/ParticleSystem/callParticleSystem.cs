@@ -7,6 +7,7 @@ public class callParticleSystem : MonoBehaviour {
 
     private ParticleSystem explosion;
     private ParticleSystem spark;
+    private ParticleSystem dust;
 
 
     //public int maxHeatLevel = ;
@@ -30,6 +31,11 @@ public class callParticleSystem : MonoBehaviour {
     private void Update() {
         if (Input.GetKeyDown(KeyCode.S)) {
             spark = ParticleSystemManager.instance.PlayParticle(ParticleSystemManager.instance.Spark, ParticleSystemStopAction.Destroy, new Vector3(0, 0, 0), Vector3.up);
+        }
+
+        if (Input.GetKeyDown(KeyCode.D)) {
+            Debug.Log("dust");
+            dust = ParticleSystemManager.instance.PlayParticle(ParticleSystemManager.instance.Dust, ParticleSystemStopAction.Destroy, new Vector3(0, 0, 0), Vector3.up);
         }
     }
 

@@ -13,6 +13,8 @@ public class ParticleSystemManager : MonoBehaviour {
 
     public GameObject Spark;
 
+    public GameObject Dust;
+
     [Header("Particle Position")]
 
     public List<Vector3> ParticlePosition;
