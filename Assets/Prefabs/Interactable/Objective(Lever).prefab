@@ -180,8 +180,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 130871969265760137}
-  m_LocalRotation: {x: -0.000000059604645, y: 4.3954174e-10, z: -7.7632456e-10, w: 1}
-  m_LocalPosition: {x: 0, y: -0.040056333, z: -0.14083558}
+  m_LocalRotation: {x: -0.00000005960463, y: -0, z: 0.00000005960463, w: 1}
+  m_LocalPosition: {x: 0, y: -0.040056363, z: -0.1408357}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 130871969265724335}
@@ -257,8 +257,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 130871969265760139}
-  m_LocalRotation: {x: -0.4964531, y: 0.5051944, z: -0.50349265, w: 0.49478087}
-  m_LocalPosition: {x: -0.0030555567, y: 0.000053338706, z: 0.011436622}
+  m_LocalRotation: {x: -0.4964531, y: 0.50519437, z: -0.50349265, w: 0.49478084}
+  m_LocalPosition: {x: -0.0030555574, y: 0.000053336844, z: 0.011436622}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5361515094526928155}
@@ -334,13 +334,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 130871969265760143}
-  m_LocalRotation: {x: -1, y: 7.763188e-10, z: 4.3953996e-10, w: 0.000000059604645}
-  m_LocalPosition: {x: 0, y: -0.040056318, z: -0.14083558}
+  m_LocalRotation: {x: -1, y: -0.00000005960466, z: -0.000000014901159, w: 0.000000029802326}
+  m_LocalPosition: {x: 0, y: -0.04005634, z: -0.14083563}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 130871969265724329}
-  m_Father: {fileID: 5361515094716841587}
-  m_RootOrder: 1
+  m_Father: {fileID: 5460399954501734989}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &130871969264954255
 MeshFilter:
@@ -483,7 +483,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5361515093159192068}
-  m_LocalRotation: {x: -0.4956177, y: 0.5043442, z: 0.5043442, w: 0.4956177}
+  m_LocalRotation: {x: -0.49561775, y: 0.50434417, z: 0.50434417, w: 0.49561772}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -532,7 +532,7 @@ HingeJoint:
   m_UseLimits: 1
   m_Limits:
     min: -2.5679598
-    max: 85.24844
+    max: 89.75343
     bounciness: 0
     bounceMinVelocity: 0.2
     contactDistance: 0
@@ -558,7 +558,6 @@ MonoBehaviour:
   button: 0
   lever: 1
   valve: 0
-  buttonObj: {fileID: 0}
   triggerDown: {fileID: 0}
   triggerUp: {fileID: 0}
   enableCollider: {fileID: 0}
@@ -567,6 +566,8 @@ MonoBehaviour:
   isEnabled: 0
   buttonHapticPulseInterval: 0
   buttonPulseTime: 0
+  buttonUpForce: 0
+  buttonDownForce: 0
   upAnchor: {x: 0, y: 1, z: 0.65}
   downAnchor: {x: 0, y: 1, z: 0.25}
   leverDirection: 1
@@ -579,7 +580,6 @@ MonoBehaviour:
   LeverAngle: {fileID: 0}
   valveAngle: {fileID: 0}
   valveRounds: {fileID: 0}
-  valveObj: {fileID: 0}
   valveAnchor: {x: 0, y: 0, z: 0}
   springForce: 1000
   springDamper: 10
@@ -592,9 +592,10 @@ MonoBehaviour:
   pulseIncreaser: 2.5
   hand: {fileID: 0}
   tag: 
-  pulseIntervall: 0
+  pulseInterval: 0
   pulseStrengh: 4
   pulseTime: 0.15
+  interactable: {fileID: 0}
 --- !u!136 &5361515093159192075
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -669,9 +670,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5361515093159192069}
-  - {fileID: 130871969265724335}
   m_Father: {fileID: 5460399954501734989}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &5361515094716841584
 Rigidbody:
@@ -716,6 +716,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 130871969265724335}
   - {fileID: 5361515094716841587}
   m_Father: {fileID: 5460112974684589243}
   m_RootOrder: 0

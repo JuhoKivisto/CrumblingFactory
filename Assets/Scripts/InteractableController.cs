@@ -95,16 +95,7 @@ public class InteractableController : MonoBehaviour {
 
     [Range(0f, 100f)]
     public float springDamper;
-
-    [Range(-10f, 10f)]
-    public float distanceX;
-
-    [Range(-10f, 10f)]
-    public float distanceY;
-
-    [Range(-10f, 10f)]
-    public float distanceZ;
-
+    
     public HingeJoint hinge;
     public bool interacting;
     public SpringJoint spring;
@@ -194,8 +185,7 @@ public class InteractableController : MonoBehaviour {
                         }
 
                         break;
-                    default:
-                        break;
+                   
                 }
 
             }
@@ -232,11 +222,14 @@ public class InteractableController : MonoBehaviour {
 
     public IEnumerator OnInteraction() {
 
-
         interacting = true;
 
         print("lever interaction");
 
+        switch (interactableType) {
+            case InteractableType.Button:
+                break;            
+            default:
         spring = hand.GetComponent<SpringJoint>();
 
         if (spring.connectedBody == null) {
@@ -246,19 +239,20 @@ public class InteractableController : MonoBehaviour {
         else {
             yield break;
         }
-
         print("Trigger pressed" + hand.GetComponent<SteamVR_TrackedController>().triggerPressed);
+        spring.spring = springForce;
+        spring.damper = springDamper;
+                break;
+        }
+        float angle = 0;
+        float previosAngle;
+        int rounds = 0;
 
         float timer = 0;
         float startTime = 0;
 
-        float angle = 0;
-        float previosAngle;
-        int rounds = 0;
         //int wholeRounds = 360;
 
-        spring.spring = springForce;
-        spring.damper = springDamper;
         //spring.connectedAnchor = new Vector3(distanceX, distanceY, distanceZ);
 
         switch (interactableType) {
