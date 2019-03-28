@@ -304,7 +304,7 @@ public class ObjectiveManager : MonoBehaviour {
             objective.warningLevel = stats.warningLevels[3];
             StartCoroutine(DisableObjective(objective, objective.warningLevel, 0, objective.lifeTimeId));
             objectivesDone++;
-            //currentInteractingPanel = objective.controlPanelId;
+            currentInteractingPanel = objective.controlPanelId;
 
             if (CheckForReactorRoomOpening() && !isReactorRoomOpen) {
                 reactorRoomController.OpenReactorRoomDoors();
