@@ -61,6 +61,7 @@ public class HeatManager : MonoBehaviour {
 
         maxHeat = stats.maxHeat;
         CalculateHeatLevelLenght();
+        heatMultiplier = stats.startHeatMultiplier;
 
     }
 
@@ -91,8 +92,6 @@ public class HeatManager : MonoBehaviour {
         heatMultiplier = -multiplier;
         minHeat = stats.HeatAfterShutdown;
         
-
-
     }
 
     /// <summary>
@@ -101,7 +100,7 @@ public class HeatManager : MonoBehaviour {
     /// <param name="seconds"></param>
     /// <returns></returns>
     private IEnumerator ChangeHeating(Objective objective, float duration, bool increacing) {
-        float currentHeatMultiplier = heatMultiplier;
+        
         print("heat");
 
         if (!increacing) {
@@ -118,7 +117,7 @@ public class HeatManager : MonoBehaviour {
         }
 
         yield return new WaitForSeconds(duration);
-        heatMultiplier = currentHeatMultiplier;
+        heatMultiplier = stats.startHeatMultiplier;
         
     }
 

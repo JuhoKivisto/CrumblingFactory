@@ -47,6 +47,7 @@ public class Stats : MonoBehaviour {
     */
     #endregion
     [Space]
+    public float startHeatMultiplier;
     public float maxHeat;
     [Range(0f,1f)]
     public float changeHeatingFor;

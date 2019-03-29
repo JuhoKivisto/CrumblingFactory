@@ -560,6 +560,7 @@ public class ObjectiveManager : MonoBehaviour {
                 //time++;
                 yield return null;
             }
+        FailureObjective(objective);
         }
 
         RemoveObjective(objective);

@@ -22,7 +22,7 @@ public class InteractableController : MonoBehaviour {
     #region Button
     [Header("Button")]
     [Space]
-    
+
     [HideUnless("button")]
     public GameObject triggerDown;
     [HideUnless("button")]
@@ -40,6 +40,10 @@ public class InteractableController : MonoBehaviour {
     public float buttonHapticPulseInterval;
     [HideUnless("button")]
     public float buttonPulseTime;
+    [HideUnless("button")]
+    public float buttonUpForce;
+    [HideUnless("button")]
+    public float buttonDownForce;
     #endregion
 
 
@@ -67,8 +71,9 @@ public class InteractableController : MonoBehaviour {
     public float previousDAngle;
     [HideUnless("lever")]
     public float leverHeight;
+    [HideUnless("lever")]
     public Text LeverAngle;
-
+    public bool isReactorShutdownLever;
 
     #endregion
     #region Valve
@@ -79,7 +84,7 @@ public class InteractableController : MonoBehaviour {
     public Text valveAngle;
     [HideUnless("valve")]
     public Text valveRounds;
-   
+
     [HideUnless("valve")]
     public Vector3 valveAnchor;
     #endregion
@@ -91,15 +96,6 @@ public class InteractableController : MonoBehaviour {
 
     [Range(0f, 100f)]
     public float springDamper;
-
-    [Range(-10f, 10f)]
-    public float distanceX;
-
-    [Range(-10f, 10f)]
-    public float distanceY;
-
-    [Range(-10f, 10f)]
-    public float distanceZ;
 
     public HingeJoint hinge;
     public bool interacting;
@@ -154,7 +150,7 @@ public class InteractableController : MonoBehaviour {
                     case InteractableType.None:
                         print(string.Format("<color=orange>No interactable type selected on {0}</color>", gameObject));
                         break;
-                    
+
                     case InteractableType.Lever:
 
                         //print("switch");
@@ -169,10 +165,7 @@ public class InteractableController : MonoBehaviour {
                                 handController = hand.GetComponent<Controller>();
                                 StartCoroutine(OnInteraction());
                             }
-
-
                         }
-
                         break;
                     case InteractableType.Valve:
 
@@ -185,81 +178,73 @@ public class InteractableController : MonoBehaviour {
                                 handController = hand.GetComponent<Controller>();
                                 StartCoroutine(OnInteraction());
                             }
-
-
                         }
-
-                        break;
-                    default:
                         break;
                 }
-
             }
         }
-
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
+    private void OnTriggerEnter(Collider other) {
 
-        switch (interactableType)
-        {
+        switch (interactableType) {
             case InteractableType.None:
                 print(string.Format("<color=orange>No interactable type selected on {0}</color>", gameObject));
                 break;
             case InteractableType.Button:
-        if (active && other == triggerDown.GetComponent<Collider>() && other.tag == tag)
-        {
-            print("Button down");
-            interactable.GetComponent<Rigidbody>().AddForce(transform.up * 20);
-            active = false;
-            StartCoroutine(OnInteraction());
-            ObjectiveManager.instance.CompleteObjective(interactable.GetComponentInParent<Interactable>().objectiveInfo);
-        }
-        if (!active && other == triggerUp.GetComponent<Collider>() && other.tag == tag)
-        {
-            active = true;
-            print("Button up");
-        }
-        if (other.tag == InteractableManager.instance.handTag && active)
-        {
-            print("Add force");
-            interactable.GetComponent<Rigidbody>().AddForce(-transform.up * 50);
-            //active = false;
-        }
-                break;            
+                if (active && other == triggerDown.GetComponent<Collider>() && other.tag == tag) {
+                    print("Button down");
+                    interactable.GetComponent<Rigidbody>().AddForce(transform.up * buttonUpForce);
+                    active = false;
+                    StartCoroutine(OnInteraction());
+                    ObjectiveManager.instance.CompleteObjective(interactable.GetComponentInParent<Interactable>().objectiveInfo);
+                }
+                if (!active && other == triggerUp.GetComponent<Collider>() && other.tag == tag) {
+                    active = true;
+                    print("Button up");
+                }
+                if (other.tag == InteractableManager.instance.handTag && active) {
+                    print("Add force");
+                    interactable.GetComponent<Rigidbody>().AddForce(-transform.up * buttonDownForce);
+                    //active = false;
+                }
+                break;
         }
     }
 
     public IEnumerator OnInteraction() {
 
-
         interacting = true;
 
         print("lever interaction");
 
-        spring = hand.GetComponent<SpringJoint>();
+        switch (interactableType) {
+            case InteractableType.Button:
+                break;
+            default:
+                spring = hand.GetComponent<SpringJoint>();
 
-        if (spring.connectedBody == null) {
-            spring.connectedBody = GetComponent<Rigidbody>();
+                if (spring.connectedBody == null) {
+                    spring.connectedBody = GetComponent<Rigidbody>();
 
+                }
+                else {
+                    yield break;
+                }
+                print("Trigger pressed" + hand.GetComponent<SteamVR_TrackedController>().triggerPressed);
+                spring.spring = springForce;
+                spring.damper = springDamper;
+                break;
         }
-        else {
-            yield break;
-        }
-
-        print("Trigger pressed" + hand.GetComponent<SteamVR_TrackedController>().triggerPressed);
+        float angle = 0;
+        float previosAngle;
+        int rounds = 0;
 
         float timer = 0;
         float startTime = 0;
 
-        float angle = 0;
-        float previosAngle;
-        int rounds = 0;
         //int wholeRounds = 360;
 
-        spring.spring = springForce;
-        spring.damper = springDamper;
         //spring.connectedAnchor = new Vector3(distanceX, distanceY, distanceZ);
 
         switch (interactableType) {
@@ -293,7 +278,7 @@ public class InteractableController : MonoBehaviour {
             switch (interactableType) {
                 case InteractableType.None:
                     break;
-                
+
                 #region Switch Lever
                 case InteractableType.Lever:
 
@@ -348,18 +333,20 @@ public class InteractableController : MonoBehaviour {
 
                     switch (leverDirection) {
                         case LeverDirection.up:
-                            if (angle < hinge.limits.min) {
+                            if (angle > hinge.limits.max) {
                                 GetComponent<Rigidbody>().isKinematic = true;
-                                ObjectiveManager.instance.CompleteObjective(interactable.GetComponentInParent<Interactable>().objectiveInfo);
+                                if (isReactorShutdownLever) ObjectiveManager.instance.CompleteReactorShutDown();
+                                else ObjectiveManager.instance.CompleteObjective(interactable.GetComponentInParent<Interactable>().objectiveInfo);
                                 leverDirection = LeverDirection.down;
                                 DetachSpringJoint();
                                 yield break;
                             }
                             break;
                         case LeverDirection.down:
-                            if (angle > hinge.limits.max) {
+                            if (angle < hinge.limits.min) {
                                 GetComponent<Rigidbody>().isKinematic = true;
-                                ObjectiveManager.instance.CompleteObjective(interactable.GetComponentInParent<Interactable>().objectiveInfo);
+                                if (isReactorShutdownLever) ObjectiveManager.instance.CompleteReactorShutDown();
+                                else ObjectiveManager.instance.CompleteObjective(interactable.GetComponentInParent<Interactable>().objectiveInfo);
                                 leverDirection = LeverDirection.up;
                                 DetachSpringJoint();
                                 yield break;
