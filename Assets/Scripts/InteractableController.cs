@@ -413,31 +413,40 @@ public class InteractableController : MonoBehaviour {
 
         }
 
+        hinge.useMotor = true;
+        JointMotor motor = hinge.motor;
+        switch (interactableType) {
+
+            case InteractableType.Lever:
+                switch (leverDirection) {
+                    case LeverDirection.up:
+        motor.force = 1000;
+                        motor.targetVelocity = -1000;
+                        break;
+                    case LeverDirection.down:
+                        motor.targetVelocity = 1000;
+                        break;
+                }
+                hinge.motor = motor;
+                StartCoroutine(ResetHinge());
+                break;
+            case InteractableType.Valve:
+                //motor.force = 5000;
+                if (hinge.angle < 0) {
+                    motor.targetVelocity = 1000;
+                }
+                else {
+                    motor.targetVelocity = -1000;
+
+                }
+                hinge.motor = motor;
+                StartCoroutine(ResetHinge());
+                break;
+        }
+
         DetachSpringJoint();
 
     }
-
-    //public IEnumerator OnButtonInteraction() {
-    //    interacting = true;
-
-
-    //    float timer = 0;
-    //    float startTime = 0;
-    //    while (timer < buttonPulseTime) {
-    //        print("Button pulse");
-
-
-    //        if (timer - startTime > buttonHapticPulseInterval) {
-    //            handController.EnableHapticFeedBack();
-    //            startTime = timer;
-
-    //            //print("Haptic start " + startTime + " current " + timer);
-    //        }
-
-    //        timer += Time.deltaTime;
-    //        yield return null;
-    //    }
-    //}
 
     private void DetachSpringJoint() {
         handController.EnableHapticFeedBackLoop(pulseInterval, pulseStrengh, pulseTime);
@@ -453,5 +462,11 @@ public class InteractableController : MonoBehaviour {
         yield return new WaitForSeconds(2.5f);
         GetComponent<Rigidbody>().isKinematic = false;
 
+
+    }
+
+    private IEnumerator ResetHinge() {        
+        yield return new WaitForSeconds(0.1f);
+        hinge.useMotor = false;
     }
 }

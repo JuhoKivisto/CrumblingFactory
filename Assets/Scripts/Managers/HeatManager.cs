@@ -11,6 +11,8 @@ public class HeatManager : MonoBehaviour {
 
     public Slider[] HeatUI;
 
+    public Slider heatChance;
+
     public Stats stats;
     [SerializeField]
     private float heat;
@@ -107,17 +109,19 @@ public class HeatManager : MonoBehaviour {
 
             for (int i = 0; i < stats.warningLevels.Count; i++) {
                 if (stats.warningLevels[i].level == objective.warningLevel.level) {
-                    heatMultiplier = -stats.warningLevels[i].heatMultiplier;
+                    heatMultiplier = -stats.warningLevels[i].heatChange / duration;
                 }
             }
         }
         
         else {
-            heatMultiplier = stats.IncreaceAtFailure;
+            heatMultiplier = stats.IncreaceAtFailure / duration;
         }
-
+        float heatBeforeChance = heat;
         yield return new WaitForSeconds(duration);
+        float heatAfterChance = heat;
         heatMultiplier = stats.startHeatMultiplier;
+        print("Heat chance: " + (heatAfterChance - heatBeforeChance));
         
     }
 
@@ -129,10 +133,9 @@ public class HeatManager : MonoBehaviour {
     /// <returns></returns>
     private IEnumerator ChangeHeating(float multiplier, float duration) {
         float currentHeatMultiplier = heatMultiplier;
-        heatMultiplier = multiplier;
+        heatMultiplier = multiplier;        
         yield return new WaitForSeconds(duration);
-
-        heatMultiplier = currentHeatMultiplier;
+        heatMultiplier = currentHeatMultiplier;        
         working = false;
     }
 

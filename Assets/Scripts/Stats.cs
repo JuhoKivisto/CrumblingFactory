@@ -16,7 +16,7 @@ public class WarningLevel {
 
     public int level;
 
-    public float heatMultiplier;
+    public float heatChange;
 
     public Color color;
 

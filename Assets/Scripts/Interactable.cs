@@ -43,7 +43,7 @@ public class Interactable : MonoBehaviour {
             missing = true;
         }
         if (warningLight == null) {
-            Debug.LogError(string.Format("Gameobject '{0}' has no reference of GameObject 'alarmLight', attach 'AlarmLight' GameObject reference to it", transform.GetChild(1).name), gameObject);
+            Debug.LogError(string.Format("Gameobject '{0}' has no reference of GameObject 'warningLight', attach 'WarningLight' GameObject reference to it", transform.GetChild(1).name), gameObject);
             missing = true;
         }
         if (controlPanel == null) {
