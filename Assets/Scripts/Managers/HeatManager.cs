@@ -51,6 +51,11 @@ public class HeatManager : MonoBehaviour {
         else if (instance != this) {
             Destroy(gameObject);
         }
+        foreach (var item in HeatUI) {
+            item.value = heat;
+            //print("HUI");
+
+        }
 
     }
 
@@ -64,7 +69,7 @@ public class HeatManager : MonoBehaviour {
         maxHeat = stats.maxHeat;
         CalculateHeatLevelLenght();
         heatMultiplier = stats.startHeatMultiplier;
-
+        
     }
 
     /// <summary>
@@ -89,6 +94,7 @@ public class HeatManager : MonoBehaviour {
     public void ActiveChangeHeating(Objective objective, float duration, bool increacing) {        
         StartCoroutine(ChangeHeating(objective, duration, increacing));
     }
+
     public void ActiveReactorShutdown(float multiplier, float duration) {
         //StartCoroutine(ChangeHeating(multiplier, duration));
         heatMultiplier = -multiplier;
@@ -113,7 +119,11 @@ public class HeatManager : MonoBehaviour {
                 }
             }
         }
-        
+        /* Happens when pulling the first lever */
+        else if (objective == null) {
+            heatMultiplier = stats.startHeat / duration;
+        }
+
         else {
             heatMultiplier = stats.IncreaceAtFailure / duration;
         }
@@ -142,6 +152,7 @@ public class HeatManager : MonoBehaviour {
     public void StartHeatIncreace() {
         print("Start Heating");
         StartCoroutine(IncreaseHeat());
+        StartCoroutine(ChangeHeating(null, 1f, true));
     }
 
     /// <summary>
@@ -152,7 +163,7 @@ public class HeatManager : MonoBehaviour {
     /// <returns></returns>
     private IEnumerator IncreaseHeat() {
 
-        while (Heat < maxHeat && Heat > minHeat) {
+        while (Heat < maxHeat && Heat >= minHeat) {
             
                 Heat += stats.heatCurve2.Evaluate(Heat / maxHeat) * Time.deltaTime * heatMultiplier/* + (GameManager.instance.errorCount * errorMultiplier)*/;
                 yield return null;

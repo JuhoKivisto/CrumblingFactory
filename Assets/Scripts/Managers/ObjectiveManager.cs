@@ -469,10 +469,10 @@ public class ObjectiveManager : MonoBehaviour {
 
     private IEnumerator FirstObjectiveSet() {
         yield return new WaitForSeconds(stats.waitBeforeFirstSet);
-        CreateObjectives();
         //heatManager.working = true;
-        heatManager.StartHeatIncreace();
+        HeatManager.instance.StartHeatIncreace();
         TimeManager.instance.StartTimer();
+        CreateObjectives();
 
     }
 
@@ -560,14 +560,13 @@ public class ObjectiveManager : MonoBehaviour {
                 //time++;
                 yield return null;
             }
-        FailureObjective(objective);
+            if (stats.riseHeatAtFailure) FailureObjective(objective);
         }
 
         RemoveObjective(objective);
         DisableWarningLight(objective);
         //objectiveLifeTimes.RemoveAt(lifeTimeId);
-        //FailureObjective(objective);
-
+        
         if (debugMode) {
 
         print("<color=blue>time over</color>");

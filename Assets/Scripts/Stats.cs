@@ -47,6 +47,7 @@ public class Stats : MonoBehaviour {
     */
     #endregion
     [Space]
+    public float startHeat;
     public float startHeatMultiplier;
     public float maxHeat;
     [Range(0f,1f)]
@@ -80,6 +81,9 @@ public class Stats : MonoBehaviour {
 
     [Header("----------OBJECTTIVE----------")]
     [Space]
+
+    public bool riseHeatAtFailure;
+
     [Range(0, 10)]
     public int maxObjectives;
 
