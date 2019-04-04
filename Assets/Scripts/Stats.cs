@@ -47,6 +47,7 @@ public class Stats : MonoBehaviour {
     */
     #endregion
     [Space]
+    public AnimationCurve heatCurve2;
     public float startHeat;
     public float startHeatMultiplier;
     public float maxHeat;
@@ -63,9 +64,9 @@ public class Stats : MonoBehaviour {
 
     [Header("----------TIME----------")]
     [Space]
+    public bool useTimer;
     public float gameLenght;
     public AnimationCurve heatCurve;
-    public AnimationCurve heatCurve2;
     [Tooltip("Time events are created from random number between timeEventRandomLow + previous time event and timeEventRandomHigh + previous time event")]
     public int timeEventRandomLow;
     public int timeEventRandomHigh;

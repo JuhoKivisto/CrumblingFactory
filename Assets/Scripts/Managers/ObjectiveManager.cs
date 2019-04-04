@@ -143,7 +143,7 @@ public class ObjectiveManager : MonoBehaviour {
         if (CheckForMissing()) return;
 
         //CreateObjectives___OLD();
-        StartCoroutine(FirstObjectiveSet());
+        //StartCoroutine(FirstObjectiveSet());
 
     }
 
@@ -467,13 +467,26 @@ public class ObjectiveManager : MonoBehaviour {
         StartCoroutine(WaitNextSet());
     }
 
-    private IEnumerator FirstObjectiveSet() {
+    /// <summary>
+    /// ------------[ Use this to start the whole objective system ]------------
+    /// __________________________________________________________________________________
+    /// | Function first waits the firstObjectiveSet time
+    /// | Then it starts heat rising on HeatManager
+    /// | Also it starts the timer if needed
+    /// | And finally it calls createObjectives function
+    /// |_________________________________________________________________________________
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator StartCrumbling() {
         yield return new WaitForSeconds(stats.waitBeforeFirstSet);
         //heatManager.working = true;
         HeatManager.instance.StartHeatIncreace();
-        TimeManager.instance.StartTimer();
+        if (stats.useTimer) TimeManager.instance.StartTimer();
         CreateObjectives();
+    }
 
+    public void ActivateCrumbling() {
+        StartCoroutine(StartCrumbling());
     }
 
     private IEnumerator WaitNextSet() {

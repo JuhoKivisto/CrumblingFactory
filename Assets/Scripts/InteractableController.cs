@@ -74,6 +74,7 @@ public class InteractableController : MonoBehaviour {
     [HideUnless("lever")]
     public Text LeverAngle;
     public bool isReactorShutdownLever;
+    public bool isTheFirstLever;
 
     #endregion
     #region Valve
@@ -282,8 +283,7 @@ public class InteractableController : MonoBehaviour {
                 #region Switch Lever
                 case InteractableType.Lever:
 
-
-
+                    #region old
                     //spring.anchor = transform.InverseTransformPoint(hand.GetComponent<SteamVR_TrackedObject>().transform.position);
                     //spring.connectedAnchor = Vector3.up * leverHeight;
 
@@ -307,6 +307,7 @@ public class InteractableController : MonoBehaviour {
                     //{
 
                     //}
+                    #endregion
 
                     if (timer - startTime > 0.1) {
                         if (Mathf.Abs(angle) > Mathf.Abs(previosAngle + 1)) {
@@ -335,6 +336,7 @@ public class InteractableController : MonoBehaviour {
                         case LeverDirection.up:
                             if (angle > hinge.limits.max) {
                                 GetComponent<Rigidbody>().isKinematic = true;
+                                if (isTheFirstLever) ObjectiveManager.instance.ActivateCrumbling();
                                 if (isReactorShutdownLever) ObjectiveManager.instance.CompleteReactorShutDown();
                                 else ObjectiveManager.instance.CompleteObjective(interactable.GetComponentInParent<Interactable>().objectiveInfo);
                                 leverDirection = LeverDirection.down;
@@ -345,6 +347,7 @@ public class InteractableController : MonoBehaviour {
                         case LeverDirection.down:
                             if (angle < hinge.limits.min) {
                                 GetComponent<Rigidbody>().isKinematic = true;
+                                if (isTheFirstLever) ObjectiveManager.instance.ActivateCrumbling();
                                 if (isReactorShutdownLever) ObjectiveManager.instance.CompleteReactorShutDown();
                                 else ObjectiveManager.instance.CompleteObjective(interactable.GetComponentInParent<Interactable>().objectiveInfo);
                                 leverDirection = LeverDirection.up;
