@@ -336,22 +336,22 @@ public class InteractableController : MonoBehaviour {
                         case LeverDirection.up:
                             if (angle > hinge.limits.max) {
                                 GetComponent<Rigidbody>().isKinematic = true;
+                                leverDirection = LeverDirection.down;
+                                DetachSpringJoint();
                                 if (isTheFirstLever) ObjectiveManager.instance.ActivateCrumbling();
                                 if (isReactorShutdownLever) ObjectiveManager.instance.CompleteReactorShutDown();
                                 else ObjectiveManager.instance.CompleteObjective(interactable.GetComponentInParent<Interactable>().objectiveInfo);
-                                leverDirection = LeverDirection.down;
-                                DetachSpringJoint();
                                 yield break;
                             }
                             break;
                         case LeverDirection.down:
                             if (angle < hinge.limits.min) {
                                 GetComponent<Rigidbody>().isKinematic = true;
+                                leverDirection = LeverDirection.up;
+                                DetachSpringJoint();
                                 if (isTheFirstLever) ObjectiveManager.instance.ActivateCrumbling();
                                 if (isReactorShutdownLever) ObjectiveManager.instance.CompleteReactorShutDown();
                                 else ObjectiveManager.instance.CompleteObjective(interactable.GetComponentInParent<Interactable>().objectiveInfo);
-                                leverDirection = LeverDirection.up;
-                                DetachSpringJoint();
                                 yield break;
                             }
                             break;

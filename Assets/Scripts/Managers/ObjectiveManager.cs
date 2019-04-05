@@ -128,15 +128,8 @@ public class ObjectiveManager : MonoBehaviour {
     public float warningLightIntensity;
 
     void Awake() {
-
-        if (instance == null) {
-            instance = this;
-        }
-
-        else if (instance != this) {
-            Destroy(gameObject);
-        }
-
+        if (instance == null) instance = this;
+        else if (instance != this) Destroy(gameObject);
     }
 
     void Start() {
@@ -478,8 +471,17 @@ public class ObjectiveManager : MonoBehaviour {
     /// </summary>
     /// <returns></returns>
     private IEnumerator StartCrumbling() {
+
+        LightManager.instance.DisableFirstControlPanelLight();
+        yield return new WaitForSeconds(1f);
+
+        LightManager.instance.ActivateControlPanelLights();
+        yield return new WaitForSeconds(1f);
+
+        LightManager.instance.ActivateFactoryLight();
         yield return new WaitForSeconds(stats.waitBeforeFirstSet);
-        //heatManager.working = true;
+
+        LightManager.instance.ActivateReactorLights(reactorRoomController.isReactorOn);
         HeatManager.instance.StartHeatIncreace();
         if (stats.useTimer) TimeManager.instance.StartTimer();
         CreateObjectives();
