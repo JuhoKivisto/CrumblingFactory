@@ -30,15 +30,18 @@ public class callParticleSystem : MonoBehaviour {
 
     private void Update() {
         if (Input.GetKeyDown(KeyCode.S)) {
-            spark = ParticleSystemManager.instance.PlayParticle(ParticleSystemManager.instance.Spark, ParticleSystemStopAction.Destroy, new Vector3(0, 0, 0), Vector3.up);
+            spark = ParticleManager.instance.PlayParticle(ParticleManager.instance.Spark, ParticleSystemStopAction.Destroy, ParticleManager.instance.SparkPosition[0].position, Vector3.up);
         }
 
         if (Input.GetKeyDown(KeyCode.D)) {
             Debug.Log("dust");
-            dust = ParticleSystemManager.instance.PlayParticle(ParticleSystemManager.instance.Dust, ParticleSystemStopAction.Destroy, new Vector3(0, 0, 0), Vector3.up);
+            dust = ParticleManager.instance.PlayParticle(ParticleManager.instance.Dust, ParticleSystemStopAction.Destroy, new Vector3(0, 0, 0), Vector3.up);
         }
     }
-
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     IEnumerator randomGenerateParticle() {
 
         while (true) {
@@ -51,7 +54,7 @@ public class callParticleSystem : MonoBehaviour {
 
                 yield return new WaitForSeconds(waitTime);
 
-                explosion = ParticleSystemManager.instance.PlayParticle(ParticleSystemManager.instance.particleSystemPrefab, ParticleSystemStopAction.Destroy, position[Random.Range(0, position.Count)].position, Vector3.right);
+                explosion = ParticleManager.instance.PlayParticle(ParticleManager.instance.particleSystemPrefab, ParticleSystemStopAction.Destroy, position[Random.Range(0, position.Count)].position, Vector3.right);
                 //activate sound also
             }
             else {

@@ -9,7 +9,6 @@ public class testLight : MonoBehaviour
     private float maxHeat = 100;
     private float minHeat = 40;
 
-    private Color newLightColor;
     private Light light;
 
     [SerializeField]
@@ -18,11 +17,10 @@ public class testLight : MonoBehaviour
     [SerializeField]
     AnimationCurve intensity;
 
-    public float heatNormalizeNumber;
+    private float heatNormalizeNumber;
     // Start is called before the first frame update
     void Start()
     {
-        newLightColor = new Color();
         light = GetComponent<Light>();
     }
 
@@ -31,7 +29,6 @@ public class testLight : MonoBehaviour
     {
         heatNormalizeNumber = (currentHeat - minHeat) / (maxHeat - minHeat);
 
-        //newLightColor = new Color(1, 1 - heatNormalizeNumber, 1 - heatNormalizeNumber);
         light.color = grad.Evaluate(heatNormalizeNumber);
         light.intensity = intensity.Evaluate(heatNormalizeNumber * 5);
     }

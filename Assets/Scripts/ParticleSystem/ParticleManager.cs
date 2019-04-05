@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ParticleSystemManager : MonoBehaviour {
+public class ParticleManager : MonoBehaviour {
 
-    public static ParticleSystemManager instance;
+    public static ParticleManager instance;
 
 
-    [Header("Particle Name")]
+    [Header("Particle Effects")]
 
     public GameObject particleSystemPrefab;
 
@@ -15,17 +15,21 @@ public class ParticleSystemManager : MonoBehaviour {
 
     public GameObject Dust;
 
-    [Header("Particle Position")]
+    public GameObject MediumExplosion;
 
-    public List<Vector3> ParticlePosition;
+    public GameObject BigExplosion;
+
+    [Header ("Particle Positions")]
+    public List<Transform> SparkPosition;
+
+    public List<Transform> DustPosition;
+
+    public List<Transform> ExplosionPosition;
     
 
     private void Awake() {
         instance = this;
     }
-    
-
-
 
     public ParticleSystem PlayParticle(GameObject particleSys, ParticleSystemStopAction stopAction, Vector3 position, Vector3 direction) {
 
