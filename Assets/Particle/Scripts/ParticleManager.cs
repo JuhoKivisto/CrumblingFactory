@@ -32,7 +32,7 @@ public class ParticleManager : MonoBehaviour {
     public float currentHeat;
     private float normalizeNumber;
     private float waitTime;
-    private float timeRateBetweenExplosions = 3;
+    private float timeRateBetweenExplosions = 7;
     private void Awake() {
         instance = this;
     }
@@ -120,7 +120,7 @@ public class ParticleManager : MonoBehaviour {
             if (currentHeat > 50) {            //trigger an explosion when heat at 51
                 normalizeNumber = (currentHeat - minHeat) / (maxHeat - minHeat);
 
-                waitTime = (1.5f - Random.Range(normalizeNumber - 0.2f, normalizeNumber + 0.2f)) * HeatLevel * timeRateBetweenExplosions;        //Heat higher, time shorter
+                waitTime = (1.5f - Random.Range(normalizeNumber - 0.1f, normalizeNumber + 0.1f)) * timeRateBetweenExplosions;        //Heat higher, time shorter
 
                 yield return new WaitForSeconds(waitTime);
                 Debug.Log(waitTime);

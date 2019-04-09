@@ -55,8 +55,8 @@ public class Stats : MonoBehaviour {
     public float changeHeatingFor;
     public float HeatAfterShutdown;
 
-    public bool decreaseHeat;
-    public bool waitTime;
+    //public bool decreaseHeat;
+    //public bool waitTime;
 
 
 
@@ -85,14 +85,14 @@ public class Stats : MonoBehaviour {
 
     public bool riseHeatAtFailure;
 
-    [Range(0, 10)]
+    [Range(0, 15)]
     public int maxObjectives;
 
-    [Range(0f,10f)]
+    [Range(0f,20f)]
     public float objectiveLifeTime;
-    [Range(0f, 10f)]
+    [Range(0f, 20f)]
     public float waitBeforeFirstSet;
-    [Range(0f, 10f)]
+    [Range(0f, 20f)]
     public float waitBeforeNextSet;
 
     public float IncreaceAtFailure;

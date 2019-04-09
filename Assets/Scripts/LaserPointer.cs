@@ -30,8 +30,8 @@ public class LaserPointer : MonoBehaviour {
     public float maxCooldown; // Use 0 if you don't want a cooldown
     public float maxDistance; // Max allowed teleport distance
     private float cooldown;
-    private float angle;
-    private float length;
+    public float angle;
+    public float length;
     private float angleCount;
     private float distanceFromGround;
     private float cooldownTime;
@@ -103,7 +103,7 @@ public class LaserPointer : MonoBehaviour {
 
     private void Teleport() {
         shouldTeleport = false; // sets the bool back to false
-        reticle.SetActive(false); // sets reticle to false
+        //reticle.SetActive(false); // sets reticle to false
 
         Vector3 playerOffset = CalculatePlayerOffset();
         Vector3 convertedTeleportPoint = rigCenter.InverseTransformPoint(reticle.transform.position);
@@ -130,7 +130,7 @@ public class LaserPointer : MonoBehaviour {
 
         onCooldown = true; // Puts the teleport on cooldown
         cooldownTime = cooldown + Time.time;
-        cooldownSprite.fillAmount = 1.0f;
+        //cooldownSprite.fillAmount = 1.0f;
     }
 
     private void Stunned() // sets movement on a 4 second cooldown after being stunned
@@ -138,16 +138,18 @@ public class LaserPointer : MonoBehaviour {
         onCooldown = true;
         cooldown = 4;
         cooldownTime = cooldown + Time.time;
-        cooldownSprite.fillAmount = 1.0f;
+        //cooldownSprite.fillAmount = 1.0f;
         areStunned = false;
     }
 
     // Use this for initialization
     void Start() {
 
+      
+
         lineRenderer.widthMultiplier = 0.1f; // Sets our line renderers width to 0.1
 
-        cooldownSprite = teleportReticlePrefab.transform.GetChild(1).GetComponent<Image>(); // Gets the cooldown sprite from the reticle prefab
+        //cooldownSprite = teleportReticlePrefab.transform.GetChild(1).GetComponent<Image>(); // Gets the cooldown sprite from the reticle prefab
 
         // Setting the tested "best" values for the curve calculation
         angle = 0.5f;
@@ -171,6 +173,8 @@ public class LaserPointer : MonoBehaviour {
         teleportReticleTransform = reticle.transform;
 
         onCooldown = false; // Takes the movement off cooldown at launch
+        reticle.SetActive(true);
+
     }
 
     // Update is called once per frame
@@ -182,9 +186,9 @@ public class LaserPointer : MonoBehaviour {
         }
 
         // Visualization of cooldown
-        if (cooldownSprite.fillAmount > 0f) {
-            cooldownSprite.fillAmount -= 1.0f / cooldown * Time.deltaTime;
-        }
+        //if (cooldownSprite.fillAmount > 0f) {
+        //    cooldownSprite.fillAmount -= 1.0f / cooldown * Time.deltaTime;
+        //}
 
         if (areStunned == true) {
             if (showDebug == true) {
@@ -225,6 +229,7 @@ public class LaserPointer : MonoBehaviour {
                             }
                             positions[i] = hit.point;
                             lineRenderer.material = canTeleportMat;
+                            teleportReticlePrefab.GetComponent<MeshRenderer>().material = canTeleportMat;
                             amount = i;
                             reticle.SetActive(true);
                             teleportReticleTransform.position = hit.point + teleportReticleOffset;
@@ -232,13 +237,16 @@ public class LaserPointer : MonoBehaviour {
                         }
                         else // If the ray hit distance is higher than the allowed max distance, changes the material to red unlit color & draws the laser
                       {
+                            teleportReticleTransform.position = hit.point + teleportReticleOffset;
+
                             if (showDebug == true) {
                                 Debug.Log("Went over the max distance");
                             }
                             positions[i] = hit.point;
                             lineRenderer.material = canNotTeleportMat;
+                            teleportReticlePrefab.GetComponent<MeshRenderer>().material = canNotTeleportMat;
                             amount = i;
-                            reticle.SetActive(false);
+                            //reticle.SetActive(false);
                             shouldTeleport = false;
                         }
                         break;
@@ -250,8 +258,10 @@ public class LaserPointer : MonoBehaviour {
                         }
                         positions[i] = hit.point;
                         lineRenderer.material = canNotTeleportMat;
+                        teleportReticlePrefab.GetComponent<MeshRenderer>().material = canNotTeleportMat;
+
                         amount = i;
-                        reticle.SetActive(false);
+                        //reticle.SetActive(false);
                         shouldTeleport = false;
                         break;
                     }
@@ -262,9 +272,10 @@ public class LaserPointer : MonoBehaviour {
                         Debug.Log("No hit");
                     }
                     DisableLaser();
-                    reticle.SetActive(false);
+                    //reticle.SetActive(false);
                     shouldTeleport = false;
                     lineRenderer.material = canNotTeleportMat;
+                    teleportReticlePrefab.GetComponent<MeshRenderer>().material = canNotTeleportMat;
                     startPoint = startPoint + newDir * length;
                     positions[i] = startPoint;
                     if (angleCount < 90) // max angle of the curve is 90 degrees, checks that
