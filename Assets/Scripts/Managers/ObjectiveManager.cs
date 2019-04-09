@@ -123,6 +123,8 @@ public class ObjectiveManager : MonoBehaviour {
 
     private Color color;
 
+    public GameObject speaker;
+
     public float warningLightRange;
 
     public float warningLightIntensity;
@@ -136,7 +138,7 @@ public class ObjectiveManager : MonoBehaviour {
         if (CheckForMissing()) return;
 
         //CreateObjectives___OLD();
-        //StartCoroutine(FirstObjectiveSet());
+        //StartCoroutine(StartCrumbling());
 
     }
 
@@ -312,6 +314,7 @@ public class ObjectiveManager : MonoBehaviour {
 
     public void CompleteReactorShutDown() {
         reactorRoomController.ShutDownTheReactor();
+        StopCoroutine(WaitNextSet());
     }
 
     /// <summary>
@@ -473,13 +476,18 @@ public class ObjectiveManager : MonoBehaviour {
     private IEnumerator StartCrumbling() {
 
         LightManager.instance.DisableFirstControlPanelLight();
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.5f);
 
         LightManager.instance.ActivateControlPanelLights();
         yield return new WaitForSeconds(1f);
 
         LightManager.instance.ActivateFactoryLight();
         yield return new WaitForSeconds(stats.waitBeforeFirstSet);
+
+        for (int i = 0; i < 3; i++) {
+
+        SoundManager.instance.audioSourceToPlay(speaker, 0, false, 0.5f, null, speaker.transform.position);
+        }
 
         LightManager.instance.ActivateReactorLights(reactorRoomController.isReactorOn);
         HeatManager.instance.StartHeatIncreace();
