@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class testLight : MonoBehaviour
+public class GradientLight : MonoBehaviour
 {
     public float currentHeat = 40;
 
@@ -30,6 +30,7 @@ public class testLight : MonoBehaviour
         heatNormalizeNumber = (currentHeat - minHeat) / (maxHeat - minHeat);
 
         light.color = grad.Evaluate(heatNormalizeNumber);
-        light.intensity = intensity.Evaluate(heatNormalizeNumber * 5);
+        light.intensity = intensity.Evaluate(heatNormalizeNumber * intensity.keys[intensity.length - 1].value);
+
     }
 }

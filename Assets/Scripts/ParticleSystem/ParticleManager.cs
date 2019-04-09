@@ -29,7 +29,7 @@ public class ParticleManager : MonoBehaviour {
     private int HeatLevel = 3;
     private float minHeat = 30;
     private float maxHeat = 100;
-    public float Heat;
+    public float currentHeat;
     private float normalizeNumber;
     float waitTime;
     private void Awake() {
@@ -115,8 +115,8 @@ public class ParticleManager : MonoBehaviour {
         while (true) {
             int randomNumber = Random.Range(0, ExplosionPosition.Count);
 
-            if (Heat > 50) {            //trigger an explosion when heat at 51
-                normalizeNumber = (Heat - minHeat) / (maxHeat - minHeat);
+            if (currentHeat > 50) {            //trigger an explosion when heat at 51
+                normalizeNumber = (currentHeat - minHeat) / (maxHeat - minHeat);
                 Debug.Log(normalizeNumber);
 
                 waitTime = (1 - Random.Range(normalizeNumber - 0.1f, normalizeNumber + 0.1f)) * HeatLevel * 10;        //Heat higher, time shorter
@@ -127,7 +127,7 @@ public class ParticleManager : MonoBehaviour {
                 //activate sound also
             }
             else {
-                yield return new WaitUntil(() => Heat > 50);
+                yield return new WaitUntil(() => currentHeat > 50);
             }
         }
 
