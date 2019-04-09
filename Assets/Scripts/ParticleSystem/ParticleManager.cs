@@ -9,11 +9,11 @@ public class ParticleManager : MonoBehaviour {
 
     [Header("Particle Effects")]
 
-    public GameObject particleSystemPrefab;
-
     public GameObject Spark;
 
     public GameObject Dust;
+
+    public GameObject SmallExplosion;
 
     public GameObject MediumExplosion;
 
@@ -25,13 +25,28 @@ public class ParticleManager : MonoBehaviour {
     public List<Transform> DustPosition;
 
     public List<Transform> ExplosionPosition;
-    
 
+    private int HeatLevel = 3;
+    private float minHeat = 30;
+    private float maxHeat = 100;
+    public float Heat;
+    private float normalizeNumber;
+    float waitTime;
     private void Awake() {
         instance = this;
     }
-
-    public ParticleSystem PlayParticle(GameObject particleSys, ParticleSystemStopAction stopAction, Vector3 position, Vector3 direction) {
+    private void Start() {
+        StartCoroutine(randomGenerateParticle());
+    }
+    /// <summary>
+    /// spawn a particle in a position
+    /// </summary>
+    /// <param name="particle"></param>
+    /// <param name="stopAction"></param>
+    /// <param name="position">position of particle</param>
+    /// <param name="direction">direction of particle</param>
+    /// <returns></returns>
+    public ParticleSystem PlayParticle(GameObject particle, ParticleSystemStopAction stopAction, Vector3 position, Vector3 direction) {
 
         Quaternion changeDirection = new Quaternion();
 
@@ -42,7 +57,7 @@ public class ParticleManager : MonoBehaviour {
         changeDirection = Quaternion.LookRotation(direction);
         
 
-        GameObject clone = Instantiate(particleSys, position, changeDirection);
+        GameObject clone = Instantiate(particle, position, changeDirection);
 
         ParticleSystem temp = clone.GetComponent<ParticleSystem>();
 
@@ -52,8 +67,8 @@ public class ParticleManager : MonoBehaviour {
 
         temp.Play();
 
-        if(particleSys.transform.childCount > 0) {
-            foreach(Transform child in particleSys.transform) {
+        if(particle.transform.childCount > 0) {
+            foreach(Transform child in particle.transform) {
 
                 GameObject childGameObject = child.gameObject;
 
@@ -70,6 +85,11 @@ public class ParticleManager : MonoBehaviour {
         return temp;
     }
 
+
+    /// <summary>
+    /// stop particle
+    /// </summary>
+    /// <param name="particleSystem"></param>
     public void stopParticleSystem (ParticleSystem particleSystem) {
 
         if(particleSystem.gameObject.transform.childCount > 0) {
@@ -80,5 +100,37 @@ public class ParticleManager : MonoBehaviour {
             }
         }
         particleSystem.Stop();
+    }
+
+
+    /// <summary>
+    /// spawn explosion according to current heat
+    /// when current heat is 51 an explosion is triggered 
+    /// when current heat increasing, explosions are more often 
+    /// the time between explosions is changing
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator randomGenerateParticle() {
+
+        while (true) {
+            int randomNumber = Random.Range(0, ExplosionPosition.Count);
+
+            if (Heat > 50) {            //trigger an explosion when heat at 51
+                normalizeNumber = (Heat - minHeat) / (maxHeat - minHeat);
+                Debug.Log(normalizeNumber);
+
+                waitTime = (1 - Random.Range(normalizeNumber - 0.1f, normalizeNumber + 0.1f)) * HeatLevel * 10;        //Heat higher, time shorter
+
+                yield return new WaitForSeconds(waitTime);
+
+                ParticleManager.instance.PlayParticle(ParticleManager.instance.SmallExplosion, ParticleSystemStopAction.Destroy, ExplosionPosition[randomNumber].position, Vector3.right);
+                //activate sound also
+            }
+            else {
+                yield return new WaitUntil(() => Heat > 50);
+            }
+        }
+
+
     }
 }

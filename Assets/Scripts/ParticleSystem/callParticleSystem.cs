@@ -24,13 +24,14 @@ public class callParticleSystem : MonoBehaviour {
 
     private void Start() {
 
-        StartCoroutine(randomGenerateParticle());
+        //StartCoroutine(randomGenerateParticle());
 
     }
 
     private void Update() {
         if (Input.GetKeyDown(KeyCode.S)) {
-            spark = ParticleManager.instance.PlayParticle(ParticleManager.instance.Spark, ParticleSystemStopAction.Destroy, ParticleManager.instance.SparkPosition[0].position, Vector3.up);
+            //spark = ParticleManager.instance.PlayParticle(ParticleManager.instance.Spark, ParticleSystemStopAction.Destroy, ParticleManager.instance.SparkPosition[0].position, Vector3.up);
+            ParticleManager.instance.PlayParticle(ParticleManager.instance.Spark, ParticleSystemStopAction.Destroy, ParticleManager.instance.SparkPosition[0].position, Vector3.up);
         }
 
         if (Input.GetKeyDown(KeyCode.D)) {
@@ -42,27 +43,27 @@ public class callParticleSystem : MonoBehaviour {
     /// 
     /// </summary>
     /// <returns></returns>
-    IEnumerator randomGenerateParticle() {
+    //IEnumerator randomGenerateParticle() {
 
-        while (true) {
+    //    while (true) {
 
-            if(Heat > 50) {
-                normalizeNumber = (Heat - minHeat) / (maxHeat - minHeat);
-                Debug.Log(normalizeNumber);
+    //        if(Heat > 50) {
+    //            normalizeNumber = (Heat - minHeat) / (maxHeat - minHeat);
+    //            Debug.Log(normalizeNumber);
 
-                waitTime = (1 - Random.Range(normalizeNumber - 0.1f, normalizeNumber + 0.1f)) * HeatLevel * 10;        //Heat higher, time shorter
+    //            waitTime = (1 - Random.Range(normalizeNumber - 0.1f, normalizeNumber + 0.1f)) * HeatLevel * 10;        //Heat higher, time shorter
 
-                yield return new WaitForSeconds(waitTime);
+    //            yield return new WaitForSeconds(waitTime);
 
-                explosion = ParticleManager.instance.PlayParticle(ParticleManager.instance.particleSystemPrefab, ParticleSystemStopAction.Destroy, position[Random.Range(0, position.Count)].position, Vector3.right);
-                //activate sound also
-            }
-            else {
-                yield return new WaitUntil(() => Heat > 50);
-            }
-            Debug.Log("time to wait " + waitTime);
-        }
+    //            explosion = ParticleManager.instance.PlayParticle(ParticleManager.instance.particleSystemPrefab, ParticleSystemStopAction.Destroy, position[Random.Range(0, position.Count)].position, Vector3.right);
+    //            //activate sound also
+    //        }
+    //        else {
+    //            yield return new WaitUntil(() => Heat > 50);
+    //        }
+    //        Debug.Log("time to wait " + waitTime);
+    //    }
         
         
-    }
+    //}
 }
