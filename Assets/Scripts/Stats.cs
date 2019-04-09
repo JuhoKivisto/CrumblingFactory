@@ -50,6 +50,7 @@ public class Stats : MonoBehaviour {
     public AnimationCurve heatCurve2;
     public float startHeat;
     public float startHeatMultiplier;
+    public float minHeat;
     public float maxHeat;
     [Range(0f,1f)]
     public float changeHeatingFor;
