@@ -26,18 +26,16 @@ public class ParticleManager : MonoBehaviour {
 
     public List<Transform> ExplosionPosition;
 
-    public int HeatLevel = 3;
-    private float minHeat = 30;
-    private float maxHeat = 100;
-    public float currentHeat;
     private float normalizeNumber;
     private float waitTime;
     private float timeRateBetweenExplosions = 7;
+    private int triggerHeat;
     private void Awake() {
         instance = this;
     }
     private void Start() {
         StartCoroutine(randomGenerateParticle());
+        triggerHeat = 50;
     }
     
     /// <summary>
@@ -117,8 +115,8 @@ public class ParticleManager : MonoBehaviour {
         while (true) {
             int randomNumber = Random.Range(0, ExplosionPosition.Count);
 
-            if (currentHeat > 50) {            //trigger an explosion when heat at 51
-                normalizeNumber = (currentHeat - minHeat) / (maxHeat - minHeat);
+            if (HeatManager.instance.Heat > triggerHeat) {            //trigger an explosion when heat at 51
+                normalizeNumber = (HeatManager.instance.Heat - Stats.instance.minHeat) / (Stats.instance.maxHeat - Stats.instance.minHeat);
 
                 waitTime = (1.5f - Random.Range(normalizeNumber - 0.1f, normalizeNumber + 0.1f)) * timeRateBetweenExplosions;        //Heat higher, time shorter
 
@@ -129,7 +127,7 @@ public class ParticleManager : MonoBehaviour {
                 //activate sound also
             }
             else {
-                yield return new WaitUntil(() => currentHeat > 50);
+                yield return new WaitUntil(() => HeatManager.instance.Heat > triggerHeat);
             }
         }
 

@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GradientLight : MonoBehaviour
-{
-    public float currentHeat = 40;
-
-    private float maxHeat = 100;
-    private float minHeat = 40;
-
+{    
+    /// <summary>
+    /// This scipt changes light color according to heat so that it is more red when heat increases 
+    /// </summary>
     private Light light;
 
     [SerializeField]
@@ -27,7 +25,7 @@ public class GradientLight : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        heatNormalizeNumber = (currentHeat - minHeat) / (maxHeat - minHeat);
+        heatNormalizeNumber = (HeatManager.instance.Heat - Stats.instance.minHeat) / (Stats.instance.maxHeat - Stats.instance.minHeat);
 
         light.color = grad.Evaluate(heatNormalizeNumber);
         light.intensity = intensity.Evaluate(heatNormalizeNumber * intensity.keys[intensity.length - 1].value);
