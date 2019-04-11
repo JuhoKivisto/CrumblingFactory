@@ -53,7 +53,7 @@ MonoBehaviour:
     type: 3}
   SparkPosition:
   - {fileID: 0}
-  DustPosition: []
+  DustPosition:
+  - {fileID: 0}
+  - {fileID: 0}
   ExplosionPosition: []
-  HeatLevel: 3
-  currentHeat: 0
