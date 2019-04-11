@@ -30,10 +30,12 @@ public class ParticleManager : MonoBehaviour {
     private float waitTime;
     private float timeRateBetweenExplosions = 7;
     private int triggerHeat;
+
     private void Awake() {
         instance = this;
     }
     private void Start() {
+
         StartCoroutine(randomGenerateParticle());
         triggerHeat = 50;
     }
@@ -46,7 +48,7 @@ public class ParticleManager : MonoBehaviour {
     /// <param name="position">position of particle</param>
     /// <param name="direction">direction of particle</param>
     /// <returns></returns>
-    public ParticleSystem PlayParticle(GameObject particle, ParticleSystemStopAction stopAction, Vector3 position, Vector3 direction) {
+    public ParticleSystem PlayParticle(GameObject particle, ParticleSystemStopAction stopAction, Transform position, Vector3 direction) {
 
         Quaternion changeDirection = new Quaternion();
 
@@ -55,34 +57,38 @@ public class ParticleManager : MonoBehaviour {
             direction = Vector3.up;                                     //default direction is up
         }
         changeDirection = Quaternion.LookRotation(direction);
-        
 
-        GameObject clone = Instantiate(particle, position, changeDirection);
+        if (position != null) {     //if the list of position is empty or there is no game object - don't spawn the particle
+            GameObject clone = Instantiate(particle, position.position, changeDirection);
 
-        ParticleSystem temp = clone.GetComponent<ParticleSystem>();
+            ParticleSystem temp = clone.GetComponent<ParticleSystem>();
 
-        var main = temp.main;
+            var main = temp.main;
 
-        main.stopAction = stopAction;
+            main.stopAction = stopAction;
 
-        temp.Play();
+            temp.Play();
 
-        if(particle.transform.childCount > 0) {
-            foreach(Transform child in particle.transform) {
+            if (particle.transform.childCount > 0) {
+                foreach (Transform child in particle.transform) {
 
-                GameObject childGameObject = child.gameObject;
+                    GameObject childGameObject = child.gameObject;
 
-                ParticleSystem tempChild = childGameObject.GetComponent<ParticleSystem>();
+                    ParticleSystem tempChild = childGameObject.GetComponent<ParticleSystem>();
 
-                var mainChild = tempChild.main;
+                    var mainChild = tempChild.main;
 
-                mainChild.stopAction = stopAction;
+                    mainChild.stopAction = stopAction;
 
-                tempChild.Play();
+                    tempChild.Play();
+                }
             }
-        }
 
-        return temp;
+            return temp;
+        }
+        else
+            return null;
+        
     }
 
 
@@ -92,14 +98,16 @@ public class ParticleManager : MonoBehaviour {
     /// <param name="particleSystem"></param>
     public void stopParticleSystem (ParticleSystem particleSystem) {
 
-        if(particleSystem.gameObject.transform.childCount > 0) {
-            foreach (Transform child in particleSystem.gameObject.transform) {
-                ParticleSystem childTemp = child.gameObject.GetComponent<ParticleSystem>();
+        if(particleSystem != null) {
+            if (particleSystem.gameObject.transform.childCount > 0) {
+                foreach (Transform child in particleSystem.gameObject.transform) {
+                    ParticleSystem childTemp = child.gameObject.GetComponent<ParticleSystem>();
 
-                childTemp.Stop();
+                    childTemp.Stop();
+                }
             }
-        }
-        particleSystem.Stop();
+            particleSystem.Stop();
+        }        
     }
 
 
@@ -115,15 +123,16 @@ public class ParticleManager : MonoBehaviour {
         while (true) {
             int randomNumber = Random.Range(0, ExplosionPosition.Count);
 
-            if (HeatManager.instance.Heat > triggerHeat) {            //trigger an explosion when heat at 51
-                normalizeNumber = (HeatManager.instance.Heat - Stats.instance.minHeat) / (Stats.instance.maxHeat - Stats.instance.minHeat);
 
+            if (HeatManager.instance.Heat > triggerHeat) {            //trigger an explosion when heat at 51
+
+                normalizeNumber = (HeatManager.instance.Heat - Stats.instance.minHeat) / (Stats.instance.maxHeat - Stats.instance.minHeat);
+                
                 waitTime = (1.5f - Random.Range(normalizeNumber - 0.1f, normalizeNumber + 0.1f)) * timeRateBetweenExplosions;        //Heat higher, time shorter
 
                 yield return new WaitForSeconds(waitTime);
-                Debug.Log(waitTime);
-
-                ParticleManager.instance.PlayParticle(ParticleManager.instance.SmallExplosion, ParticleSystemStopAction.Destroy, ExplosionPosition[randomNumber].position, Vector3.right);
+                if(ExplosionPosition.Count > 0)
+                    ParticleManager.instance.PlayParticle(ParticleManager.instance.SmallExplosion, ParticleSystemStopAction.Destroy, ExplosionPosition[randomNumber], Vector3.right);
                 //activate sound also
             }
             else {

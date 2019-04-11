@@ -14,6 +14,6 @@ public class test : MonoBehaviour
     void Update()
     {
         if(Input.GetKeyDown(KeyCode.S))
-            ParticleManager.instance.PlayParticle(ParticleManager.instance.Spark, ParticleSystemStopAction.Destroy, ParticleManager.instance.SparkPosition[0].position, Vector3.up);
+            ParticleManager.instance.PlayParticle(ParticleManager.instance.Spark, ParticleSystemStopAction.Destroy, ParticleManager.instance.SparkPosition[0], Vector3.up);
     }
 }

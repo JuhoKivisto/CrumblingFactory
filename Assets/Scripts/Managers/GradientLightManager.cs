@@ -22,7 +22,6 @@ public class GradientLightManager : MonoBehaviour
 
     private float heatNormalizeNumber;
 
-
     // Update is called once per frame
     void Update()
     {
@@ -33,7 +32,7 @@ public class GradientLightManager : MonoBehaviour
             if(light != null) {
 
                 light.color = grad.Evaluate(heatNormalizeNumber);
-                light.intensity = intensity.Evaluate(heatNormalizeNumber * intensity.keys[intensity.length - 1].value);
+                light.intensity = intensity.Evaluate(heatNormalizeNumber * intensity.keys[intensity.length - 1].value);//intensity.keys[intensity.length - 1].value - to get the biggest value of intensity
             }
             
         }       
