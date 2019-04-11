@@ -28,6 +28,8 @@ public class HeatManager : MonoBehaviour {
             heat = value;
         }
     }
+
+    public float deltaHeat;
     public int heatLevels;
     public int currentHeatLevel;
     public float heatLevelLenght;
@@ -41,6 +43,8 @@ public class HeatManager : MonoBehaviour {
 
     public ReactorRoomController reactorRoomController;
 
+    public HeatMeterIndicator heatMeterIndicator;
+
 
     void Awake() {
 
@@ -51,6 +55,12 @@ public class HeatManager : MonoBehaviour {
         else if (instance != this) {
             Destroy(gameObject);
         }
+
+        minHeat = Stats.instance.minHeat;
+        maxHeat = Stats.instance.maxHeat;
+        CalculateHeatLevelLenght();
+        heatMultiplier = stats.startHeatMultiplier;
+
         foreach (var item in HeatUI) {
             item.value = heat;
             //print("HUI");
@@ -65,11 +75,8 @@ public class HeatManager : MonoBehaviour {
             Debug.LogWarning("Slider HeatUI has no reference, attach HeatUI Slider");
             return;
         }
-        minHeat = Stats.instance.minHeat;
-        maxHeat = Stats.instance.maxHeat;
-        CalculateHeatLevelLenght();
-        heatMultiplier = stats.startHeatMultiplier;
-        
+
+
     }
 
     /// <summary>
@@ -91,7 +98,7 @@ public class HeatManager : MonoBehaviour {
         }
     }
 
-    public void ActiveChangeHeating(Objective objective, float duration, bool increacing) {        
+    public void ActiveChangeHeating(Objective objective, float duration, bool increacing) {
         StartCoroutine(ChangeHeating(objective, duration, increacing));
     }
 
@@ -99,7 +106,7 @@ public class HeatManager : MonoBehaviour {
         //StartCoroutine(ChangeHeating(multiplier, duration));
         heatMultiplier = -multiplier;
         minHeat = stats.HeatAfterShutdown;
-        
+
     }
 
     /// <summary>
@@ -108,7 +115,7 @@ public class HeatManager : MonoBehaviour {
     /// <param name="seconds"></param>
     /// <returns></returns>
     private IEnumerator ChangeHeating(Objective objective, float duration, bool increacing) {
-        
+
         print("heat");
 
         if (!increacing) {
@@ -132,7 +139,7 @@ public class HeatManager : MonoBehaviour {
         float heatAfterChance = heat;
         heatMultiplier = stats.startHeatMultiplier;
         print("Heat chance: " + (heatAfterChance - heatBeforeChance));
-        
+
     }
 
     /// <summary>
@@ -143,15 +150,16 @@ public class HeatManager : MonoBehaviour {
     /// <returns></returns>
     private IEnumerator ChangeHeating(float multiplier, float duration) {
         float currentHeatMultiplier = heatMultiplier;
-        heatMultiplier = multiplier;        
+        heatMultiplier = multiplier;
         yield return new WaitForSeconds(duration);
-        heatMultiplier = currentHeatMultiplier;        
+        heatMultiplier = currentHeatMultiplier;
         working = false;
     }
 
     public void StartHeatIncreace() {
         print("Start Heating");
         StartCoroutine(IncreaseHeat());
+        heatMeterIndicator.ActivateHeatMeter();
         StartCoroutine(ChangeHeating(null, 1f, true));
     }
 
@@ -163,17 +171,21 @@ public class HeatManager : MonoBehaviour {
     /// <returns></returns>
     private IEnumerator IncreaseHeat() {
 
+        print(Heat);
+        print(maxHeat);
+        print(minHeat);
         while (Heat < maxHeat && Heat >= minHeat) {
-            
-                Heat += stats.heatCurve2.Evaluate(Heat / maxHeat) * Time.deltaTime * heatMultiplier/* + (GameManager.instance.errorCount * errorMultiplier)*/;
-                yield return null;
+
+            deltaHeat = stats.heatCurve2.Evaluate(Heat / maxHeat) * Time.deltaTime * heatMultiplier/* + (GameManager.instance.errorCount * errorMultiplier)*/;
+            Heat += deltaHeat;
+            yield return null;
 
             foreach (var item in HeatUI) {
                 item.value = heat;
                 //print("HUI");
 
             }
-                ChangeHeatLevel();            
+            ChangeHeatLevel();
         }
     }
 }

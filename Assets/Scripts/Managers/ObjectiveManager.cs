@@ -475,8 +475,12 @@ public class ObjectiveManager : MonoBehaviour {
     /// <returns></returns>
     private IEnumerator StartCrumbling() {
 
+        ParticleManager.instance.PlayParticle(ParticleManager.instance.Spark, ParticleSystemStopAction.None, ParticleManager.instance.SparkPosition[0].position, Vector3.up);
+        yield return new WaitForSeconds(0.5f);
+
         LightManager.instance.DisableFirstControlPanelLight();
         yield return new WaitForSeconds(0.5f);
+
 
         LightManager.instance.ActivateControlPanelLights();
         yield return new WaitForSeconds(1f);
