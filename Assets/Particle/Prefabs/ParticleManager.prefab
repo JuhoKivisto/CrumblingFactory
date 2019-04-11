@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3797786094054555102
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3797786094054555088}
+  - component: {fileID: 3797786094054555103}
+  m_Layer: 0
+  m_Name: ParticleManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3797786094054555088
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3797786094054555102}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.10300003, y: -0.6979969, z: 2.5205002}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3797786094054555103
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3797786094054555102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18c7d4441417fe74a8f55c5af3dfbac8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Spark: {fileID: 1669249858857334, guid: e103626f12693d043b1b29da577743c1, type: 3}
+  Dust: {fileID: 1167587211127636, guid: e5f9256cc734c074d80c4c02cb84cac7, type: 3}
+  SmallExplosion: {fileID: 5838794848778430701, guid: 1f6cf8f98f1de9746af822ba29cce7cc,
+    type: 3}
+  MediumExplosion: {fileID: 8019443173642388355, guid: a629cf454dedaaa448ba9007a9ab7626,
+    type: 3}
+  BigExplosion: {fileID: 1435521663468766, guid: 3ce190d48643ac345b49ba45015d9afc,
+    type: 3}
+  SparkPosition:
+  - {fileID: 0}
+  DustPosition:
+  - {fileID: 0}
+  ExplosionPosition:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
