@@ -22,7 +22,7 @@ public class HeatMeterIndicator : MonoBehaviour {
     public bool running;
 
     void Start() {
-        HeatManager.instance.StartHeatIncreace();
+        //HeatManager.instance.StartHeatIncreace();
         StartCoroutine(RotateIndicator());
     }
 

@@ -152,7 +152,6 @@ public class LaserPointer : MonoBehaviour {
         //cooldownSprite = teleportReticlePrefab.transform.GetChild(1).GetComponent<Image>(); // Gets the cooldown sprite from the reticle prefab
 
         // Setting the tested "best" values for the curve calculation
-        angle = 0.5f;
         length = 0.1f;
 
         // Sets reticle offset
