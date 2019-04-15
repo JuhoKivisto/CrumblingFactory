@@ -12,10 +12,10 @@ public class InteractableActivator : MonoBehaviour
         {
 
             case InteractableType.Button:
-                ObjectiveManager.instance.CompleteObjective(interactable.GetComponentInParent<Interactable>().objectiveInfo);
+                ObjectiveManager.instance.CompleteObjective(interactable.GetComponentInParent<InteractableInfo>().objectiveInfo);
                 break;
             case InteractableType.Valve:
-                ObjectiveManager.instance.CompleteObjective(interactable.GetComponentInParent<Interactable>().objectiveInfo);
+                ObjectiveManager.instance.CompleteObjective(interactable.GetComponentInParent<InteractableInfo>().objectiveInfo);
                 break;
         }
 
@@ -25,7 +25,7 @@ public class InteractableActivator : MonoBehaviour
     {
         switch (lType) {
             case LeverType.Normal:
-                ObjectiveManager.instance.CompleteObjective(interactable.GetComponentInParent<Interactable>().objectiveInfo);
+                ObjectiveManager.instance.CompleteObjective(interactable.GetComponentInParent<InteractableInfo>().objectiveInfo);
                 break;
             case LeverType.First:
                 ObjectiveManager.instance.ActivateCrumbling();

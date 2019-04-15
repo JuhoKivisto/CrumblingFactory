@@ -41,6 +41,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2314726924210229511}
+  - component: {fileID: 6686849441304648254}
   m_Layer: 0
   m_Name: Objective(Lever)
   m_TagString: Untagged
@@ -64,6 +65,33 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6686849441304648254
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2309099930451738377}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63d5998b4ae3b954eb71c2173660b47c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactable: {fileID: 2308125867179088701}
+  warningLight: {fileID: 2309179624073794109}
+  controlPanel: {fileID: 0}
+  interactableType: 2
+  objectiveInfo:
+    interactable: {fileID: 0}
+    warningLight: {fileID: 0}
+    controlPanelId: 0
+    lifeTimeId: 0
+    interactableType: 0
+    done: 0
+    warningLevel:
+      level: 0
+      heatChange: 0
+      color: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1 &2309179624073794109
 GameObject:
   m_ObjectHideFlags: 0
@@ -306,7 +334,7 @@ MonoBehaviour:
   pulseInterval: 0
   pulseStrengh: 4
   pulseTime: 0.15
-  interactable: {fileID: 0}
+  interactable: {fileID: 2308125867179088701}
 --- !u!114 &7014096706619552273
 MonoBehaviour:
   m_ObjectHideFlags: 0

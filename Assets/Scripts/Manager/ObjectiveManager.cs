@@ -44,6 +44,18 @@ public class Objective {
     }
 }
 
+[System.Serializable]
+public class ControlPanel
+{
+    public int id;
+    public int numberOfInteractables;
+
+    public ControlPanel(int cPID)
+    {
+        id = cPID;       
+    }
+}
+
 public class ObjectiveManager : MonoBehaviour {
 
     public static ObjectiveManager instance = null;
@@ -103,6 +115,10 @@ public class ObjectiveManager : MonoBehaviour {
     /// All possible objectives that are on the all control panels
     /// </summary>
     public List<Objective> allObjectivesList = new List<Objective>();
+    /// <summary>
+    /// List of control panels with id and number of interactables
+    /// </summary>
+    public List<ControlPanel> controlPanelList = new List<ControlPanel>();
     /// <summary>
     /// Stores DisableObjective coroutines
     /// </summary>
@@ -167,11 +183,16 @@ public class ObjectiveManager : MonoBehaviour {
             }
         }
 
-        /* If howManyObjectives is greater than all objectives count and smaller than -1 then set how many objectives to allObjectives count */
+        /* If howManyObjectives is greater than all objectives count or smaller than -1 then set how many objectives to allObjectives count */
         if (howManyObjectives >= allObjectivesList.Count || howManyObjectives <= -1) {
             howManyObjectives = allObjectivesList.Count;
         }
-        int spacesLeft = allObjectivesList.Count - objectiveList.Count;
+
+        int spacesLeft = 0;
+
+        if (currentInteractingPanel == -1) spacesLeft = allObjectivesList.Count - objectiveList.Count;
+        else spacesLeft = allObjectivesList.Count - (objectiveList.Count + controlPanelList.Find(cp => cp.id == currentInteractingPanel).numberOfInteractables);
+
         if (howManyObjectives > spacesLeft) {
             howManyObjectives = spacesLeft;
         }
@@ -241,9 +262,9 @@ public class ObjectiveManager : MonoBehaviour {
     }
 
     public void PopulateList(Objective objective) {
-
         InitObjective(objective);
-
+        /* Gets objectives control panel and increases number of interactables on that panel  */
+        controlPanelList.Find(cp => cp.id == objective.controlPanelId).numberOfInteractables++;
         allObjectivesList.Add(objective);
     }
 
@@ -263,7 +284,13 @@ public class ObjectiveManager : MonoBehaviour {
             case InteractableType.Valve:
                 objective.warningLevel = stats.warningLevels[0];
                 break;
-        }
+        }        
+    
+    }
+
+    public void InitControlPanel(ControlPanel controlPanel)
+    {
+        controlPanelList.Add(controlPanel);
     }
 
     public void NextObjectiveSet() {
@@ -604,7 +631,7 @@ public class ObjectiveManager : MonoBehaviour {
 
     private IEnumerator SetObjectiveInfo(Objective objective) {
         print(objective.interactable);
-        objective.interactable.GetComponentInParent<Interactable>().objectiveInfo = objective;
+        objective.interactable.GetComponentInParent<InteractableInfo>().objectiveInfo = objective;
         yield return null;
     }
 

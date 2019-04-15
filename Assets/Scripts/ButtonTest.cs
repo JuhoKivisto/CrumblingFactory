@@ -30,7 +30,7 @@ public class ButtonTest : MonoBehaviour {
             print("Button down");
             button.GetComponent<Rigidbody>().AddForce(transform.up * 20);
             active = false;
-            ObjectiveManager.instance.CompleteObjective(button.GetComponentInParent<Interactable>().objectiveInfo);
+            ObjectiveManager.instance.CompleteObjective(button.GetComponentInParent<InteractableInfo>().objectiveInfo);
         }
         if (!active && other == triggerUp.GetComponent<Collider>() && other.tag == tag) {
             active = true;
