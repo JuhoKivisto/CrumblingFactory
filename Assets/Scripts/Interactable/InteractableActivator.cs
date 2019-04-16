@@ -2,14 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InteractableActivator : MonoBehaviour
-{
+public class InteractableActivator : MonoBehaviour {
 
-    public void Activate(InteractableType type, GameObject interactable)
-    {
+    public void Activate(InteractableType type, GameObject interactable) {
 
-        switch (type)
-        {
+        switch (type) {
 
             case InteractableType.Button:
                 ObjectiveManager.instance.CompleteObjective(interactable.GetComponentInParent<InteractableInfo>().objectiveInfo);
@@ -21,8 +18,7 @@ public class InteractableActivator : MonoBehaviour
 
     }
 
-    public void Activate(InteractableType type, LeverType lType, GameObject interactable)
-    {
+    public void Activate(InteractableType type, LeverType lType, GameObject interactable) {
         switch (lType) {
             case LeverType.Normal:
                 ObjectiveManager.instance.CompleteObjective(interactable.GetComponentInParent<InteractableInfo>().objectiveInfo);
@@ -32,7 +28,10 @@ public class InteractableActivator : MonoBehaviour
                 break;
             case LeverType.Reactor:
                 ObjectiveManager.instance.CompleteReactorShutDown();
-                break;            
+                break;
         }
+    }
+    public void Interacting(bool interacting) {
+        ObjectiveManager.instance.CompletingObjective(interacting);
     }
 }

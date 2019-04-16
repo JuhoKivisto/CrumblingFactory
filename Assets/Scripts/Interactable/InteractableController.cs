@@ -320,6 +320,7 @@ public class InteractableController : MonoBehaviour {
 
         previosAngle = angle;
         while (hand.GetComponent<SteamVR_TrackedController>().triggerPressed) {
+            interactableActivator.Interacting(interacting);
 
             Debug.DrawRay(spring.transform.TransformPoint(spring.anchor), Vector3.up, Color.red);
             Debug.DrawRay(spring.transform.TransformPoint(spring.connectedAnchor), Vector3.up, Color.red);
@@ -519,6 +520,7 @@ public class InteractableController : MonoBehaviour {
         //GetComponent<Collider>().enabled = true;
         print("Enabled col");
         interacting = false;
+        interactableActivator.Interacting(interacting);
         StartCoroutine(ReActive());
 
     }

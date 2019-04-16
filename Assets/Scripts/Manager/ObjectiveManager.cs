@@ -92,6 +92,11 @@ public class ObjectiveManager : MonoBehaviour {
     public bool isReactorRoomOpen;
 
     /// <summary>
+    /// When user is interacting with correct objectives interactable interactable
+    /// </summary>
+    public bool completingObjective;
+
+    /// <summary>
     /// How many objectives are created for current objective set
     /// </summary>
     [ReadOnly]
@@ -334,6 +339,10 @@ public class ObjectiveManager : MonoBehaviour {
         }
     }
 
+    public void CompletingObjective(bool isCompleting) {
+        completingObjective = isCompleting;
+    }
+
     /// <summary>
     /// When player is interacting with correct objectives interactable
     ///     -heat is rediced amount of based on warning light color
@@ -348,7 +357,7 @@ public class ObjectiveManager : MonoBehaviour {
     public void CompleteObjective(Objective objective) {
 
         /* Objective that player is acting with is on objective list*/
-        if (objectiveList.Contains(objective)) {
+        if (objectiveList.Contains(objective)) {            
             if (debugMode) print("objective DONE!!!");
             objcomp = false;
             heatManager.ActiveChangeHeating(objective, stats.changeHeatingFor, false);
@@ -363,7 +372,7 @@ public class ObjectiveManager : MonoBehaviour {
 
             if (CheckForReactorRoomOpening() && !isReactorRoomOpen) {
                 reactorRoomController.OpenReactorRoomDoors();
-            }
+            }            
         }
     }
 
@@ -644,7 +653,7 @@ public class ObjectiveManager : MonoBehaviour {
 
             while (time < duration) {
 
-                time += Time.deltaTime;
+                if (!completingObjective) time += Time.deltaTime;
 
                 lightOn = (int)stats.alarmLigthBlinkIntensity.Evaluate(time / duration);
 

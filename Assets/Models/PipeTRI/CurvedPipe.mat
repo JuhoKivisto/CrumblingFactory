@@ -5,9 +5,8 @@ Material:
   serializedVersion: 6
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Pipe_Texture
+  m_PrefabInternal: {fileID: 0}
+  m_Name: CurvedPipe
   m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
   m_ShaderKeywords: _METALLICGLOSSMAP _NORMALMAP
   m_LightmapFlags: 4
@@ -20,7 +19,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BumpMap:
-        m_Texture: {fileID: 2800000, guid: 1866da5202858494c89fe8042b057ab0, type: 3}
+        m_Texture: {fileID: 2800000, guid: 3993d046ac09984498a1fb5e58f9c5c2, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailAlbedoMap:
@@ -40,15 +39,15 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 842ca36fe69ae134c806f9896adb658f, type: 3}
+        m_Texture: {fileID: 2800000, guid: c7ab19a42ce3aa7419f6e32ad6800721, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
-        m_Texture: {fileID: 2800000, guid: 07a40510b44d01044a6de2816fa8a0fe, type: 3}
+        m_Texture: {fileID: 2800000, guid: 0721bade2301b2647a57392b2033b963, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
-        m_Texture: {fileID: 2800000, guid: 97e9be0d2ca242346b69e1aea267e9be, type: 3}
+        m_Texture: {fileID: 2800000, guid: 809a6b771adc34942aad430e47fffe58, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ParallaxMap:
