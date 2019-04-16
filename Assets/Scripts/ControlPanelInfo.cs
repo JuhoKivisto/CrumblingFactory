@@ -8,8 +8,7 @@ public class ControlPanelInfo : MonoBehaviour {
 
     public ControlPanel controlPanelInfo;
 
-    private void Awake()
-    {
+    private void Awake() {
         controlPanelInfo = new ControlPanel(id);
         ObjectiveManager.instance.InitControlPanel(controlPanelInfo);
     }

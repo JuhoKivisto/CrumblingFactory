@@ -252,7 +252,7 @@ public class InteractableController : MonoBehaviour {
                     print("Button up");
                 }
                 /* Checks if hand has collided with button and is active when interacting */
-                if (other.tag == InteractableManager.instance.handTag && active) {
+                if (other.tag == "hand" && active) {
                     print("Add force");
                     interactable.GetComponent<Rigidbody>().AddForce(-transform.up * buttonDownForce);                  
                 }

@@ -28,7 +28,7 @@ public class Objective {
         warningLight = wLight;
         controlPanelId = cPId;
         done = false;
-        lifeTimeId = -1;        
+        lifeTimeId = -1;
 
     }
     public Objective(int cPId, GameObject intact) {
@@ -45,14 +45,12 @@ public class Objective {
 }
 
 [System.Serializable]
-public class ControlPanel
-{
+public class ControlPanel {
     public int id;
-    public int numberOfInteractables;
+    public int numberOfObjectives;
 
-    public ControlPanel(int cPID)
-    {
-        id = cPID;       
+    public ControlPanel(int cPID) {
+        id = cPID;
     }
 }
 
@@ -71,7 +69,7 @@ public class ObjectiveManager : MonoBehaviour {
     /* DO NOT USE */
     public int numberOfPanelSwitch;
     public int currentObjectiveId;
-
+    /*-----------*/
     /// <summary>
     /// How many objectives is done total
     /// </summary>
@@ -82,6 +80,15 @@ public class ObjectiveManager : MonoBehaviour {
     /// </summary>
     public int ObjectivesForReactor;
 
+    /// <summary>
+    /// How many objective spaces are left
+    /// </summary>
+    [ReadOnly]
+    public int spacesLeft;
+
+    /// <summary>
+    /// Is the reactor room open
+    /// </summary>
     public bool isReactorRoomOpen;
 
     /// <summary>
@@ -105,6 +112,9 @@ public class ObjectiveManager : MonoBehaviour {
     /// </summary>
     public int lifeTimeId = 0;
 
+    /// <summary>
+    /// Panel id that player is interacting
+    /// </summary>
     public int currentInteractingPanel;
 
     /// <summary>
@@ -167,39 +177,38 @@ public class ObjectiveManager : MonoBehaviour {
     }
 
     /// <summary>
-    /// 
+    /// Creates objective set
     /// </summary>
     private void CreateObjectives() {
 
-        if (heatManager.currentHeatLevel == 0) {
-            howManyObjectives = 1;
-        }
+        if (heatManager.currentHeatLevel == 0) howManyObjectives = 1;
         else {
 
             howManyObjectives = heatManager.currentHeatLevel;
 
+            /* If amount of objectives to be created is bigger than max allowed objectives */
             if (howManyObjectives > stats.maxObjectives) {
                 howManyObjectives = stats.maxObjectives;
             }
         }
 
-        /* If howManyObjectives is greater than all objectives count or smaller than -1 then set how many objectives to allObjectives count */
+        /* If howManyObjectives is greater than all objectives count or smaller than -1 then set howManyObjectives to allObjectives count */
         if (howManyObjectives >= allObjectivesList.Count || howManyObjectives <= -1) {
             howManyObjectives = allObjectivesList.Count;
-        }
+        }        
 
-        int spacesLeft = 0;
-
+        /* If palyer hasn't interacted with any panel don't use control panels numberOfObjectives  */
         if (currentInteractingPanel == -1) spacesLeft = allObjectivesList.Count - objectiveList.Count;
-        else spacesLeft = allObjectivesList.Count - (objectiveList.Count + controlPanelList.Find(cp => cp.id == currentInteractingPanel).numberOfInteractables);
+        else spacesLeft = allObjectivesList.Count 
+                - (objectiveList.Count 
+                + controlPanelList.Find(cp => cp.id == currentInteractingPanel).numberOfObjectives);
 
-        if (howManyObjectives > spacesLeft) {
-            howManyObjectives = spacesLeft;
-        }
-
+        /* If number of objectives to be created is bigger than available spaces on control panels set howManyObjectives to spacesLeft */
+        if (howManyObjectives > spacesLeft) howManyObjectives = spacesLeft;
+        
         int createdObjectives = 0;
 
-        while (createdObjectives != howManyObjectives && !tooManyObjectives) {                        
+        while (createdObjectives != howManyObjectives) {
 
             int randomIndex = random.Next(0, allObjectivesList.Count);
 
@@ -213,13 +222,10 @@ public class ObjectiveManager : MonoBehaviour {
             /* Current objective id on the objectiveList */
             int currentId = objectiveList.Count - 1;
 
-            //objectiveList[currentId].warningLight.GetComponentInChildren<Light>().range = 0.12f;
-            //objectiveList[currentId].warningLight.GetComponentInChildren<Light>().intensity = 2.46f;
-            
-            EnableWarningLight(objectiveList[currentId], objectiveList[currentId].warningLevel );
+            EnableWarningLight(objectiveList[currentId], objectiveList[currentId].warningLevel);
 
             createdObjectives++;
-            
+
             if (debugMode) {
 
                 print("activate");
@@ -227,15 +233,20 @@ public class ObjectiveManager : MonoBehaviour {
 
             objectiveLifeTimes.Add(StartCoroutine(DisableObjective(objectiveList[currentId],
                 objectiveList[currentId].warningLevel, stats.objectiveLifeTime, lifeTimeId)));
+
             objectiveList[currentId].lifeTimeId = lifeTimeId;
             lifeTimeId++;
 
-
             StartCoroutine(SetObjectiveInfo(objectiveList[currentId]));
         }
-        StartCoroutine(WaitNextSet());
+        /* Start new objective creation sequnce when reactor is on */
+        if (reactorRoomController.isReactorOn) StartCoroutine(WaitNextSet());
     }
 
+    /// <summary>
+    /// Removes given objective from objectiveList
+    /// </summary>
+    /// <param name="objective"></param>
     private void RemoveObjective(Objective objective) {
 
         if (objectiveList.Contains(objective)) {
@@ -256,22 +267,28 @@ public class ObjectiveManager : MonoBehaviour {
             int rndIndex = rnd.Next(list.Count);
             list[i] = list[rndIndex];
             list[rndIndex] = temp;
-
         }
         return list;
     }
 
+    /// <summary>
+    /// Creates the allObjectivesList
+    /// And sets how many interactable are on specifig control panel
+    /// </summary>
+    /// <param name="objective"></param>
     public void PopulateList(Objective objective) {
         InitObjective(objective);
         /* Gets objectives control panel and increases number of interactables on that panel  */
-        controlPanelList.Find(cp => cp.id == objective.controlPanelId).numberOfInteractables++;
+        controlPanelList.Find(cp => cp.id == objective.controlPanelId).numberOfObjectives++;
         allObjectivesList.Add(objective);
     }
 
-    private void InitObjective(Objective objective)
-    {
-        switch (objective.interactableType)
-        {
+    /// <summary>
+    /// Sets objective warning light
+    /// </summary>
+    /// <param name="objective"></param>
+    private void InitObjective(Objective objective) {
+        switch (objective.interactableType) {
             case InteractableType.None:
                 Debug.LogError(string.Format("{0} does not have interactable type selected", objective.interactable.name));
                 break;
@@ -284,15 +301,20 @@ public class ObjectiveManager : MonoBehaviour {
             case InteractableType.Valve:
                 objective.warningLevel = stats.warningLevels[0];
                 break;
-        }        
-    
+        }
     }
 
-    public void InitControlPanel(ControlPanel controlPanel)
-    {
+    /// <summary>
+    /// Adds control panels to control panel list
+    /// </summary>
+    /// <param name="controlPanel"></param>
+    public void InitControlPanel(ControlPanel controlPanel) {
         controlPanelList.Add(controlPanel);
     }
 
+    /// <summary>
+    /// Creates new objective set
+    /// </summary>
     public void NextObjectiveSet() {
 
         #region old
@@ -305,25 +327,36 @@ public class ObjectiveManager : MonoBehaviour {
         */
         #endregion
 
-            CreateObjectives();
-        // More objectives if heat is high enough
+        CreateObjectives();        
         if (nextSet) {
             if (debugMode) print("too long");
-
             nextSet = false;
         }
     }
 
+    /// <summary>
+    /// When player is interacting with correct objectives interactable
+    ///     -heat is rediced amount of based on warning light color
+    ///     -stop life time of the objective
+    ///     -objectives warning light is set to green
+    ///     -start disable objective sequence
+    ///     -increase done objectives by 1
+    ///     -set panel where objective is to current interacting panel
+    ///     -and check if there are enough objective done to open reactor room
+    /// </summary>
+    /// <param name="objective"></param>
     public void CompleteObjective(Objective objective) {
 
         /* Objective that player is acting with is on objective list*/
         if (objectiveList.Contains(objective)) {
-            print("objective DONE!!!");
+            if (debugMode) print("objective DONE!!!");
             objcomp = false;
             heatManager.ActiveChangeHeating(objective, stats.changeHeatingFor, false);
             StopCoroutine(objectiveLifeTimes[objective.lifeTimeId]);
-            //objectiveLifeTimes.RemoveAt(objective.lifeTimeId);
+           
+            /* Sets warning light to green */
             objective.warningLevel = stats.warningLevels[3];
+
             StartCoroutine(DisableObjective(objective, objective.warningLevel, 0, objective.lifeTimeId));
             objectivesDone++;
             currentInteractingPanel = objective.controlPanelId;
@@ -332,13 +365,20 @@ public class ObjectiveManager : MonoBehaviour {
                 reactorRoomController.OpenReactorRoomDoors();
             }
         }
-
     }
 
+    /// <summary>
+    /// (OPTIONAL) If player is interacting with objective that has no warning light
+    ///     -Increase heat amount of failure objective
+    /// </summary>
+    /// <param name="objective"></param>
     public void FailureObjective(Objective objective) {
         heatManager.ActiveChangeHeating(objective, stats.changeHeatingFor, true);
     }
 
+    /// <summary>
+    /// When player is interacting with reactor lever
+    /// </summary>
     public void CompleteReactorShutDown() {
         reactorRoomController.ShutDownTheReactor();
         StopCoroutine(WaitNextSet());
@@ -406,6 +446,10 @@ public class ObjectiveManager : MonoBehaviour {
         TimeManager.instance.StartTimer();
     }
 
+    /// <summary>
+    /// DO NOT USE !!!
+    /// Old way to create objectives was in certain sequence
+    /// </summary>
     private void CreateObjectivesInSequence() {
         if (heatManager.currentHeatLevel == 0) {
             howManyObjectives = 1;
@@ -426,13 +470,6 @@ public class ObjectiveManager : MonoBehaviour {
 
         int createdObjectives = 0;
         while (createdObjectives != howManyObjectives && !tooManyObjectives) {
-
-            if (objectiveList.Count == allObjectivesList.Count) {
-                tooManyObjectives = true;
-            }
-            else {
-                tooManyObjectives = false;
-            }
 
             switch (objectivesActivated) {
 
@@ -517,7 +554,7 @@ public class ObjectiveManager : MonoBehaviour {
 
         for (int i = 0; i < 3; i++) {
 
-        SoundManager.instance.audioSourceToPlay(speaker, 0, false, 0.5f, null, speaker.transform.position);
+            SoundManager.instance.audioSourceToPlay(speaker, 0, false, 0.5f, null, speaker.transform.position);
         }
 
         LightManager.instance.ActivateReactorLights(reactorRoomController.isReactorOn);
@@ -525,30 +562,37 @@ public class ObjectiveManager : MonoBehaviour {
         if (stats.useTimer) TimeManager.instance.StartTimer();
         CreateObjectives();
     }
-
+    
+    /// <summary>
+    /// Calls StartCrumbling
+    /// </summary>
     public void ActivateCrumbling() {
         StartCoroutine(StartCrumbling());
     }
 
+    /// <summary>
+    /// Waits waitForNextSet before creating new objective set
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator WaitNextSet() {
-        if (debugMode) {
+        if (debugMode) print("Wait next set");
 
-        print("Wait next set");
-        }
-        yield return new WaitForSeconds(stats.waitBeforeNextSet);
-        //yield return null;
-        NextObjectiveSet();
-        //RemoveObjectives();
-
+        yield return new WaitForSeconds(stats.waitBeforeNextSet);       
+        NextObjectiveSet();       
     }
 
+    /// <summary>
+    /// Enables the objectives warning light
+    /// </summary>
+    /// <param name="objective"></param>
+    /// <param name="warningLvl"></param>
     private void EnableWarningLight(Objective objective, WarningLevel warningLvl) {
 
         material = Instantiate(objective.warningLight.GetComponentInChildren<MeshRenderer>().material);
         objective.warningLight.GetComponentInChildren<MeshRenderer>().material = material;
 
         objective.warningLight.GetComponentInChildren<Light>().range = warningLightRange;
-        objective.warningLight.GetComponentInChildren<Light>().intensity = warningLightIntensity;        
+        objective.warningLight.GetComponentInChildren<Light>().intensity = warningLightIntensity;
         material.SetColor("_EmissionColor", warningLvl.color * 1);
 
         material.EnableKeyword("_EMISSION");
@@ -562,6 +606,10 @@ public class ObjectiveManager : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Disables objectives warning light
+    /// </summary>
+    /// <param name="objective"></param>
     private void DisableWarningLight(Objective objective) {
 
         material = Instantiate(objective.warningLight.GetComponentInChildren<MeshRenderer>().material);
@@ -583,8 +631,7 @@ public class ObjectiveManager : MonoBehaviour {
     /// <param name="duration"></param>
     /// <param name="lifeTimeId"></param>
     /// <returns></returns>
-    private IEnumerator DisableObjective(Objective objective, WarningLevel currentWarningLvl, float duration, int lifeTimeId) {
-        //print("ghkdgsonfg");
+    private IEnumerator DisableObjective(Objective objective, WarningLevel currentWarningLvl, float duration, int lifeTimeId) {        
         float time = 0;
         int lightOn = 1;
 
@@ -610,27 +657,31 @@ public class ObjectiveManager : MonoBehaviour {
                         DisableWarningLight(objective);
                         break;
                 }
-
-                //time++;
+             
                 yield return null;
             }
             if (stats.riseHeatAtFailure) FailureObjective(objective);
         }
 
         RemoveObjective(objective);
-        DisableWarningLight(objective);
-        //objectiveLifeTimes.RemoveAt(lifeTimeId);
-        
+        DisableWarningLight(objective);        
+
         if (debugMode) {
 
-        print("<color=blue>time over</color>");
-        print("<color=yellow>time: </color>" + time);
+            print("<color=blue>time over</color>");
+            print("<color=yellow>time: </color>" + time);
         }
+        /* Sets objectives default values */
         InitObjective(objective);
     }
 
+    /// <summary>
+    /// Gives objective basic information
+    /// </summary>
+    /// <param name="objective"></param>
+    /// <returns></returns>
     private IEnumerator SetObjectiveInfo(Objective objective) {
-        print(objective.interactable);
+        if (debugMode) print(objective.interactable);
         objective.interactable.GetComponentInParent<InteractableInfo>().objectiveInfo = objective;
         yield return null;
     }

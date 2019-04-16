@@ -36,7 +36,7 @@ public class ButtonTest : MonoBehaviour {
             active = true;
             print("Button up");
         }
-        if (other.tag == InteractableManager.instance.handTag && active) {
+        if (other.tag == "hand" && active) {
             print("Add force");
             button.GetComponent<Rigidbody>().AddForce(-transform.up * 50);
             //active = false;

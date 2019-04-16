@@ -168,12 +168,9 @@ public class HeatManager : MonoBehaviour {
     /// heat increase value is taken from curves y-axis and multiplied with time between previous and current frame and added additionally errors that player makes
     /// after that if heat is high enough heat level increases
     /// </summary>
-    /// <returns></returns>
-    private IEnumerator IncreaseHeat() {
-
-        print(Heat);
-        print(maxHeat);
-        print(minHeat);
+    /// <returns></returns>    
+private IEnumerator IncreaseHeat() {
+       
         while (Heat < maxHeat && Heat >= minHeat) {
 
             deltaHeat = stats.heatCurve2.Evaluate(Heat / maxHeat) * Time.deltaTime * heatMultiplier/* + (GameManager.instance.errorCount * errorMultiplier)*/;
@@ -181,9 +178,7 @@ public class HeatManager : MonoBehaviour {
             yield return null;
 
             foreach (var item in HeatUI) {
-                item.value = heat;
-                //print("HUI");
-
+                item.value = heat;             
             }
             ChangeHeatLevel();
         }
