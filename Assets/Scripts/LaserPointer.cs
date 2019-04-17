@@ -55,6 +55,7 @@ public class LaserPointer : MonoBehaviour {
     // Camera and headset transforms
     public Transform headTransform;
     public Transform cameraRigTransform;
+    public Transform follower;
 
     // Teleportation checks
     public GameObject teleportAreaCheck;
@@ -92,7 +93,7 @@ public class LaserPointer : MonoBehaviour {
         lineRenderer.SetPosition(0, positions[0]); // Sets the starting position to the controller
         for (int i = 1; i < amount; i++) // Sets the other positions to the line renderer to create a curve
         {
-            lineRenderer.SetPosition(i, positions[i]);
+            lineRenderer.SetPosition(i, positions[i]);            
         }
     }
 
@@ -179,6 +180,11 @@ public class LaserPointer : MonoBehaviour {
     // Update is called once per frame
     void Update() {
 
+        follower.transform.position = transform.position;
+        //follower.transform.rotation = Quaternion.AngleAxis(transform.rotation.y, Vector3.up);
+        //follower.transform.rotation = Quaternion.AngleAxis(transform.rotation.x, Vector3.left);        
+        //follower.transform.rotation = Quaternion.AngleAxis(0, Vector3.forward);
+
         // Resets cooldown after the wait time has passed
         if (cooldownTime < Time.time) {
             onCooldown = false;
@@ -204,10 +210,11 @@ public class LaserPointer : MonoBehaviour {
 
             angleCount = angle; // Variable used to calculate that the curves angle will never go much above 90
 
-            newDir = transform.forward;
+            newDir = trackedObj.transform.forward;
             startPoint = trackedObj.transform.position;
             positions[0] = startPoint;
             Vector3 laserAxis = transform.right;
+            laserAxis.y = 0;
 
             for (int i = 1; i < 100; i++) // Casts multiple raycasts in a curve until it hits something
             {

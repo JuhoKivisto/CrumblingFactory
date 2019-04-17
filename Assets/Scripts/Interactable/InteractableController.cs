@@ -467,9 +467,9 @@ public class InteractableController : MonoBehaviour {
             case InteractableType.Lever:
                 hinge.useMotor = true;
                 JointMotor motorL = hinge.motor;
+                        motorL.force = 1000;
                 switch (leverDirection) {
                     case LeverDirection.up:
-                        motorL.force = 1000;
                         motorL.targetVelocity = -1000;
                         break;
                     case LeverDirection.down:
