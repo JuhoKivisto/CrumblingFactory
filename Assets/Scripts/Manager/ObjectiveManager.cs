@@ -653,9 +653,12 @@ public class ObjectiveManager : MonoBehaviour {
 
             while (time < duration) {
 
-                if (!completingObjective) time += Time.deltaTime;
-
-                lightOn = (int)stats.alarmLigthBlinkIntensity.Evaluate(time / duration);
+                if (!completingObjective)
+                {
+                    time += Time.deltaTime;
+                    lightOn = (int)stats.alarmLigthBlinkIntensity.Evaluate(time / duration);
+                }
+                else lightOn = 1;
 
                 switch (lightOn) {
 

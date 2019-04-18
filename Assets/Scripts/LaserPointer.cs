@@ -93,7 +93,7 @@ public class LaserPointer : MonoBehaviour {
         lineRenderer.SetPosition(0, positions[0]); // Sets the starting position to the controller
         for (int i = 1; i < amount; i++) // Sets the other positions to the line renderer to create a curve
         {
-            lineRenderer.SetPosition(i, positions[i]);            
+            lineRenderer.SetPosition(i, positions[i]);
         }
     }
 
@@ -146,7 +146,7 @@ public class LaserPointer : MonoBehaviour {
     // Use this for initialization
     void Start() {
 
-      
+
 
         lineRenderer.widthMultiplier = 0.1f; // Sets our line renderers width to 0.1
 
@@ -180,10 +180,7 @@ public class LaserPointer : MonoBehaviour {
     // Update is called once per frame
     void Update() {
 
-        follower.transform.position = transform.position;
-        //follower.transform.rotation = Quaternion.AngleAxis(transform.rotation.y, Vector3.up);
-        //follower.transform.rotation = Quaternion.AngleAxis(transform.rotation.x, Vector3.left);        
-        //follower.transform.rotation = Quaternion.AngleAxis(0, Vector3.forward);
+        //follower.transform.position = transform.position;        
 
         // Resets cooldown after the wait time has passed
         if (cooldownTime < Time.time) {
@@ -307,7 +304,9 @@ public class LaserPointer : MonoBehaviour {
             if (showDebug == true) {
                 Debug.Log("Activated Teleport on GetPressUp");
             }
+
             Teleport();
         }
     }
+    
 }
